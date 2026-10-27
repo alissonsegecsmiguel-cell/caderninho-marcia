@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* design-system catalog bridge. Inside the catalog iframe the floating nav capsule is drawn by the
+   catalog over this page at the same spot (hidden here; it is fixed, so nothing moves). */
+html.ds-embed #nav { visibility: hidden !important; }
+/* hero tiles (lg+): the source anchors them inside the headline box (-right-6 -top-14 / right-24 top-24 /
+   -right-16 top-40), where they sat on the last letters of the title. Same tiles, same tilt and drift,
+   moved just past the headline's right edge so every letter of the title stays readable. */
+#top [data-drift] { width: max-content; }
+#top [data-drift="1"] { right: auto !important; left: calc(100% + 4px) !important; top: -3.5rem !important; }
+#top [data-drift="2"] { right: auto !important; left: calc(100% + 60px) !important; top: 5.5rem !important; }
+#top [data-drift="3"] { right: auto !important; left: calc(100% + 20px) !important; top: 11rem !important; }
+</style>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var root = document.documentElement;
+  root.classList.add('ds-embed');
+  function post(m) { try { window.parent.postMessage(m, '*'); } catch (e) {} }
+  /* the catalog capsule mirrors the page's scroll state (#navCapsule: scrollY > 40) */
+  var last = null;
+  function report() { var s = window.scrollY > 40; if (s !== last) { last = s; post({ ds: 'scroll', s: s }); } }
+  addEventListener('scroll', report, { passive: true });
+  /* ready = fonts in and the hero risers finished (5 risers, 90 ms stagger, 0.8 s transition) */
+  addEventListener('load', function () {
+    report();
+    var go = function () { setTimeout(function () { post({ ds: 'ready' }); }, 1500); };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go, go); else go();
+  });
+  addEventListener('message', function (e) {
+    if (e.source !== window.parent || !e.data) return;
+    if (e.data.ds === 'top') window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+<title>TerraSprint Design System</title>
+<link rel="icon" href="assets/terrasprint-ai.aura.build/favicon.ico">
+<script src="assets/cdn.tailwindcss.com/3.4.17.js"></script>
+<script src="assets/terrasprint-ai.aura.build/iconify-solar.js"></script>
+<script src="assets/code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link href="assets/fonts.googleapis.com/css2__q409fcde3.css" rel="stylesheet">
+<meta name="aura-font-heading-class" content="font-fraunces">
+<meta name="aura-font-body-class" content="font-manrope">
+<meta name="aura-font-heading-label" content="Fraunces">
+<meta name="aura-font-body-label" content="Manrope">
+<meta name="disabled-font-classes" content="font-jetbrains-mono,font-geist,font-rajdhani,font-google-sans">
+<link id="all-fonts-link-font-fraunces" rel="stylesheet" href="assets/fonts.googleapis.com/css2__qf7d38554.css">
+<style id="all-fonts-style-font-fraunces">
+.font-fraunces { font-family: 'Fraunces', serif !important; }
+</style>
+<link id="all-fonts-link-font-manrope" rel="stylesheet" href="assets/fonts.googleapis.com/css2__qed4d15e6.css">
+<style id="all-fonts-style-font-manrope">
+.font-manrope { font-family: 'Manrope', sans-serif !important; }
+</style>
+<script src="assets/cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="assets/cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+  <body class="min-h-screen antialiased" style="font-family: Geist, Inter, sans-serif; background-color: rgb(234, 231, 221); color: rgb(46, 48, 52); letter-spacing: 0px;">
+    <div class="p-2 sm:p-3 lg:p-4">
+      <div class="relative overflow-hidden rounded-[28px] sm:rounded-[40px]" style="background-color: rgb(247, 246, 239);">
+        <header id="nav" class="fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-[880px] transition-all duration-500" style="top:1.25rem;">
+          <div id="navCapsule" class="flex items-center justify-between gap-3 rounded-[36px] pl-5 pr-2 py-2 transition-shadow duration-500" style="background: rgba(255, 255, 255, 0.78); backdrop-filter: blur(18px); border: 1px solid rgba(46, 48, 52, 0.08); box-shadow: rgba(255, 255, 255, 0.9) 0px 1px 0px inset, rgba(35, 36, 39, 0.18) 0px 10px 30px -14px;">
+            <a href="#top" class="flex items-center gap-2.5" aria-label="TerraSprint home">
+              <span class="relative inline-flex items-center" aria-hidden="true">
+                <span class="inline-block rounded-full" style="width:16px;height:16px;background:#232427;"></span>
+                <span class="inline-block rounded-full -ml-1.5" style="width: 16px; height: 16px; background: rgb(63, 125, 83);"></span>
+              </span>
+              <span class="text-sm font-medium tracking-tight font-manrope" style="color:#232427;">
+                TerraSprint
+              </span>
+            </a>
+            <nav class="hidden md:flex items-center gap-1" aria-label="Primary">
+              <a href="#top" class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors font-manrope" style="color:#232427;background:rgba(46,48,52,0.05);">
+                Home
+              </a>
+              <a href="#services" class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors hover:text-[#232427] font-manrope" style="color:rgba(46,48,52,0.55);">
+                Services
+              </a>
+              <a href="#work" class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors hover:text-[#232427] font-manrope" style="color:rgba(46,48,52,0.55);">
+                Work
+              </a>
+              <a href="#packages" class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors hover:text-[#232427] font-manrope" style="color:rgba(46,48,52,0.55);">
+                Packages
+              </a>
+              <a href="#contact" class="rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors hover:text-[#232427] font-manrope" style="color:rgba(46,48,52,0.55);">
+                Contact
+              </a>
+            </nav>
+            <div class="flex items-center gap-2">
+              <a href="#contact" class="group hidden sm:inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium text-white transition-transform duration-300 hover:-translate-y-0.5 font-manrope" style="background: linear-gradient(rgb(47, 74, 58) 0%, rgb(22, 37, 28) 55%); box-shadow: rgba(255, 255, 255, 0.22) 0px 1px 0px inset, rgba(0, 0, 0, 0.35) 0px -2px 6px inset, rgba(23, 23, 25, 0.55) 0px 12px 22px -10px;">
+                Lorem Ipsum
+                <iconify-icon icon="solar:arrow-right-linear" width="13" class="transition-transform duration-300 group-hover:translate-x-0.5" style="stroke-width:1.5;"></iconify-icon>
+              </a>
+              <button id="menuBtn" class="md:hidden inline-flex items-center justify-center rounded-full w-9 h-9 transition-colors" style="border:1px solid rgba(46,48,52,0.1);color:#232427;" aria-label="Open menu" aria-expanded="false">
+                <iconify-icon icon="solar:hamburger-menu-linear" width="18" style="stroke-width:1.5;"></iconify-icon>
+              </button>
+            </div>
+          </div>
+          <div id="mobileMenu" class="hidden md:hidden mt-2 rounded-[28px] p-4 flex flex-col gap-1" style="background:rgba(255,255,255,0.94);backdrop-filter:blur(18px);border:1px solid rgba(46,48,52,0.08);box-shadow:0 20px 40px -16px rgba(35,36,39,0.25);">
+            <a href="#top" class="rounded-full px-4 py-2.5 text-sm font-medium font-manrope" style="color:#232427;">
+              Home
+            </a>
+            <a href="#services" class="rounded-full px-4 py-2.5 text-sm font-manrope" style="color:rgba(46,48,52,0.6);">
+              Services
+            </a>
+            <a href="#work" class="rounded-full px-4 py-2.5 text-sm font-manrope" style="color:rgba(46,48,52,0.6);">
+              Work
+            </a>
+            <a href="#packages" class="rounded-full px-4 py-2.5 text-sm font-manrope" style="color:rgba(46,48,52,0.6);">
+              Packages
+            </a>
+            <a href="#contact" class="rounded-full px-4 py-2.5 text-sm font-manrope" style="color:rgba(46,48,52,0.6);">
+              Contact
+            </a>
+            <a href="#contact" class="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-3 text-sm font-medium text-white font-manrope" style="background: linear-gradient(rgb(47, 74, 58) 0%, rgb(22, 37, 28) 55%); box-shadow: rgba(255, 255, 255, 0.22) 0px 1px 0px inset, rgba(23, 23, 25, 0.5) 0px 10px 20px -8px;">
+              Lorem Ipsum
+              <iconify-icon icon="solar:arrow-right-linear" width="14" style="stroke-width:1.5;"></iconify-icon>
+            </a>
+          </div>
+        </header>
+
+        <section id="top" class="relative overflow-hidden flex flex-col items-center justify-center text-center px-5 sm:px-8" style="min-height:100svh;padding-top:8rem;padding-bottom:5rem;">
+          <div class="absolute pointer-events-none" aria-hidden="true" style="left:-18%;top:6%;width:56vw;height:56vw;max-width:820px;max-height:820px;background:radial-gradient(circle at 42% 45%, rgba(46,48,52,0.30) 0%, rgba(46,48,52,0.12) 38%, transparent 68%);filter:blur(70px);"></div>
+          <div id="bloom" class="absolute pointer-events-none transition-transform duration-700 ease-out" aria-hidden="true" style="right: -14%; top: 14%; width: 52vw; height: 52vw; max-width: 760px; max-height: 760px; background: radial-gradient(circle at 55% 45%, rgba(63, 125, 83, 0.42) 0%, rgba(47, 104, 68, 0.18) 40%, transparent 70%); filter: blur(60px);"></div>
+          <div class="absolute pointer-events-none inset-x-0 bottom-0 h-64" aria-hidden="true" style="background:linear-gradient(180deg, transparent, rgba(255,255,255,0.7));"></div>
+
+          <canvas id="heroParticles" class="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true" style="z-index:2;"></canvas>
+
+          <div data-rise="" class="relative z-10 inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8 text-xs font-medium font-manrope" style="background:rgba(255,255,255,0.7);backdrop-filter:blur(10px);border:1px solid rgba(46,48,52,0.08);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 8px 20px -10px rgba(35,36,39,0.15);color:#2E3034;">
+            <iconify-icon icon="solar:bolt-linear" width="14" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+            Lorem ipsum dolor sit
+          </div>
+
+          <div class="relative z-10 max-w-6xl mx-auto">
+            <div data-drift="1" class="hidden lg:flex absolute -right-6 -top-14 items-center gap-2.5 rounded-[20px] px-4 py-3.5 text-left" style="transform:rotate(4deg);background:linear-gradient(180deg,#EAF6EC,#DDEFE1);border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.8) inset, 0 18px 34px -16px rgba(35,36,39,0.3);">
+              <span class="inline-flex items-center justify-center rounded-xl" style="width:34px;height:34px;background:rgba(38,110,66,0.12);">
+                <iconify-icon icon="solar:widget-4-linear" width="17" style="stroke-width:1.5;color:#2E7D4F;"></iconify-icon>
+              </span>
+              <div>
+                <p class="text-xs font-medium font-manrope" style="color:#232427;">
+                  Lorem ipsum
+                </p>
+                <p class="text-xs font-manrope" style="color:rgba(46,48,52,0.5);">
+                  Dolor sit
+                </p>
+              </div>
+            </div>
+            <div data-drift="2" class="hidden lg:flex absolute right-24 top-24 items-center gap-2.5 rounded-[20px] px-4 py-3.5 text-left" style="transform:rotate(-3deg);background:linear-gradient(180deg,#E8F0FA,#DCE7F5);border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.8) inset, 0 18px 34px -16px rgba(35,36,39,0.3);">
+              <span class="inline-flex items-center justify-center rounded-xl" style="width: 34px; height: 34px; background: rgba(139, 111, 71, 0.12);">
+                <iconify-icon icon="solar:database-linear" width="17" style="stroke-width: 1.5; color: rgb(139, 111, 71);"></iconify-icon>
+              </span>
+              <div>
+                <p class="text-xs font-medium font-manrope" style="color:#232427;">
+                  Amet elit
+                </p>
+                <p class="text-xs font-manrope" style="color:rgba(46,48,52,0.5);">
+                  Sed do
+                </p>
+              </div>
+            </div>
+            <div data-drift="3" class="hidden lg:flex absolute -right-16 top-40 items-center gap-2.5 rounded-[20px] px-4 py-3.5 text-left" style="transform:rotate(2deg);background:linear-gradient(180deg,#FFFFFF,#F1F2F2);border:1px solid rgba(46,48,52,0.07);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 34px -16px rgba(35,36,39,0.3);">
+              <span class="inline-flex items-center justify-center rounded-xl" style="width: 34px; height: 34px; background: rgba(107, 143, 71, 0.1);">
+                <iconify-icon icon="solar:chat-round-line-linear" width="17" style="stroke-width: 1.5; color: rgb(107, 143, 71);"></iconify-icon>
+              </span>
+              <div>
+                <p class="text-xs font-medium font-manrope" style="color:#232427;">
+                  Tempor ipsum
+                </p>
+                <p class="text-xs font-manrope" style="color:rgba(46,48,52,0.5);">
+                  Dolor
+                </p>
+              </div>
+            </div>
+
+            <h1 data-rise="" class="font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: clamp(3rem, 8vw, 6.75rem); line-height: 0.98; letter-spacing: 0px; font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+              TerraSprint
+              <br>
+              Design System.
+            </h1>
+          </div>
+
+          <p data-rise="" class="relative z-10 mt-8 max-w-xl mx-auto text-base sm:text-lg font-manrope" style="color:rgba(46,48,52,0.62);line-height:1.65;">
+            Warm paper surfaces, light Fraunces serifs and deep forest-green gradients, with drifting glass tiles and rain that follows the pointer.
+          </p>
+
+          <div data-rise="" class="relative z-10 mt-9 flex flex-col sm:flex-row items-center justify-center gap-3" style=" transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);">
+            <a href="#services" class="group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5 font-manrope" style="background: linear-gradient(rgb(47, 74, 58) 0%, rgb(22, 37, 28) 55%); box-shadow: rgba(255, 255, 255, 0.24) 0px 1px 0px inset, rgba(0, 0, 0, 0.35) 0px -3px 8px inset, rgba(23, 23, 25, 0.55) 0px 16px 30px -12px;">
+              Lorem ipsum dolor
+              <iconify-icon icon="solar:arrow-right-down-linear" width="15" class="transition-transform duration-300 group-hover:translate-y-0.5" style="stroke-width:1.5;"></iconify-icon>
+            </a>
+            <a href="#packages" class="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 font-manrope" style="color:#232427;background:rgba(255,255,255,0.85);border:1px solid rgba(46,48,52,0.1);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 12px 24px -12px rgba(35,36,39,0.22);">
+              Dolor sit amet elit
+            </a>
+          </div>
+
+          <div data-rise="" class="absolute right-6 bottom-8 z-10 hidden md:flex items-center gap-3 rounded-[18px] pl-2 pr-4 py-2" style="background:rgba(255,255,255,0.8);backdrop-filter:blur(10px);border:1px solid rgba(46,48,52,0.08);box-shadow:0 12px 24px -12px rgba(35,36,39,0.2);">
+            <img src="assets/images.unsplash.com/photo-1501854140801-50d01698950b__q93fd3f2f.jpg" alt="Sprint preview" style="width:38px;height:38px;border-radius:12px;object-fit:cover;">
+            <div class="text-left">
+              <p class="text-xs font-medium font-manrope" style="color:#232427;">
+                Lorem ipsum dolor
+              </p>
+              <p class="text-xs font-manrope" style="color:rgba(46,48,52,0.5);">
+                Sit amet elit
+              </p>
+            </div>
+          </div>
+        </section>
+        <section class="relative px-5 sm:px-8 lg:px-16 py-24 lg:py-32 flex items-center justify-center">
+          <div class="max-w-4xl mx-auto text-center">
+            <h2 class="scroll-reveal font-fraunces font-light tracking-tighter" data-reveal-opacity="0.1" data-reveal-blur="8px" data-reveal-y="20px" data-reveal-stagger="0.08" data-reveal-start="top 90%" data-reveal-end="bottom 60%" style="color: rgb(35, 36, 39); font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.1; font-family: 'Source Serif 4', Georgia, serif;">
+              Lorem ipsum dolor sit amet consectetur. Sed do eiusmod
+              <em class="not-italic font-normal" style="color:rgb(63,125,83);">
+                tempor incididunt
+              </em>
+              ut labore et dolore magna aliqua, ut enim ad minim veniam.
+            </h2>
+          </div>
+        </section>
+
+        <section id="services" class="relative px-5 sm:px-8 lg:px-16 py-20 lg:py-28">
+          <div class="max-w-6xl mx-auto relative z-10">
+            <div data-rise="" class="max-w-2xl mb-12 lg:mb-16" style=" transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);">
+              <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium mb-6 font-manrope" style="background:rgba(63,125,83,0.08);border:1px solid rgba(63,125,83,0.18);color:#2F6844;">
+                <iconify-icon icon="solar:layers-minimalistic-linear" width="13" style="stroke-width:1.5;"></iconify-icon>
+                Lorem ipsum
+              </span>
+              <h2 class="font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: clamp(2rem, 4.5vw, 3.5rem); line-height: 1.05; letter-spacing: 0px; font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                Lorem ipsum dolor sit amet.
+              </h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+              <div data-rise="" class="group rounded-[24px] p-6 transition-all duration-300 hover:-translate-y-1" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 14px 28px -18px rgba(35,36,39,0.25);">
+                <span class="inline-flex items-center justify-center rounded-2xl mb-5" style="width:44px;height:44px;background:#F4F5F5;border:1px solid rgba(46,48,52,0.06);">
+                  <iconify-icon icon="solar:routing-2-linear" width="20" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                </span>
+                <h3 class="text-base font-medium mb-2 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Lorem ipsum dolor
+                </h3>
+                <p class="text-sm font-manrope" style="color:rgba(46,48,52,0.55);line-height:1.6;">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.
+                </p>
+                <p class="mt-5 inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 font-manrope" style="background:#F4F5F5;color:rgba(46,48,52,0.6);">
+                  <iconify-icon icon="solar:clock-circle-linear" width="12" style="stroke-width:1.5;"></iconify-icon>
+                  Lorem 10 ipsum
+                </p>
+              </div>
+              <div data-rise="" class="group rounded-[24px] p-6 transition-all duration-300 hover:-translate-y-1" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 14px 28px -18px rgba(35,36,39,0.25);">
+                <span class="inline-flex items-center justify-center rounded-2xl mb-5" style="width:44px;height:44px;background:#F4F5F5;border:1px solid rgba(46,48,52,0.06);">
+                  <iconify-icon icon="solar:chat-square-code-linear" width="20" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                </span>
+                <h3 class="text-base font-medium mb-2 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Dolor sit amet
+                </h3>
+                <p class="text-sm font-manrope" style="color:rgba(46,48,52,0.55);line-height:1.6;">
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.
+                </p>
+                <p class="mt-5 inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 font-manrope" style="background:#F4F5F5;color:rgba(46,48,52,0.6);">
+                  <iconify-icon icon="solar:clock-circle-linear" width="12" style="stroke-width:1.5;"></iconify-icon>
+                  Lorem 3 dolor
+                </p>
+              </div>
+              <div data-rise="" class="group rounded-[24px] p-6 transition-all duration-300 hover:-translate-y-1" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 14px 28px -18px rgba(35,36,39,0.25);">
+                <span class="inline-flex items-center justify-center rounded-2xl mb-5" style="width:44px;height:44px;background:#F4F5F5;border:1px solid rgba(46,48,52,0.06);">
+                  <iconify-icon icon="solar:headphones-round-linear" width="20" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                </span>
+                <h3 class="text-base font-medium mb-2 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Consectetur elit
+                </h3>
+                <p class="text-sm font-manrope" style="color:rgba(46,48,52,0.55);line-height:1.6;">
+                  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.
+                </p>
+                <p class="mt-5 inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 font-manrope" style="background:#F4F5F5;color:rgba(46,48,52,0.6);">
+                  <iconify-icon icon="solar:clock-circle-linear" width="12" style="stroke-width:1.5;"></iconify-icon>
+                  Lorem 2 dolor
+                </p>
+              </div>
+              <div data-rise="" class="group rounded-[24px] p-6 transition-all duration-300 hover:-translate-y-1" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 14px 28px -18px rgba(35,36,39,0.25);">
+                <span class="inline-flex items-center justify-center rounded-2xl mb-5" style="width:44px;height:44px;background:#F4F5F5;border:1px solid rgba(46,48,52,0.06);">
+                  <iconify-icon icon="solar:graph-new-linear" width="20" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                </span>
+                <h3 class="text-base font-medium mb-2 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Sed do eiusmod
+                </h3>
+                <p class="text-sm font-manrope" style="color:rgba(46,48,52,0.55);line-height:1.6;">
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.
+                </p>
+                <p class="mt-5 inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 font-manrope" style="background:#F4F5F5;color:rgba(46,48,52,0.6);">
+                  <iconify-icon icon="solar:clock-circle-linear" width="12" style="stroke-width:1.5;"></iconify-icon>
+                  Lorem 3 dolor
+                </p>
+              </div>
+              <div data-rise="" class="group rounded-[24px] p-6 transition-all duration-300 hover:-translate-y-1" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 14px 28px -18px rgba(35,36,39,0.25);">
+                <span class="inline-flex items-center justify-center rounded-2xl mb-5" style="width:44px;height:44px;background:#F4F5F5;border:1px solid rgba(46,48,52,0.06);">
+                  <iconify-icon icon="solar:document-add-linear" width="20" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                </span>
+                <h3 class="text-base font-medium mb-2 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Tempor incididunt
+                </h3>
+                <p class="text-sm font-manrope" style="color:rgba(46,48,52,0.55);line-height:1.6;">
+                  Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia.
+                </p>
+                <p class="mt-5 inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 font-manrope" style="background:#F4F5F5;color:rgba(46,48,52,0.6);">
+                  <iconify-icon icon="solar:clock-circle-linear" width="12" style="stroke-width:1.5;"></iconify-icon>
+                  Lorem 2 dolor
+                </p>
+              </div>
+              <div data-rise="" class="group rounded-[24px] p-6 transition-all duration-300 hover:-translate-y-1" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 14px 28px -18px rgba(35,36,39,0.25);">
+                <span class="inline-flex items-center justify-center rounded-2xl mb-5" style="width:44px;height:44px;background:#F4F5F5;border:1px solid rgba(46,48,52,0.06);">
+                  <iconify-icon icon="solar:rocket-2-linear" width="20" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                </span>
+                <h3 class="text-base font-medium mb-2 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Magna aliqua ut
+                </h3>
+                <p class="text-sm font-manrope" style="color:rgba(46,48,52,0.55);line-height:1.6;">
+                  Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur adipisci.
+                </p>
+                <p class="mt-5 inline-flex items-center gap-1.5 text-xs font-medium rounded-full px-3 py-1.5 font-manrope" style="background:#F4F5F5;color:rgba(46,48,52,0.6);">
+                  <iconify-icon icon="solar:clock-circle-linear" width="12" style="stroke-width:1.5;"></iconify-icon>
+                  Lorem 1 dolor
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="relative px-5 sm:px-8 lg:px-16 pb-20 lg:pb-28">
+          <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col lg:flex-row items-stretch justify-center gap-4 lg:gap-0">
+              <div data-rise="" class="flex-1 rounded-[999px] px-10 py-8 text-center lg:-mr-4 lg:rotate-[-1deg]" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.07);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 34px -18px rgba(35,36,39,0.25);">
+                <p class="font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: clamp(2.25rem, 4vw, 3.25rem); line-height: 1;">
+                  10
+                </p>
+                <p class="mt-2 text-sm font-manrope" style="color:rgba(46,48,52,0.55);">
+                  lorem ipsum dolor
+                </p>
+              </div>
+              <div data-rise="" class="flex-1 rounded-[999px] px-10 py-8 text-center relative z-10 lg:scale-[1.04]" style="background: rgb(31, 51, 38); box-shadow: rgba(255, 255, 255, 0.14) 0px 1px 0px inset, rgba(23, 23, 25, 0.5) 0px 24px 44px -18px;">
+                <p class="text-white font-fraunces font-light tracking-tighter" style="font-size: clamp(2.25rem, 4vw, 3.25rem); line-height: 1;">
+                  3
+                </p>
+                <p class="mt-2 text-sm font-manrope" style="color:rgba(255,255,255,0.55);">
+                  consectetur adipiscing
+                </p>
+              </div>
+              <div data-rise="" class="flex-1 rounded-[999px] px-10 py-8 text-center lg:-ml-4 lg:rotate-[1deg]" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.07);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 34px -18px rgba(35,36,39,0.25);">
+                <p class="font-fraunces font-light tracking-tighter" style="color: rgb(63, 125, 83); font-size: clamp(2.25rem, 4vw, 3.25rem); line-height: 1;">
+                  1
+                </p>
+                <p class="mt-2 text-sm font-manrope" style="color:rgba(46,48,52,0.55);">
+                  sed do eiusmod
+                </p>
+              </div>
+            </div>
+            <p data-rise="" class="mt-6 text-center text-xs font-manrope" style="color:rgba(46,48,52,0.4);">
+              Lorem ipsum dolor sit amet consectetur — sed do eiusmod tempor incididunt.
+            </p>
+          </div>
+        </section>
+
+        <section id="work" class="relative px-5 sm:px-8 lg:px-16 pb-20 lg:pb-28">
+          <div class="max-w-6xl mx-auto">
+            <div data-rise="" class="max-w-2xl mb-12" style=" transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);">
+              <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium mb-6 font-manrope" style="background:rgba(63,125,83,0.08);border:1px solid rgba(63,125,83,0.18);color:#2F6844;">
+                <iconify-icon icon="solar:folder-check-linear" width="13" style="stroke-width:1.5;"></iconify-icon>
+                Lorem ipsum
+              </span>
+              <h2 class="font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: clamp(2rem, 4.5vw, 3.5rem); line-height: 1.05; letter-spacing: 0px; font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                Lorem ipsum dolor sit amet elit.
+              </h2>
+            </div>
+
+            <div class="flex flex-col gap-5">
+              <div data-rise="" class="grid md:grid-cols-2 rounded-[28px] overflow-hidden" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 20px 40px -22px rgba(35,36,39,0.28);">
+                <div class="p-8 lg:p-10 flex flex-col justify-center order-2 md:order-1">
+                  <p class="text-xs font-medium mb-4 font-manrope" style="color: rgb(47, 104, 68);">
+                    Lorem · Ipsum dolor sit
+                  </p>
+                  <h3 class="text-xl mb-5 font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                    Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                  </h3>
+                  <div class="flex flex-col gap-3 text-sm" style="color:rgba(46,48,52,0.6);line-height:1.6;">
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Lorem —
+                      </span>
+                      Sed do eiusmod tempor incididunt ut labore et dolore magna.
+                    </p>
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Ipsum dolor —
+                      </span>
+                      Ut enim ad minim veniam quis nostrud exercitation ullamco.
+                    </p>
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Amet —
+                      </span>
+                      Duis aute irure dolor, in reprehenderit, in voluptate.
+                    </p>
+                  </div>
+                </div>
+                <div class="relative min-h-[220px] md:min-h-[300px] order-1 md:order-2 m-3 rounded-[20px] overflow-hidden" style="background:linear-gradient(150deg,#F7EEEA,#F1DED6);">
+                  <div class="absolute left-8 top-8 right-16 rounded-2xl p-4" style="background:rgba(255,255,255,0.9);box-shadow:0 12px 24px -14px rgba(35,36,39,0.25);">
+                    <div class="h-2 w-2/3 rounded-full mb-2" style="background:rgba(46,48,52,0.15);"></div>
+                    <div class="h-2 w-1/2 rounded-full" style="background:rgba(46,48,52,0.1);"></div>
+                  </div>
+                  <div class="absolute left-16 top-28 right-8 rounded-2xl p-4" style="background:#232427;box-shadow:0 16px 30px -14px rgba(23,23,25,0.5);">
+                    <div class="h-2 w-1/2 rounded-full mb-2" style="background:rgba(255,255,255,0.35);"></div>
+                    <div class="h-2 w-3/4 rounded-full" style="background:rgba(255,255,255,0.18);"></div>
+                  </div>
+                  <div class="absolute left-8 bottom-6 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium font-manrope" style="background:rgba(255,255,255,0.9);color:#2E3034;">
+                    <iconify-icon icon="solar:shield-check-linear" width="13" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    Lorem ipsum dolor
+                  </div>
+                </div>
+              </div>
+
+              <div data-rise="" class="grid md:grid-cols-2 rounded-[28px] overflow-hidden" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 20px 40px -22px rgba(35,36,39,0.28);">
+                <div class="relative min-h-[220px] md:min-h-[300px] m-3 rounded-[20px] overflow-hidden" style="background:linear-gradient(150deg,#EAF0F7,#DCE6F2);">
+                  <div class="absolute left-8 top-8 right-8 rounded-2xl p-4 flex items-end gap-1.5" style="background:rgba(255,255,255,0.9);height:120px;box-shadow:0 12px 24px -14px rgba(35,36,39,0.25);">
+                    <div class="rounded-full" style="width:8px;height:35%;background:rgba(46,48,52,0.2);"></div>
+                    <div class="rounded-full" style="width:8px;height:55%;background:rgba(46,48,52,0.2);"></div>
+                    <div class="rounded-full" style="width:8px;height:45%;background:rgba(46,48,52,0.2);"></div>
+                    <div class="rounded-full" style="width:8px;height:80%;background:#E34A32;"></div>
+                    <div class="rounded-full" style="width:8px;height:60%;background:rgba(46,48,52,0.2);"></div>
+                    <div class="rounded-full" style="width:8px;height:70%;background:rgba(46,48,52,0.2);"></div>
+                  </div>
+                  <div class="absolute left-8 bottom-6 right-24 rounded-2xl p-4" style="background:#232427;box-shadow:0 16px 30px -14px rgba(23,23,25,0.5);">
+                    <div class="h-2 w-2/3 rounded-full mb-2" style="background:rgba(255,255,255,0.35);"></div>
+                    <div class="h-2 w-1/3 rounded-full" style="background:rgba(255,255,255,0.18);"></div>
+                  </div>
+                </div>
+                <div class="p-8 lg:p-10 flex flex-col justify-center">
+                  <p class="text-xs font-medium mb-4 font-manrope" style="color: rgb(47, 104, 68);">
+                    Dolor · Sit amet elit
+                  </p>
+                  <h3 class="text-xl mb-5 font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem.
+                  </h3>
+                  <div class="flex flex-col gap-3 text-sm" style="color:rgba(46,48,52,0.6);line-height:1.6;">
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Lorem —
+                      </span>
+                      Nemo enim ipsam voluptatem quia voluptas sit aspernatur.
+                    </p>
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Ipsum dolor —
+                      </span>
+                      Neque porro quisquam est qui dolorem ipsum quia dolor sit.
+                    </p>
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Amet —
+                      </span>
+                      Excepteur sint occaecat, cupidatat non proident sunt.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div data-rise="" class="grid md:grid-cols-2 rounded-[28px] overflow-hidden" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 20px 40px -22px rgba(35,36,39,0.28);">
+                <div class="p-8 lg:p-10 flex flex-col justify-center order-2 md:order-1">
+                  <p class="text-xs font-medium mb-4 font-manrope" style="color: rgb(47, 104, 68);">
+                    Amet · Consectetur elit
+                  </p>
+                  <h3 class="text-xl mb-5 font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus.
+                  </h3>
+                  <div class="flex flex-col gap-3 text-sm" style="color:rgba(46,48,52,0.6);line-height:1.6;">
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Lorem —
+                      </span>
+                      Temporibus autem quibusdam et aut officiis debitis rerum.
+                    </p>
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Ipsum dolor —
+                      </span>
+                      Itaque earum rerum hic tenetur a sapiente delectus ut aut.
+                    </p>
+                    <p class="font-manrope">
+                      <span class="font-medium font-manrope" style="color:#232427;">
+                        Amet —
+                      </span>
+                      Quis autem vel eum iure, reprehenderit qui in ea voluptate.
+                    </p>
+                  </div>
+                </div>
+                <div class="relative min-h-[220px] md:min-h-[300px] order-1 md:order-2 m-3 rounded-[20px] overflow-hidden" style="background:linear-gradient(150deg,#EDF5EE,#DFEEE2);">
+                  <div class="absolute left-8 top-8 right-12 rounded-2xl p-4" style="background:rgba(255,255,255,0.9);box-shadow:0 12px 24px -14px rgba(35,36,39,0.25);">
+                    <div class="flex items-center gap-2 mb-3">
+                      <img src="assets/i.pravatar.cc/40.jpg" alt="Source avatar" class="rounded-full" style="width:20px;height:20px;object-fit:cover;">
+                      <div class="h-2 w-1/3 rounded-full" style="background:rgba(46,48,52,0.15);"></div>
+                    </div>
+                    <div class="h-2 w-full rounded-full mb-2" style="background:rgba(46,48,52,0.1);"></div>
+                    <div class="h-2 w-2/3 rounded-full" style="background:rgba(46,48,52,0.1);"></div>
+                  </div>
+                  <div class="absolute right-8 bottom-6 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium font-manrope" style="background:#232427;color:#fff;box-shadow:0 12px 22px -12px rgba(23,23,25,0.5);">
+                    <iconify-icon icon="solar:link-round-angle-linear" width="13" style="stroke-width: 1.5; color: rgb(169, 201, 164);"></iconify-icon>
+                    3 lorem ipsum
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="packages" class="relative px-5 sm:px-8 lg:px-16 pb-24 lg:pb-32">
+          <div class="max-w-6xl mx-auto rounded-[36px] px-5 sm:px-10 lg:px-14 py-14 lg:py-20" style="background:#FFFFFF;border:1px solid rgba(46,48,52,0.06);box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 30px 60px -30px rgba(35,36,39,0.3);">
+            <div data-rise="" class="max-w-2xl mb-12" style=" transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);">
+              <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-medium mb-6 font-manrope" style="background:rgba(63,125,83,0.08);border:1px solid rgba(63,125,83,0.18);color:#2F6844;">
+                <iconify-icon icon="solar:box-minimalistic-linear" width="13" style="stroke-width:1.5;"></iconify-icon>
+                Lorem ipsum
+              </span>
+              <h2 class="font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.05; letter-spacing: 0px; font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                Lorem ipsum dolor sit amet elit.
+              </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4 lg:gap-0 items-stretch">
+              <div data-rise="" class="rounded-[26px] p-7 flex flex-col lg:-rotate-1 lg:translate-y-3" style="background:#F4F5F5;border:1px solid rgba(46,48,52,0.07);box-shadow:0 16px 30px -20px rgba(35,36,39,0.25);">
+                <p class="text-xs font-medium mb-1 font-manrope" style="color:rgba(46,48,52,0.5);">
+                  2 weeks
+                </p>
+                <h3 class="text-lg font-medium mb-4 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Lorem Ipsum
+                </h3>
+                <p class="mb-6 font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: 1.75rem;">
+                  $9k
+                  <span class="text-xs font-normal font-manrope" style="color:rgba(46,48,52,0.45);">
+                    / sprint
+                  </span>
+                </p>
+                <ul class="flex flex-col gap-2.5 text-sm mb-8" style="color:rgba(46,48,52,0.6);">
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    Lorem ipsum dolor
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    Sit amet elit
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    Sed do eiusmod
+                  </li>
+                </ul>
+                <a href="#contact" class="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 font-manrope" style="color:#232427;background:#FFFFFF;border:1px solid rgba(46,48,52,0.1);box-shadow:0 8px 18px -10px rgba(35,36,39,0.25);">
+                  Lorem ipsum dolor
+                </a>
+              </div>
+              <div data-rise="" class="rounded-[26px] p-7 flex flex-col relative z-10 lg:-translate-y-2 lg:scale-[1.03]" style="background: linear-gradient(rgb(47, 74, 58) 0%, rgb(22, 37, 28) 70%); box-shadow: rgba(255, 255, 255, 0.16) 0px 1px 0px inset, rgba(23, 23, 25, 0.6) 0px 30px 55px -22px;">
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-xs font-medium font-manrope" style="color:rgba(255,255,255,0.5);">
+                    4 weeks
+                  </p>
+                  <span class="text-xs font-medium rounded-full px-2.5 py-1 font-manrope" style="background:rgba(107,143,71,0.18);color:#A9C9A4;">
+                    Lorem ipsum
+                  </span>
+                </div>
+                <h3 class="text-lg font-medium mb-4 text-white font-manrope" style="font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Dolor Sit
+                </h3>
+                <p class="mb-6 text-white font-fraunces font-light tracking-tighter" style="font-size: 1.75rem;">
+                  $24k
+                  <span class="text-xs font-normal font-manrope" style="color:rgba(255,255,255,0.45);">
+                    / sprint
+                  </span>
+                </p>
+                <ul class="flex flex-col gap-2.5 text-sm mb-8" style="color:rgba(255,255,255,0.65);">
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(169, 201, 164);"></iconify-icon>
+                    Tempor incididunt ut
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(169, 201, 164);"></iconify-icon>
+                    Labore et dolore magna
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(169, 201, 164);"></iconify-icon>
+                    Ut enim ad minim veniam
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(169, 201, 164);"></iconify-icon>
+                    Quis nostrud exercitation
+                  </li>
+                </ul>
+                <a href="#contact" class="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 font-manrope" style="color:#171719;background:#FFFFFF;box-shadow:0 10px 22px -10px rgba(0,0,0,0.5);">
+                  Dolor sit amet elit
+                </a>
+              </div>
+              <div data-rise="" class="rounded-[26px] p-7 flex flex-col lg:rotate-1 lg:translate-y-3" style="background:#F4F5F5;border:1px solid rgba(46,48,52,0.07);box-shadow:0 16px 30px -20px rgba(35,36,39,0.25);">
+                <p class="text-xs font-medium mb-1 font-manrope" style="color:rgba(46,48,52,0.5);">
+                  Quarterly
+                </p>
+                <h3 class="text-lg font-medium mb-4 font-manrope" style="color: rgb(35, 36, 39); font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+                  Consectetur Adipiscing
+                </h3>
+                <p class="mb-6 font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: 1.75rem;">
+                  Custom
+                </p>
+                <ul class="flex flex-col gap-2.5 text-sm mb-8" style="color:rgba(46,48,52,0.6);">
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    Duis aute irure dolor
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    In reprehenderit in
+                  </li>
+                  <li class="flex items-center gap-2 font-manrope">
+                    <iconify-icon icon="solar:check-circle-linear" width="15" style="stroke-width: 1.5; color: rgb(63, 125, 83);"></iconify-icon>
+                    Voluptate velit esse
+                  </li>
+                </ul>
+                <a href="#contact" class="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 font-manrope" style="color:#232427;background:#FFFFFF;border:1px solid rgba(46,48,52,0.1);box-shadow:0 8px 18px -10px rgba(35,36,39,0.25);">
+                  Sed do eiusmod
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer id="contact" class="relative overflow-hidden px-5 sm:px-8 lg:px-16 pt-20 pb-10">
+          <canvas id="footerParticles" class="absolute inset-0 w-full h-full pointer-events-none z-0" aria-hidden="true"></canvas>
+          <div class="absolute pointer-events-none" aria-hidden="true" style="left: 50%; bottom: -30%; transform: translateX(-50%); width: 80vw; height: 50vw; max-width: 1100px; max-height: 640px; background: radial-gradient(at 50% 80%, rgba(63, 125, 83, 0.32) 0%, rgba(47, 104, 68, 0.12) 45%, transparent 72%); filter: blur(60px);"></div>
+
+          <div class="relative z-10 max-w-3xl mx-auto text-center">
+            <h2 data-rise="" class="font-fraunces font-light tracking-tighter" style="color: rgb(35, 36, 39); font-size: clamp(2.25rem, 5.5vw, 4.25rem); line-height: 1.02; letter-spacing: 0px; font-family: &quot;Source Serif 4&quot;, Georgia, serif;">
+              Lorem ipsum dolor sit amet.
+              <br>
+              Consectetur adipiscing elit sed.
+            </h2>
+            <p data-rise="" class="mt-6 text-base max-w-md mx-auto font-manrope" style="color:rgba(46,48,52,0.6);line-height:1.65;">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.
+            </p>
+
+            <form data-rise="" class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-lg mx-auto" onsubmit="event.preventDefault();this.querySelector('button span').textContent='Request sent';" style=" transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);">
+              <input type="email" required="" placeholder="you@company.com" class="w-full sm:flex-1 rounded-full px-5 py-3.5 text-sm outline-none transition-shadow focus:shadow-lg" style="background:rgba(255,255,255,0.9);border:1px solid rgba(46,48,52,0.1);color:#232427;box-shadow:0 8px 20px -14px rgba(35,36,39,0.25);">
+              <button type="submit" class="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5" style="background: linear-gradient(rgb(47, 74, 58) 0%, rgb(22, 37, 28) 55%); box-shadow: rgba(255, 255, 255, 0.24) 0px 1px 0px inset, rgba(0, 0, 0, 0.35) 0px -3px 8px inset, rgba(23, 23, 25, 0.55) 0px 14px 26px -12px;">
+                <span class="font-manrope">Lorem Ipsum</span>
+                <iconify-icon icon="solar:arrow-right-linear" width="14" class="transition-transform duration-300 group-hover:translate-x-0.5" style="stroke-width:1.5;"></iconify-icon>
+              </button>
+            </form>
+            <p data-rise="" class="mt-4 text-xs font-manrope" style="color:rgba(46,48,52,0.45);">
+              Lorem ipsum dolor sit —
+              <a href="mailto:hello@terrasprint.studio" class="font-medium underline underline-offset-2 font-manrope" style="color:#232427;">
+                hello@terrasprint.studio
+              </a>
+            </p>
+          </div>
+
+          <div class="relative z-10 mt-20 max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 pt-8" style="border-top:1px solid rgba(46,48,52,0.08);">
+            <div class="flex items-center gap-2.5">
+              <span class="relative inline-flex items-center" aria-hidden="true">
+                <span class="inline-block rounded-full" style="width:14px;height:14px;background:#232427;"></span>
+                <span class="inline-block rounded-full -ml-1.5" style="width: 14px; height: 14px; background: rgb(63, 125, 83);"></span>
+              </span>
+              <span class="text-xs font-medium font-manrope" style="color:#232427;">
+                TerraSprint
+              </span>
+            </div>
+            <nav class="flex items-center gap-5 text-xs" style="color:rgba(46,48,52,0.5);" aria-label="Footer">
+              <a href="#services" class="hover:text-[#232427] transition-colors font-manrope">
+                Services
+              </a>
+              <a href="#work" class="hover:text-[#232427] transition-colors font-manrope">
+                Work
+              </a>
+              <a href="#packages" class="hover:text-[#232427] transition-colors font-manrope">
+                Packages
+              </a>
+              <a href="#contact" class="hover:text-[#232427] transition-colors font-manrope">
+                Contact
+              </a>
+            </nav>
+            <p class="text-xs font-manrope" style="color:rgba(46,48,52,0.4);">
+              © 2025 TerraSprint Studio
+            </p>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // ---- Rise / fade reveal ----
+        var risers = document.querySelectorAll('[data-rise]');
+        risers.forEach(function(el){
+          el.style.opacity = '0';
+          if(!reduced) el.style.transform = (el.style.transform ? el.style.transform + ' ' : '') + 'translateY(14px)';
+          el.style.transition = 'opacity 0.8s cubic-bezier(0.22,0.61,0.36,1), transform 0.8s cubic-bezier(0.22,0.61,0.36,1)';
+        });
+        var seen = new WeakMap();
+        var io = new IntersectionObserver(function(entries){
+          var visible = entries.filter(function(e){return e.isIntersecting;});
+          visible.forEach(function(e, i){
+            if(seen.get(e.target)) return;
+            seen.set(e.target, true);
+            setTimeout(function(){
+              e.target.style.opacity = '1';
+              if(!reduced) e.target.style.transform = e.target.style.transform.replace(/\s*translateY\(14px\)/,'');
+            }, i * 90);
+            io.unobserve(e.target);
+          });
+        }, {threshold: 0.12});
+        risers.forEach(function(el){ io.observe(el); });
+
+        // ---- Floating tile drift ----
+        if(!reduced && 'animate' in Element.prototype){
+          document.querySelectorAll('[data-drift]').forEach(function(el){
+            var i = parseInt(el.getAttribute('data-drift'),10);
+            var base = el.style.transform || '';
+            el.animate(
+              [{transform: base + ' translateY(0px) rotate(0deg)'},
+               {transform: base + ' translateY(-9px) rotate(' + (i%2===0 ? -1.5 : 1.5) + 'deg)'},
+               {transform: base + ' translateY(0px) rotate(0deg)'}],
+              {duration: 5200 + i*900, iterations: Infinity, easing: 'ease-in-out', delay: i*500}
+            );
+          });
+        }
+
+        // ---- Nav shadow on scroll ----
+        var capsule = document.getElementById('navCapsule');
+        window.addEventListener('scroll', function(){
+          if(window.scrollY > 40){
+            capsule.style.boxShadow = '0 1px 0 rgba(255,255,255,0.9) inset, 0 20px 44px -16px rgba(35,36,39,0.3)';
+            capsule.style.background = 'rgba(255,255,255,0.9)';
+          } else {
+            capsule.style.boxShadow = '0 1px 0 rgba(255,255,255,0.9) inset, 0 10px 30px -14px rgba(35,36,39,0.18)';
+            capsule.style.background = 'rgba(255,255,255,0.78)';
+          }
+        }, {passive:true});
+
+        // ---- Bloom pointer drift ----
+        var bloom = document.getElementById('bloom');
+        if(!reduced && bloom){
+          window.addEventListener('pointermove', function(e){
+            var x = (e.clientX / window.innerWidth - 0.5) * 26;
+            var y = (e.clientY / window.innerHeight - 0.5) * 20;
+            bloom.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+          }, {passive:true});
+        }
+
+        // ---- Mobile menu ----
+        var btn = document.getElementById('menuBtn');
+        var menu = document.getElementById('mobileMenu');
+        btn.addEventListener('click', function(){
+          var open = menu.classList.toggle('hidden') === false;
+          btn.setAttribute('aria-expanded', String(open));
+          btn.querySelector('iconify-icon').setAttribute('icon', open ? 'solar:close-circle-linear' : 'solar:hamburger-menu-linear');
+        });
+        menu.querySelectorAll('a').forEach(function(a){
+          a.addEventListener('click', function(){
+            menu.classList.add('hidden');
+            btn.setAttribute('aria-expanded','false');
+            btn.querySelector('iconify-icon').setAttribute('icon','solar:hamburger-menu-linear');
+          });
+        });
+      })();
+    </script>
+
+    <script>
+      (function(){
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var canvas = document.getElementById('heroParticles');
+        if(!canvas) return;
+        var hero = canvas.closest('section') || canvas.parentElement;
+        var ctx = canvas.getContext('2d');
+        var DPR = Math.min(window.devicePixelRatio || 1, 2);
+        var W = 0, H = 0;
+        var drops = [];
+        var splashes = [];
+        var count = window.innerWidth < 768 ? 40 : 70;
+        var mouse = { x: -9999, y: -9999, inside: false };
+        var wind = 0;
+        var umbrella = { open:false, x:0, y:0, vx:0, vy:0, angle:0, aVel:0, openT:0, R:78 };
+        var rects = [];
+        var frame = 0;
+
+        function resize(){
+          var rect = hero.getBoundingClientRect();
+          W = rect.width; H = rect.height;
+          canvas.width = Math.max(1, W * DPR);
+          canvas.height = Math.max(1, H * DPR);
+          canvas.style.width = W + 'px';
+          canvas.style.height = H + 'px';
+          ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+          collectRects();
+        }
+
+        function collectRects(){
+          rects = [];
+          var hr = hero.getBoundingClientRect();
+          hero.querySelectorAll('[data-drift], h1, a, [data-rise]').forEach(function(el){
+            var r = el.getBoundingClientRect();
+            if(r.width < 24 || r.height < 12) return;
+            rects.push({ left: r.left - hr.left, right: r.right - hr.left, top: r.top - hr.top });
+          });
+        }
+
+        function makeDrop(resetY){
+          var nearMouse = mouse.inside && Math.random() < 0.35;
+          var x = nearMouse ? mouse.x + (Math.random() - 0.5) * 180 : Math.random() * (W + 400) - 200;
+          return {
+            x: x,
+            y: resetY ? -30 : Math.random() * H,
+            py: resetY ? -30 : 0,
+            vy: Math.random() * 8 + 12,
+            l: Math.random() * 12 + 15,
+            w: Math.random() * 0.8 + 0.8,
+            color: Math.random() < 0.6 ? '#3F7D53' : (Math.random() < 0.5 ? '#232427' : '#8B6F47')
+          };
+        }
+
+        function makeSplash(x, y, color){
+          var splashCount = Math.floor(Math.random() * 3) + 2;
+          for(var i=0; i<splashCount; i++){
+            splashes.push({
+              x: x, y: y,
+              vx: (Math.random() - 0.5) * 4 + wind * 0.3,
+              vy: -Math.random() * 3 - 1,
+              r: Math.random() * 0.8 + 0.5,
+              color: color, life: 1
+            });
+          }
+        }
+
+        function drawStatic(){ resize(); ctx.clearRect(0, 0, W, H); }
+
+        if(reduced){
+          drawStatic();
+          window.addEventListener('resize', drawStatic, { passive: true });
+          return;
+        }
+
+        window.addEventListener('pointermove', function(e){
+          var r = hero.getBoundingClientRect();
+          mouse.x = e.clientX - r.left;
+          mouse.y = e.clientY - r.top;
+          mouse.inside = mouse.x >= 0 && mouse.x <= r.width && mouse.y >= 0 && mouse.y <= r.height;
+        }, { passive: true });
+
+        hero.addEventListener('click', function(e){
+          if(e.target.closest('a, button, input')) return;
+          var r = hero.getBoundingClientRect();
+          mouse.x = e.clientX - r.left;
+          mouse.y = e.clientY - r.top;
+          umbrella.open = !umbrella.open;
+          if(umbrella.open && umbrella.openT < 0.05){
+            umbrella.x = mouse.x; umbrella.y = mouse.y;
+            umbrella.vx = 0; umbrella.vy = 0; umbrella.angle = 0; umbrella.aVel = 0;
+          }
+        });
+
+        function init(){
+          resize();
+          drops = [];
+          for(var i = 0; i < count; i++) drops.push(makeDrop());
+        }
+
+        window.addEventListener('resize', resize, { passive: true });
+        if('ResizeObserver' in window){
+          var ro = new ResizeObserver(resize);
+          ro.observe(hero);
+        }
+
+        init();
+
+        function domeSurfaceY(x){
+          var dx = x - umbrella.x;
+          var R = umbrella.R * umbrella.openT;
+          if(Math.abs(dx) >= R) return null;
+          return umbrella.y - Math.sqrt(R * R - dx * dx);
+        }
+
+        function drawUmbrella(){
+          if(umbrella.openT < 0.02) return;
+          var R = umbrella.R;
+          ctx.save();
+          ctx.translate(umbrella.x, umbrella.y);
+          ctx.rotate(umbrella.angle);
+          ctx.scale(umbrella.openT, umbrella.openT);
+          ctx.strokeStyle = '#232427';
+          ctx.lineWidth = 3;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(0, -R - 12);
+          ctx.lineTo(0, 48);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(8, 48, 8, Math.PI, 0, true);
+          ctx.stroke();
+          ctx.fillStyle = '#232427';
+          ctx.beginPath();
+          ctx.arc(0, 0, R, Math.PI, Math.PI * 2, false);
+          var seg = 4, sw = (2 * R) / seg;
+          for(var i = 0; i < seg; i++){
+            ctx.quadraticCurveTo(R - sw * (i + 0.5), 13, R - sw * (i + 1), 0);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+          ctx.lineWidth = 1;
+          for(var j = 1; j < seg; j++){
+            ctx.beginPath();
+            ctx.moveTo(0, -R);
+            ctx.lineTo(-R + sw * j, 0);
+            ctx.stroke();
+          }
+          ctx.beginPath();
+          ctx.arc(0, -R - 12, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#232427';
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function tick(){
+          ctx.clearRect(0, 0, W, H);
+          frame++;
+          if(frame % 40 === 0) collectRects();
+
+          var targetWind = mouse.inside ? (mouse.x / W - 0.5) * 14 : 0;
+          wind += (targetWind - wind) * 0.04;
+
+          umbrella.vx += (mouse.x - umbrella.x) * 0.09;
+          umbrella.vy += (mouse.y - umbrella.y) * 0.09;
+          umbrella.vx *= 0.82; umbrella.vy *= 0.82;
+          umbrella.x += umbrella.vx; umbrella.y += umbrella.vy;
+          var targetA = Math.max(-0.5, Math.min(0.5, umbrella.vx * 0.015 + wind * 0.02));
+          umbrella.aVel += (targetA - umbrella.angle) * 0.12;
+          umbrella.aVel *= 0.86;
+          umbrella.angle += umbrella.aVel;
+          umbrella.openT += ((umbrella.open ? 1 : 0) - umbrella.openT) * 0.14;
+
+          for(var i = 0; i < drops.length; i++){
+            var p = drops[i];
+            p.py = p.y;
+            var vx = wind * (p.vy / 16);
+            p.x += vx;
+            p.y += p.vy;
+
+            var hit = false;
+
+            if(umbrella.openT > 0.5){
+              var sy = domeSurfaceY(p.x);
+              if(sy !== null && p.y >= sy && p.py < sy){
+                makeSplash(p.x, sy, p.color);
+                Object.assign(p, makeDrop(true));
+                hit = true;
+              }
+            }
+
+            if(!hit){
+              for(var r = 0; r < rects.length; r++){
+                var rc = rects[r];
+                if(p.y >= rc.top && p.py < rc.top && p.x >= rc.left && p.x <= rc.right){
+                  makeSplash(p.x, rc.top, p.color);
+                  Object.assign(p, makeDrop(true));
+                  hit = true;
+                  break;
+                }
+              }
+            }
+
+            if(!hit && p.y > H - 10){
+              makeSplash(p.x, H - 10, p.color);
+              Object.assign(p, makeDrop(true));
+              hit = true;
+            }
+
+            if(!hit){
+              ctx.beginPath();
+              ctx.strokeStyle = p.color;
+              ctx.lineWidth = p.w;
+              ctx.lineCap = 'round';
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p.x - wind * (p.l / 16), p.y - p.l);
+              ctx.stroke();
+            }
+          }
+
+          for(var j = splashes.length - 1; j >= 0; j--){
+            var s = splashes[j];
+            s.x += s.vx;
+            s.y += s.vy;
+            s.vy += 0.2;
+            s.life -= 0.04;
+
+            if(s.life <= 0){
+              splashes.splice(j, 1);
+            } else {
+              ctx.save();
+              ctx.globalAlpha = Math.max(0, s.life);
+              ctx.beginPath();
+              ctx.fillStyle = s.color;
+              ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+            }
+          }
+
+          drawUmbrella();
+
+          requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+      })();
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if(typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+        gsap.registerPlugin(ScrollTrigger);
+
+        document.querySelectorAll('.scroll-reveal').forEach(function(el) {
+          var hiddenOpacity = el.getAttribute('data-reveal-opacity') || '0.15';
+          var hiddenBlur = el.getAttribute('data-reveal-blur') || '6px';
+          var hiddenY = el.getAttribute('data-reveal-y') || '12px';
+          var stagger = parseFloat(el.getAttribute('data-reveal-stagger')) || 0.05;
+          var start = el.getAttribute('data-reveal-start') || 'top 85%';
+          var end = el.getAttribute('data-reveal-end') || 'bottom 50%';
+
+          var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+          var textNodes = [];
+          var node;
+          while (node = walker.nextNode()) {
+            if (node.parentElement && node.parentElement.tagName.toLowerCase() === 'script') continue;
+            textNodes.push(node);
+          }
+          textNodes.forEach(function(textNode) {
+            var words = textNode.nodeValue.split(/(\s+)/);
+            var fragment = document.createDocumentFragment();
+            words.forEach(function(word) {
+              if (word.trim().length > 0) {
+                var span = document.createElement('span');
+                span.textContent = word;
+                span.className = 'reveal-word inline-block';
+                span.style.opacity = hiddenOpacity;
+                span.style.filter = 'blur(' + hiddenBlur + ')';
+                span.style.transform = 'translateY(' + hiddenY + ')';
+                span.style.willChange = 'opacity, filter, transform';
+                fragment.appendChild(span);
+              } else {
+                fragment.appendChild(document.createTextNode(word));
+              }
+            });
+            textNode.parentNode.replaceChild(fragment, textNode);
+          });
+
+          var words = el.querySelectorAll('.reveal-word');
+          gsap.to(words, {
+            opacity: 1,
+            filter: 'blur(0px)',
+            y: 0,
+            stagger: stagger,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el,
+              start: start,
+              end: end,
+              scrub: 1
+            }
+          });
+        });
+      });
+    </script>
+
+    <script>
+      (function(){
+        const canvas = document.getElementById('footerParticles');
+        if (!canvas) return;
+        const section = canvas.parentElement;
+        const ctx = canvas.getContext('2d');
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) return;
+
+        let w, h;
+        let particles = [];
+        let isVisible = false;
+
+        const config = {
+          count: 35,
+          gravity: 0.8,
+          wind: 1.2,
+          colors: ['#FFB7C5', '#FFC1CC', '#FFD1DC', '#FDB0C0']
+        };
+
+        function resize() {
+          w = section.offsetWidth;
+          h = section.offsetHeight;
+          canvas.width = w * window.devicePixelRatio;
+          canvas.height = h * window.devicePixelRatio;
+          ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        function createPetal(respawn = false) {
+          return {
+            x: Math.random() * w,
+            y: respawn ? -20 : Math.random() * h,
+            size: Math.random() * 8 + 6,
+            vx: Math.random() * 0.5 + config.wind,
+            vy: Math.random() * 0.5 + config.gravity,
+            angle: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.04,
+            sway: Math.random() * Math.PI * 2,
+            swaySpeed: Math.random() * 0.02 + 0.01,
+            color: config.colors[Math.floor(Math.random() * config.colors.length)]
+          };
+        }
+
+        function init() {
+          resize();
+          particles = Array.from({ length: config.count }, () => createPetal(false));
+        }
+
+        window.addEventListener('resize', resize);
+
+        const io = new IntersectionObserver(entries => {
+          isVisible = entries[0].isIntersecting;
+          if (isVisible) requestAnimationFrame(tick);
+        }, { threshold: 0 });
+        io.observe(section);
+
+        init();
+
+        function tick() {
+          if (!isVisible) return;
+          ctx.clearRect(0, 0, w, h);
+
+          particles.forEach(p => {
+            p.x += p.vx + Math.sin(p.sway) * 1.5;
+            p.y += p.vy;
+            p.angle += p.rotSpeed;
+            p.sway += p.swaySpeed;
+
+            if (p.y > h + 30 || p.x > w + 30) {
+              Object.assign(p, createPetal(true));
+              p.x = Math.random() * w;
+            }
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.quadraticCurveTo(p.size, -p.size, p.size, 0);
+            ctx.quadraticCurveTo(p.size, p.size, 0, 0);
+            ctx.fill();
+            ctx.restore();
+          });
+
+          requestAnimationFrame(tick);
+        }
+      })();
+    </script>
+  
+</body></html>
