@@ -248,25 +248,30 @@ check('Shared runtime boots without catalogue elements and adds every background
   assert.equal($$('[data-reveal]:not([data-revealed])').length,0);
   page.document.dispatchEvent(Object.assign(new page.window.Event('keydown'),{key:'Escape'}));
 });
-check('All purchase links use the configured Clube de Autores destination and editable price',()=>{
+check('All seven purchase buttons use the configured cart URL in the same tab and allow navigation',()=>{
   assert.equal($('[data-preco]').textContent,'R$ 65,44');
+  assert.deepEqual($$('[data-compra]').map(button=>button.closest('section')?.id||(button.closest('header')?'cabecalho':'barra-mobile')),['cabecalho','inicio','para-que','detalhes','como-comprar','chamada-final','barra-mobile']);
   for(const button of $$('[data-compra]')){
-    assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo');
-    assert.equal(button.target,'_blank');
+    assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
+    assert.equal(new URL(button.getAttribute('href')).searchParams.get('cart'),'true');
+    assert.equal(button.hasAttribute('target'),false);
+    assert.equal(button.getAttribute('aria-label').includes('abre em nova aba'),false);
     assert.ok(button.rel.includes('noopener')&&button.rel.includes('noreferrer'));
     assert.equal(button.hasAttribute('aria-disabled'),false);
     assert.equal(button.getAttribute('aria-label').includes('R$ 65,44'),!button.closest('header, #inicio'));
+    const event=new page.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
+    assert.equal(event.defaultPrevented,false);
   }
   const unconfigured=load({link:'COLAR_AQUI_O_LINK_DO_CLUBE_DE_AUTORES'});
   const button=unconfigured.document.querySelector('[data-compra]');
   const event=new unconfigured.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
   assert.equal(event.defaultPrevented,true);
 });
-check('Configured URL and changed price apply to all purchase buttons, in new tabs',()=>{
+check('Configured URL and changed price apply to every purchase button, including an extra button, in the same tab',()=>{
   const configured=load({link:'https://example.com/caderninho',price:'R$ 70,00',extraButton:true});
   for(const button of configured.document.querySelectorAll('[data-compra]')){
     assert.equal(button.getAttribute('href'),'https://example.com/caderninho');
-    assert.equal(button.target,'_blank');
+    assert.equal(button.hasAttribute('target'),false);
     assert.ok(button.rel.includes('noopener')&&button.rel.includes('noreferrer'));
     assert.equal(button.getAttribute('aria-label').includes('R$ 70,00'),!button.closest('header, #inicio'));
     const event=new configured.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
@@ -478,7 +483,7 @@ check('Editable contact supports WhatsApp and mailto in both locations, blocks p
     }
     assert.equal(configured.document.querySelector('#compra-resposta-03 [data-preco]').textContent,'R$ 70,00');
     assert.equal(configured.document.querySelector('.purchase-total [data-preco]').textContent,'R$ 70,00');
-    assert.equal(configured.document.querySelector('.purchase-postcard [data-compra]').getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo');
+    assert.equal(configured.document.querySelector('.purchase-postcard [data-compra]').getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
   }
   for(const options of [{},{contact:'javascript:alert(1)'},{contact:'data:text/html,test'},{contact:'mailto:'}]){
     const unavailable=load(options);
@@ -568,8 +573,8 @@ check('Mobile bar shares price and checkout, supports iPhone viewport fit and tr
   const bar=active.document.querySelector('[data-mobile-purchase]'),button=bar.querySelector('[data-compra]');
   assert.equal(bar.querySelector('[data-preco]').textContent,'R$ 70,00');
   assert.equal(button.textContent,'Quero o meu caderninho');
-  assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo');
-  assert.equal(button.target,'_blank');
+  assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
+  assert.equal(button.hasAttribute('target'),false);
   assert.ok(active.document.querySelector('meta[name="viewport"]').getAttribute('content').includes('viewport-fit=cover'));
   active.document.activeElement=button;
   const finalButton=active.document.querySelector('#chamada-final [data-compra]');let focused=false;
