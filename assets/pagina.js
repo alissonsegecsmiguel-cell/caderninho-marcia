@@ -285,31 +285,116 @@
   section.querySelectorAll('[data-notes-carousel]').forEach(carousel => {
     const slides = [...carousel.querySelectorAll('[data-note-slide]')];
     const viewport = carousel.querySelector('.notes-viewport');
-    const track = carousel.querySelector('.notes-track');
-    if (!slides.length || !viewport || !track) return;
-    let current = 0, gesture = null;
-    function show(index) {
-      current = (index + slides.length) % slides.length;
-      track.style.transform = `translateX(-${current * 100}%)`;
+    const live = carousel.querySelector('.notes-position');
+    const progress = carousel.querySelector('[data-note-progress] > i');
+    const toggle = carousel.querySelector('[data-note-autoplay]');
+    const precise = window.matchMedia('(hover:hover) and (pointer:fine)');
+    if (!slides.length || !viewport) return;
+    let current = 0, gesture = null, touchTimer = null, frame = 0, tilt = null;
+    // Cada motivo de pausa é independente; o autoplay só anda sem nenhum deles.
+    const holds = new Set(['offscreen']);
+
+    function show(index, manual = true) {
+      const next = (index + slides.length) % slides.length;
+      const previous = slides[current];
+      carousel.dataset.direction = index < current ? 'prev' : 'next';
+      current = next;
+      live.setAttribute('aria-live', manual ? 'polite' : 'off');
       slides.forEach((slide, i) => {
         const active = i === current;
+        slide.classList.remove('is-entering', 'is-leaving');
         slide.classList.toggle('is-current', active);
         slide.setAttribute('aria-hidden', String(!active));
         slide.toggleAttribute('inert', !active);
       });
+      if (previous !== slides[current]) {
+        if (reduced.matches) {
+          // Com movimento reduzido, a troca é só um fade curto; a Web Animations API não é bloqueada pelo CSS.
+          slides[current].animate?.([{opacity:0}, {opacity:1}], {duration:300, easing:'ease-out'});
+        } else if (!calm()) {
+          previous.classList.add('is-leaving');
+          slides[current].classList.add('is-entering');
+        }
+      }
       carousel.querySelector('[data-note-position]').textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
       carousel.querySelector('[data-note-announcement]').textContent = ` · ${slides[current].dataset.noteLabel}`;
+      restart();
     }
+    slides.forEach(slide => slide.addEventListener('animationend', event => {
+      if (event.target === slide) slide.classList.remove('is-entering', 'is-leaving');
+    }));
+
+    // A barra dourada é o relógio: ao completar 5 s, a página avança.
+    const autoplayAllowed = () => !reduced.matches && Boolean(progress);
+    function restart() {
+      if (!progress) return;
+      carousel.classList.remove('is-autoplay');
+      if (!autoplayAllowed()) return;
+      void progress.offsetWidth;
+      carousel.classList.add('is-autoplay');
+    }
+    function sync() {
+      carousel.classList.toggle('is-autoplay-paused', holds.size > 0);
+    }
+    function hold(reason, on) {
+      if (on) holds.add(reason); else holds.delete(reason);
+      sync();
+    }
+    progress?.addEventListener('animationend', () => { if (!holds.size) show(current + 1, false); });
+
     carousel.querySelector('[data-note-prev]').addEventListener('click', () => show(current - 1));
     carousel.querySelector('[data-note-next]').addEventListener('click', () => show(current + 1));
+    toggle?.addEventListener('click', () => {
+      const paused = toggle.getAttribute('aria-pressed') !== 'true';
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.setAttribute('aria-label', paused ? 'Retomar a troca automática das páginas' : 'Pausar a troca automática das páginas');
+      hold('user', paused);
+    });
     carousel.addEventListener('keydown', event => {
       const destination = {ArrowLeft:current - 1, ArrowRight:current + 1, Home:0, End:slides.length - 1}[event.key];
       if (destination === undefined) return;
       event.preventDefault();
       show(destination);
     });
+
+    // Pausas: mouse sobre o carrossel, foco pelo teclado, toque (volta 8 s depois) e aba oculta.
+    carousel.addEventListener('mouseenter', () => { if (precise.matches) hold('hover', true); });
+    carousel.addEventListener('mouseleave', () => hold('hover', false));
+    carousel.addEventListener('focusin', event => { if (event.target.matches?.(':focus-visible')) hold('focus', true); });
+    carousel.addEventListener('focusout', event => { if (!carousel.contains(event.relatedTarget)) hold('focus', false); });
+    function touched() {
+      hold('touch', true);
+      clearTimeout(touchTimer);
+      touchTimer = setTimeout(() => hold('touch', false), 8000);
+    }
+    document.addEventListener('visibilitychange', () => hold('hidden', document.hidden));
+
+    // Folha levantada: escala e inclinação seguem o mouse, no máximo 6°.
+    function paintTilt() {
+      frame = 0;
+      if (!tilt) return;
+      const rect = slides[current].querySelector('.note-paper').getBoundingClientRect();
+      const x = Math.min(1, Math.max(0, (tilt.x - rect.left) / rect.width));
+      const y = Math.min(1, Math.max(0, (tilt.y - rect.top) / rect.height));
+      carousel.style.setProperty('--folha-y', `${((x - .5) * 12).toFixed(2)}deg`);
+      carousel.style.setProperty('--folha-x', `${((.5 - y) * 12).toFixed(2)}deg`);
+    }
+    viewport.addEventListener('pointermove', event => {
+      if (!precise.matches || event.pointerType !== 'mouse' || calm() || gesture) return;
+      carousel.classList.add('is-lifted');
+      tilt = {x:event.clientX, y:event.clientY};
+      if (!frame) frame = requestAnimationFrame(paintTilt);
+    }, {passive:true});
+    viewport.addEventListener('pointerleave', () => {
+      tilt = null;
+      carousel.classList.remove('is-lifted');
+      carousel.style.removeProperty('--folha-x');
+      carousel.style.removeProperty('--folha-y');
+    });
+
     viewport.addEventListener('pointerdown', event => {
       if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      if (event.pointerType !== 'mouse') touched();
       gesture = {id:event.pointerId, x:event.clientX, y:event.clientY};
       viewport.setPointerCapture?.(event.pointerId);
     });
@@ -318,24 +403,36 @@
       const x = event.clientX - gesture.x, y = event.clientY - gesture.y;
       if (Math.abs(x) < 8 || Math.abs(x) <= Math.abs(y) * 1.2) return;
       carousel.classList.add('is-dragging');
-      // Limita o arraste a uma página sem bloquear o scroll vertical do celular.
+      // Limita o arraste a meia página sem bloquear o scroll vertical do celular.
       const width = viewport.getBoundingClientRect?.().width || 320;
-      const delta = Math.max(-width, Math.min(width, x));
-      track.style.transform = `translateX(calc(-${current * 100}% + ${delta}px))`;
-    });
+      carousel.style.setProperty('--arraste', `${(Math.max(-width, Math.min(width, x)) * .5).toFixed(1)}px`);
+    }, {passive:true});
     function finish(event, cancelled = false) {
       if (!gesture || gesture.id !== event.pointerId) return;
       const x = event.clientX - gesture.x, y = event.clientY - gesture.y;
       gesture = null;
       carousel.classList.remove('is-dragging');
+      carousel.style.removeProperty('--arraste');
       if (viewport.hasPointerCapture?.(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+      if (event.pointerType !== 'mouse') touched();
       const horizontal = !cancelled && Math.abs(x) >= 40 && Math.abs(x) > Math.abs(y) * 1.2;
-      show(current + (horizontal ? x < 0 ? 1 : -1 : 0));
+      if (horizontal) show(current + (x < 0 ? 1 : -1));
     }
     viewport.addEventListener('pointerup', event => finish(event));
     viewport.addEventListener('pointercancel', event => finish(event, true));
+
     carousel.querySelector('[data-notes-controls]').hidden = false;
-    show(0);
+    if (toggle) toggle.hidden = !autoplayAllowed();
+    if ('IntersectionObserver' in window) {
+      new window.IntersectionObserver(entries => {
+        hold('offscreen', !entries.some(entry => entry.isIntersecting));
+      }, {threshold:.35}).observe(carousel);
+    } else hold('offscreen', false);
+    reduced.addEventListener('change', () => {
+      if (toggle) toggle.hidden = !autoplayAllowed();
+      restart();
+    });
+    show(0, false);
   });
 
   const objects = [...section.querySelectorAll('[data-vitrine-object]')];

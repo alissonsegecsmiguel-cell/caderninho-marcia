@@ -3,7 +3,7 @@
 ## Última sessão
 - Ferramenta: Claude Code
 - Data: 27/10/2026
-- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada)
+- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers
 
 ## Estado atual da página
 Arquivo único index.html, com estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html.
@@ -12,7 +12,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Hero (#inicio): título "Caderninho na mão!", aquarela do Rio ao fundo, caderno 3D em ciclo (abre e fecha), carimbo .postmark, botão de compra e aviso "Envio para endereços no Brasil". Sem preço na primeira dobra.
 - Faixa .wire: "Anote ✳ Pratique ✳ Revise ✳ ...".
 - Dobra 2 (#a-frase): "Uma frase que virou caderno."; citação que entra linha a linha com sublinhado dourado; leque de 3 postais clicáveis (Salvador, Amazônia, Foz do Iguaçu) com carimbo girando; caderno 3D fechado que inclina com o mouse e entreabre a capa; fundo com ondas do calçadão (assets/images/ondas-calcadao.svg) em parallax; itens 01, 02, 03 em cascata.
-- Dobra 3 (#para-que): vitrine com foto da mão segurando o caderno, carrossel de páginas anotadas (setas, teclado e arraste) e objetos decorativos com parallax (postal, folha, selo, lápis).
+- Dobra 3 (#para-que): vitrine com foto da mão (zoom e brilho no hover; zoom de entrada no celular), carrossel de páginas anotadas que troca sozinho a cada 5 s com barra dourada de progresso, virada de página, botão de pausar, setas, teclado e arraste; ficha de preço com linhas em cascata; objetos decorativos com parallax (dois selos da bandeira, folha e lápis).
 - Dobra 4 (#detalhes): seis diferenciais em disclosure; o caderno 3D gira para mostrar cada um (A5, acetato, espiral, 100 folhas, miolo, contracapa real).
 - Dobra 5 (#como-comprar): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato.
 - Chamada final (#chamada-final): "Tem uma palavra nova esperando por você.", caderno 3D fechado e botão de compra.
@@ -22,18 +22,20 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Fila pedida pelo usuário em 27/10/2026, nesta ordem: Dobra 3 (carrossel automático), compartilhamento (meta tags, og-image, favicon, 404) e revisão de desempenho por último. Os pedidos completos estão na conversa do Claude Code; o resumo está em "Próximas tarefas".
+- Fila pedida pelo usuário em 27/10/2026, nesta ordem: caderno da chamada final, dobra de oferta "A encomenda", compartilhamento e revisão de desempenho por último. Os pedidos completos estão na conversa do Claude Code; o resumo está em "Próximas tarefas".
 
 ## Próximas tarefas (em ordem)
-1. Dobra 3: carrossel automático a cada 5 s com barra de progresso, pausa no hover, toque e foco; hover com zoom e inclinação 3D; trocar o postal flutuante do Rio pelo selo.png.
-2. Compartilhamento: title e description novos, og-image.jpg 1200 x 630, Open Graph e Twitter, canonical, favicon (ico, svg, apple-touch-icon), theme-color #00854A e 404.html.
-3. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.
+1. Chamada final: integrar o caderno 3D em duas colunas (texto à esquerda, caderno à direita; no celular caderno em cima), espiral alinhada, rotação 3D real sem skew, 320 a 380 px de altura, sombra no chão, flutuação e hover; remover o coração isolado ou compor com folha, lápis e selo; brilho atrás do caderno. Sem Pão de Açúcar.
+2. Dobra de oferta "A encomenda" (#oferta), entre detalhes e perguntas: pacote kraft com barbante, caderno 3D saindo, etiqueta de envio com lista e preço em carimbo, varal de bandeirinhas, sequência de entrada, renumerar as etiquetas de seção, esconder a barra de compra do celular enquanto a oferta estiver na tela.
+3. Compartilhamento: title e description novos, og-image.jpg 1200 x 630, Open Graph e Twitter, canonical, favicon (ico, svg, apple-touch-icon), theme-color #00854A e 404.html.
+4. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.
 
 ## Pendências que dependem de pessoas (não implementar sem confirmação)
 - Retrato da Marcia em aquarela (marcia-aquarela.png), aguardando aprovação dela.
 - LINK_CONTATO: canal e responsável ainda não definidos.
 - Fotos reais do caderno quando a amostra chegar (substituir a foto da mão, que tem o Pão de Açúcar ao fundo).
 - Marcia precisa aprovar as citações atribuídas a ela.
+- Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
 
 ## Concluído
 - 27/10/2026: design system com identidade brasileira, cores creme e paleta verde, ouro e azul-marinho.
@@ -48,6 +50,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - 27/10/2026: AGENTS.md, CLAUDE.md e HANDOFF.md para a passagem entre Codex e Claude Code.
 - 27/10/2026: postais de Salvador, Amazônia e Iguaçu convertidos para JPG (1536 x 1024, qualidade 82); PNGs apagados.
 - 27/10/2026: Dobra 2 com leque de postais, ondas do calçadão, caderno 3D com hover e citação animada. Conferida no computador (1440 px) e no celular (390 px), também com movimento reduzido.
+- 27/10/2026: Dobra 3 com carrossel automático (5 s, barra de progresso, pausa por mouse, foco, toque por 8 s, aba oculta e botão), virada de página, folha levantada no hover, zoom na foto, cascata na ficha de preço e selo no lugar do postal do Rio. Conferida no computador e no celular.
 
 ## Decisões registradas
 - Venda pelo Clube de Autores, R$ 65,44, envio só para o Brasil.
@@ -55,4 +58,6 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Sem rastreamento de cliques por enquanto (decisão de manter simples).
 - Dobra 2: brasil-aquarela.png não aparece mais nesta dobra (só na hero). As ondas usam opacidade .2 para ficarem como marca d'água.
 - Dobra 2: clicar no postal da frente manda ele para o fundo; clicar em outro traz esse para a frente. No celular, o leque abre sozinho e a capa do caderno entreabre uma vez.
+- Dobra 3: a barra dourada de progresso é o próprio relógio do autoplay (o fim da animação avança a página), então ela pausa junto com as animações da página fora da tela, com a aba oculta ou com o botão de pausa do design system. Com movimento reduzido não há autoplay e as trocas usam só fade.
+- Dobra 3: o postal do Rio da lateral esquerda virou um segundo selo da bandeira (selo.png). postal.png deixou de ser usado na página.
 - As pastas assets/qa/npm-cache/ e assets/qa/runtime/ são cache local dos testes e ficam fora do git (.gitignore).

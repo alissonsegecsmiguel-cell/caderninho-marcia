@@ -55,14 +55,42 @@
 .vitrine>.container{z-index:1}
 .vitrine-grid{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);grid-template-areas:"photo carousel" "offer copy";align-items:start;gap:32px 60px;margin-top:32px}
 .vitrine-grid>*{min-width:0}
-.vitrine-photo{grid-area:photo;align-self:stretch;min-height:420px;box-shadow:var(--shadow)}
-.vitrine-photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vitrine-photo{grid-area:photo;align-self:stretch;min-height:420px;box-shadow:var(--shadow);transition:opacity var(--entrance) var(--ease) var(--reveal-delay,0ms),transform var(--entrance) var(--ease) var(--reveal-delay,0ms),translate var(--gesture) var(--ease)}
+.vitrine-photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1200ms var(--ease)}
+.vitrine-photo::after{content:"";position:absolute;inset:-20% -60%;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.28) 50%,transparent 60%);transform:translateX(-80%);opacity:0}
+.vitrine-photo-sombra{grid-area:photo;align-self:stretch;border-radius:var(--radius-lg);box-shadow:0 34px 64px -28px rgba(var(--navy-rgb),.42);opacity:0;transition:opacity var(--gesture) var(--ease),translate var(--gesture) var(--ease);pointer-events:none}
+@media(hover:hover) and (pointer:fine){
+  .vitrine-photo:hover{translate:0 -6px}
+  .vitrine-photo:hover>img{transform:scale(1.06)}
+  .vitrine-photo:hover::after{animation:foto-brilho 1400ms var(--ease) both}
+  .vitrine-photo-sombra:has(+ .vitrine-photo:hover){opacity:1;translate:0 -6px}
+}
+@media(hover:none){html.js .vitrine-photo[data-revealed=true]>img{animation:foto-entrada 1800ms var(--ease) both}}
+@keyframes foto-brilho{0%{opacity:0;transform:translateX(-80%)}20%{opacity:1}100%{opacity:0;transform:translateX(80%)}}
+@keyframes foto-entrada{from{transform:scale(1.06)}to{transform:scale(1)}}
+
+/* Ficha de preço: as linhas entram em cascata quando a oferta aparece. */
+html.js .vitrine-offer .vitrine-prices tr>*{opacity:0;transform:translateY(10px);transition:opacity var(--entrance) var(--ease),transform var(--entrance) var(--ease);transition-delay:calc(250ms + var(--linha,0) * 100ms)}
+html.js .vitrine-offer .vitrine-prices tr:nth-child(2)>*{--linha:1}
+html.js .vitrine-offer .vitrine-prices tr:nth-child(3)>*{--linha:2}
+html.js .vitrine-offer[data-revealed=true] .vitrine-prices tr>*{opacity:1;transform:none}
 .notes-carousel{grid-area:carousel;min-width:0}
 .notes-carousel [hidden]{display:none!important}
 .notes-viewport{overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab;user-select:none;padding:20px 12px}
-.notes-track{display:flex;transition:transform var(--gesture) var(--ease)}
-.notes-slide{flex:0 0 100%;min-width:0}
-.note-paper{position:relative;width:min(100%,380px);aspect-ratio:1748/2480;margin-inline:auto;container-type:inline-size;background:var(--surface);border-radius:calc(var(--radius-sm) / 2);box-shadow:var(--shadow)}
+/* Páginas empilhadas: a atual sai deslizando e a próxima entra virando como folha. */
+.notes-track{display:grid;perspective:1400px}
+.notes-slide{grid-area:1/1;min-width:0;opacity:0;pointer-events:none;transform-origin:0 50%}
+.notes-slide.is-current{opacity:1;pointer-events:auto}
+.notes-slide.is-leaving{animation:pagina-sai var(--pagina-troca) var(--ease) both}
+.notes-slide.is-entering{animation:pagina-vira var(--pagina-troca) var(--ease) both}
+.notes-carousel[data-direction=prev] .notes-slide.is-leaving{animation-name:pagina-sai-volta}
+.notes-carousel[data-direction=prev] .notes-slide.is-entering{animation-name:pagina-vira-volta;transform-origin:100% 50%}
+.notes-carousel{--pagina-troca:600ms;--folha-x:0deg;--folha-y:0deg}
+.notes-carousel .notes-slide.is-current{transform:translateX(var(--arraste,0px))}
+.note-paper{position:relative;width:min(100%,380px);aspect-ratio:1748/2480;margin-inline:auto;container-type:inline-size;background:var(--surface);border-radius:calc(var(--radius-sm) / 2);box-shadow:var(--shadow);transform:perspective(1200px) rotateX(var(--folha-x)) rotateY(var(--folha-y)) scale(var(--folha-zoom,1));transition:transform var(--gesture) var(--ease)}
+.note-paper::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;box-shadow:0 34px 60px -26px rgba(var(--navy-rgb),.45),0 14px 26px -18px rgba(var(--navy-rgb),.3);opacity:0;transition:opacity var(--gesture) var(--ease);pointer-events:none}
+.notes-carousel.is-lifted{--folha-zoom:1.04}
+.notes-carousel.is-lifted .note-paper::before{opacity:1}
 .note-paper>img{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;pointer-events:none}
 .note-label{position:absolute;top:10.5%;left:15.5%;font-size:8px}
 /* Pautas reais a cada 63,5/1748 da largura. Cada linha manuscrita ocupa
@@ -76,7 +104,21 @@
 .notes-position{white-space:nowrap;font-size:10px}
 .notes-prev .icon{transform:rotate(180deg)}
 .notes-carousel.is-dragging .notes-viewport{cursor:grabbing}
-.notes-carousel.is-dragging .notes-track,html.motion-paused .notes-track{transition:none}
+.notes-carousel.is-dragging .notes-slide{animation:none}
+.notes-position{display:inline-grid;gap:6px;justify-items:end}
+.notes-progress{display:block;width:56px;height:2px;overflow:hidden;background:rgba(var(--gold-rgb),.25);border-radius:2px}
+.notes-progress>i{display:block;height:100%;background:var(--accent);transform:scaleX(0);transform-origin:0 50%}
+.notes-carousel.is-autoplay .notes-progress>i{animation:pagina-progresso 5s linear both}
+.notes-carousel.is-autoplay-paused .notes-progress>i{animation-play-state:paused}
+.notes-autoplay{width:36px;height:36px}
+.notes-autoplay .icon{width:16px;height:16px}
+.notes-autoplay .notes-icon-play,.notes-autoplay[aria-pressed=true] .notes-icon-pause{display:none}
+.notes-autoplay[aria-pressed=true] .notes-icon-play{display:block}
+@keyframes pagina-sai{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-9%) rotate(-1.5deg)}}
+@keyframes pagina-sai-volta{from{opacity:1;transform:none}to{opacity:0;transform:translateX(9%) rotate(1.5deg)}}
+@keyframes pagina-vira{from{opacity:0;transform:rotateY(-32deg) translateX(5%)}to{opacity:1;transform:none}}
+@keyframes pagina-vira-volta{from{opacity:0;transform:rotateY(32deg) translateX(-5%)}to{opacity:1;transform:none}}
+@keyframes pagina-progresso{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .vitrine-copy{grid-area:copy}
 .vitrine-copy>p{max-width:600px;margin-top:24px;color:var(--text-soft)}
 .vitrine-offer{grid-area:offer}
@@ -93,8 +135,8 @@
 .vitrine-object{position:absolute;translate:0 var(--object-y,0px);pointer-events:none}
 .vitrine-object>img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;animation:leaf-sway 16s ease-in-out infinite alternate}
 /* Recorte do lado direito do postal: mantém o Pão de Açúcar em destaque. */
-.vitrine-postal{width:190px;height:250px;left:-90px;top:180px;transform:rotate(-14deg);opacity:.75}
-.vitrine-postal>img{object-fit:cover;object-position:right center;border-radius:var(--radius-sm)}
+.vitrine-postal{width:220px;left:-95px;top:200px;transform:rotate(-14deg)}
+.vitrine-postal>img{animation-delay:-2s}
 .vitrine-selo{width:160px;right:-65px;top:120px;transform:rotate(14deg)}
 .vitrine-selo>img{animation-delay:-6s}
 .vitrine-folha{width:250px;left:-95px;bottom:35px;opacity:.16;transform:rotate(24deg)}
@@ -454,7 +496,8 @@ html.motion-paused #a-frase .frase-preenchimento{animation:none}
   :is(.detail-description,.detail-trigger,.detail-arrow,.details-ruler){transition:none}
   .vitrine-object{translate:0 0}
   .vitrine-object>img{animation:none}
-  .notes-track{transition:none}
+  .notes-slide{animation:none!important}
+  .note-paper,.vitrine-photo>img{transition:none}
 }
 @media(max-width:370px){
   .sales-page .brand{font-size:17px;gap:6px}
