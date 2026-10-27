@@ -655,3 +655,6 @@ html.motion-paused .oferta :is(.carimbo-preco,.etiqueta-papel,.oferta-botao){ani
   .etiqueta-por-pagina{font-size:21px}
 }
 @media(prefers-reduced-motion:reduce){.oferta-etiqueta,.oferta-etiqueta::after{transition:none}.oferta-etiqueta:hover{translate:0 0}}
+
+/* Compra em andamento: o botão fica levemente apagado por 3 s, sem mudar o layout. */
+[data-compra].is-enviando{opacity:.7;cursor:progress}

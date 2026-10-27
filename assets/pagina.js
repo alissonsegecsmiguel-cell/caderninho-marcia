@@ -637,3 +637,34 @@
   observer.observe(section);
   reduced.addEventListener('change', () => { if (reduced.matches) deliver(); });
 })();
+
+/* Compra: depois do primeiro clique, os botões de compra ignoram novos cliques por 3 s.
+   Ao voltar pelo histórico (pageshow), eles ficam normais de novo. */
+(() => {
+  'use strict';
+  const buttons = () => document.querySelectorAll('[data-compra]');
+  let timer = null;
+  function release() {
+    clearTimeout(timer);
+    timer = null;
+    buttons().forEach(button => {
+      button.classList.remove('is-enviando');
+      button.removeAttribute('aria-busy');
+    });
+  }
+  document.addEventListener('click', event => {
+    const button = event.target.closest?.('[data-compra]');
+    if (!button || button.getAttribute('aria-disabled') === 'true') return;
+    if (timer) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    buttons().forEach(item => {
+      item.classList.add('is-enviando');
+      item.setAttribute('aria-busy', 'true');
+    });
+    timer = setTimeout(release, 3000);
+  }, true);
+  window.addEventListener('pageshow', release);
+})();
