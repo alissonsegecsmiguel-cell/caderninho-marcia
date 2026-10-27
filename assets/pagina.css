@@ -1,0 +1,26 @@
+/* Apenas composição da página de vendas. Tokens, fontes, componentes e
+   animações são importados de design_system.css e design_system.js. */
+.sales-section{min-height:340px;display:flex;align-items:center;padding-block:84px 108px}
+.sales-section h2{max-width:900px}
+.sales-hero{min-height:540px;padding-top:calc(var(--nav-height) + var(--hero-gap));padding-bottom:88px}
+.sales-hero>.container{z-index:1}
+.sales-hero::after{content:"";position:absolute;inset:24px -2% 32px auto;width:58%;background:url("images/brasil-aquarela.png") center/contain no-repeat;mix-blend-mode:multiply;opacity:.72;pointer-events:none;z-index:-1}
+.purchase-price{padding-left:16px;border-left:1px solid rgba(255,255,255,.35);font-weight:400}
+.purchase-button[aria-disabled=true]{cursor:default}
+.sales-footer{font-size:12px}
+@media(max-width:720px){
+  .sales-page .nav-inner{gap:12px}
+  .sales-page .brand{font-size:19px;gap:8px}
+  .sales-page .brand img{width:30px;height:30px}
+  .purchase-button{font-size:11px;min-height:44px;padding:11px 14px;gap:0}
+  .purchase-price{display:none}
+  .sales-section{min-height:280px;padding-block:64px 84px}
+  .sales-hero{min-height:460px;padding-top:calc(var(--nav-height) + var(--hero-gap));padding-bottom:70px}
+  .sales-hero::after{inset:auto -12% 25px auto;width:95%;height:75%;opacity:.3}
+  .sales-footer{font-size:10px;line-height:1.8}
+}
+@media(max-width:370px){
+  .sales-page .brand{font-size:17px;gap:6px}
+  .sales-page .brand img{width:25px;height:25px}
+  .purchase-button{font-size:10px;padding-inline:12px}
+}

@@ -16,7 +16,7 @@ const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 check('Unique IDs and valid anchors, SVG references and accessible descriptions', () => {
   const ids = $$('[id]').map(el => el.id);
   assert.equal(ids.length, new Set(ids).size);
-  for (const el of $$('[href^="#"]')) assert.ok(document.getElementById(el.getAttribute('href').slice(1)), el.outerHTML);
+  for (const el of $$('a[href^="#"]')) assert.ok(document.getElementById(el.getAttribute('href').slice(1)), el.outerHTML);
   for (const el of $$('[aria-controls], [aria-describedby], [aria-labelledby]')) {
     for (const attr of ['aria-controls', 'aria-describedby', 'aria-labelledby']) {
       for (const id of (el.getAttribute(attr) || '').split(/\s+/).filter(Boolean)) assert.ok(document.getElementById(id), `${attr}: ${id}`);

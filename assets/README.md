@@ -2,6 +2,16 @@
 
 Design system local para a **Profa. Marcia Macedo**, com o universo “Caderninho na Mão!”.
 
+## Página de vendas
+
+Abra **[../index.html](../index.html)** na raiz. A página contém somente o cabeçalho, sete seções com títulos provisórios e o rodapé. Ela importa `assets/design_system.css` e `assets/design_system.js`; a composição específica fica em `assets/pagina.css`. Fontes, marca e aquarela são os mesmos arquivos locais do catálogo.
+
+No script ao final de `index.html`, edite `LINK_COMPRA` com a URL completa do Clube de Autores e `PRECO` com o preço exibido. Todos os links com `data-compra` usam essa configuração e abrem em nova aba quando o destino está configurado. Enquanto o link for o placeholder, a ação fica desabilitada para evitar uma navegação inválida. Não foi criado conteúdo de vendas além dos títulos solicitados.
+
+O sprite SVG e os efeitos de fundo e surgimento são compartilhados pelo JS. As demonstrações do catálogo só inicializam quando seus elementos estão presentes, permitindo importar o mesmo arquivo em outras páginas sem reproduzir o catálogo.
+
+## Catálogo
+
 Abra **[design_system.html](design_system.html)** diretamente no navegador. Não é necessário instalar dependências, compilar ou usar internet. Mantenha os arquivos CSS, JS, `fonts/` e `images/` nas posições atuais. A cópia de tokens possui fallback para abertura por `file://`; políticas do navegador ainda podem impedir acesso à área de transferência.
 
 ## Conteúdo
@@ -60,6 +70,7 @@ Para repetir a verificação de DOM, a partir da pasta do projeto:
 ```powershell
 npm.cmd install --prefix assets/qa/runtime --cache assets/qa/npm-cache --no-save --package-lock=false linkedom
 node assets/qa/verify.cjs
+node assets/qa/verify-sales.cjs
 ```
 
 As dependências de verificação não são necessárias para usar a página e não foram incluídas na entrega.

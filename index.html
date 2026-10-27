@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FBF6EA">
+  <meta name="description" content="Caderninho na Mão!, da Profa. Marcia Macedo.">
+  <title>Caderninho na Mão! · Profa. Marcia Macedo</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/marca.svg">
+  <link rel="preload" href="assets/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/design_system.css">
+  <link rel="stylesheet" href="assets/pagina.css">
+  <script src="assets/design_system.js" defer></script>
+</head>
+<body class="sales-page">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-chrome">
+    <div class="nav">
+      <div class="container nav-inner">
+        <a class="brand" href="#inicio" aria-label="Profa. Marcia Macedo — início">
+          <img src="assets/images/marca.svg" width="42" height="42" alt="">
+          <span>marcia macedo</span>
+        </a>
+        <a class="btn btn-primary magnetic purchase-button" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>
+          Quero o meu caderninho<span class="purchase-price" data-preco></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- Estrutura provisória: acrescentar o conteúdo de cada seção nas próximas etapas. -->
+    <section class="hero section section-cream sales-section sales-hero" id="inicio" aria-labelledby="inicio-titulo">
+      <div class="container">
+        <h1 class="display" id="inicio-titulo" data-reveal>Caderninho<br><span class="lettering-transparent">na Mão!</span></h1>
+      </div>
+    </section>
+
+    <section class="section section-dark section-forest sales-section" id="a-frase" aria-labelledby="a-frase-titulo">
+      <div class="container"><h2 id="a-frase-titulo" data-reveal>A frase que virou caderno</h2></div>
+    </section>
+
+    <section class="section section-cream sales-section" id="para-que" aria-labelledby="para-que-titulo">
+      <div class="container"><h2 id="para-que-titulo" data-reveal>Para que usar</h2></div>
+    </section>
+
+    <section class="section section-dark section-navy sales-section" id="detalhes" aria-labelledby="detalhes-titulo">
+      <div class="container"><h2 id="detalhes-titulo" data-reveal>Detalhes do caderno</h2></div>
+    </section>
+
+    <section class="section section-cream sales-section" id="como-comprar" aria-labelledby="como-comprar-titulo">
+      <div class="container"><h2 id="como-comprar-titulo" data-reveal>Como funciona a compra</h2></div>
+    </section>
+
+    <section class="section section-dark section-forest sales-section" id="perguntas" aria-labelledby="perguntas-titulo">
+      <div class="container"><h2 id="perguntas-titulo" data-reveal>Perguntas frequentes</h2></div>
+    </section>
+
+    <section class="section section-cream sales-section" id="chamada-final" aria-labelledby="chamada-final-titulo">
+      <div class="container"><h2 id="chamada-final-titulo" data-reveal>Chamada final</h2></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner sales-footer">
+      <p>Profa. Marcia Macedo · @portugues_marciamacedo</p>
+    </div>
+    <div class="footer-tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
+  </footer>
+
+  <script>
+    // Cole aqui a URL completa de compra do caderno no Clube de Autores.
+    const LINK_COMPRA = "COLAR_AQUI_O_LINK_DO_CLUBE_DE_AUTORES";
+    // Preço exibido nos botões de compra; altere este valor quando necessário.
+    const PRECO = "R$ 65,44";
+
+    document.querySelectorAll('[data-preco]').forEach(elemento => {
+      elemento.textContent = PRECO;
+    });
+
+    let destinoCompra = null;
+    try {
+      const url = new URL(LINK_COMPRA);
+      if (url.protocol === 'https:' || url.protocol === 'http:') destinoCompra = url.href;
+    } catch { /* O placeholder será substituído quando o link de compra estiver disponível. */ }
+
+    document.querySelectorAll('[data-compra]').forEach(botao => {
+      botao.target = '_blank';
+      botao.rel = 'noopener noreferrer';
+      botao.setAttribute('aria-label', `Quero o meu caderninho por ${PRECO} (abre em nova aba)`);
+      if (destinoCompra) {
+        botao.href = destinoCompra;
+      } else {
+        botao.setAttribute('aria-disabled', 'true');
+        botao.title = 'Link de compra ainda não configurado';
+        botao.addEventListener('click', evento => evento.preventDefault());
+      }
+    });
+  </script>
+</body>
+</html>
