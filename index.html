@@ -74,30 +74,51 @@
     <div class="wire" aria-label="Anote, pratique, revise. Caderninho na mão. Feito para os alunos da Profa. Marcia."><div class="wire-track"><span>Anote <i>✳</i> Pratique <i>✳</i> Revise <i>✳</i> Caderninho na mão <i>✳</i> Feito para os alunos da Profa. Marcia <i>✳</i></span><span aria-hidden="true">Anote <i>✳</i> Pratique <i>✳</i> Revise <i>✳</i> Caderninho na mão <i>✳</i> Feito para os alunos da Profa. Marcia <i>✳</i></span></div></div>
 
     <section class="section ds-group section-dark section-forest" id="a-frase" aria-labelledby="a-frase-titulo">
+      <div class="frase-ondas" aria-hidden="true"></div>
       <div class="container">
         <div class="sec-rule" data-reveal><span>02 / A FRASE</span><span>DE ONDE VEM O NOME</span></div>
         <div class="section-heading" data-reveal>
-          <h2 id="a-frase-titulo">Uma <span class="lettering-transparent">frase</span> que virou <em>caderno.</em></h2>
+          <h2 id="a-frase-titulo">Uma <span class="frase-palavra"><span class="lettering-transparent">frase</span><span class="frase-preenchimento" aria-hidden="true"><span>frase</span></span></span> que virou <em>caderno.</em></h2>
           <p>Em toda aula, a Profa. Marcia repete: "caderninho na mão!". É escrevendo que a palavra nova fica com você. Agora, o caderninho das aulas existe de verdade.</p>
         </div>
         <div class="identity-grid">
           <article class="identity-manifesto scroll-reveal" data-reveal>
             <span class="label">UMA PALAVRA DA PROFESSORA</span>
-            <p>Quem anota, lembra.<br>Quem lembra, usa.<br><em>E quem usa, aprende de verdade.</em></p>
+            <p><span class="frase-linha">Quem anota, lembra.</span><span class="frase-linha">Quem lembra, usa.</span><em class="frase-linha">E quem usa, <span class="frase-destaque">aprende de verdade.<svg class="frase-traco" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M3 9.5C38 4 74 11.5 112 7.5S174 5 197 6.5" pathLength="1"/></svg></span></em></p>
             <div class="manifesto-foot"><svg class="icon"><use href="#i-book"/></svg><span>Profa. Marcia Macedo</span></div>
           </article>
-          <figure class="flag-art ds-window phrase-art" data-reveal="scale">
-            <img src="assets/images/brasil-aquarela.png" width="1536" height="1024" alt="Aquarela do Pão de Açúcar com bondinho, mar, coqueiros e natureza tropical." loading="lazy" decoding="async">
-            <span class="annot coord phrase-coordinates">RIO DE JANEIRO · 22°57′ S 43°09′ W</span>
+          <figure class="postais" data-reveal="scale" data-postais aria-label="Três postais do Brasil: Salvador, Amazônia e Foz do Iguaçu. Toque em um postal para trazê-lo para a frente.">
+            <div class="postais-pilha">
+              <button type="button" class="postal" data-postal aria-label="Postal de Salvador: aquarela do Pelourinho, com casarões coloridos e fitas do Senhor do Bonfim. Trazer para a frente.">
+                <span class="flag-art ds-window phrase-art postal-face">
+                  <img src="assets/images/postal-salvador.jpg" width="1536" height="1024" alt="Aquarela do Pelourinho, em Salvador, com casarões coloridos e fitas do Senhor do Bonfim." loading="lazy" decoding="async">
+                  <span class="annot coord phrase-coordinates">SALVADOR · 12°58′ S 38°30′ W</span>
+                  <span class="window-caption">A FRASE DE TODA AULA.</span>
+                </span>
+              </button>
+              <button type="button" class="postal" data-postal aria-label="Postal da Amazônia: aquarela de um rio com vitórias-régias e um tucano na floresta. Trazer para a frente.">
+                <span class="flag-art ds-window phrase-art postal-face">
+                  <img src="assets/images/postal-amazonia.jpg" width="1536" height="1024" alt="Aquarela da Amazônia, com vitórias-régias no rio e um tucano na floresta." loading="lazy" decoding="async">
+                  <span class="annot coord phrase-coordinates">AMAZÔNIA · 3°07′ S 60°01′ W</span>
+                  <span class="window-caption">A FRASE DE TODA AULA.</span>
+                </span>
+              </button>
+              <button type="button" class="postal" data-postal aria-label="Postal de Foz do Iguaçu: aquarela das cataratas com arco-íris e um quati. Trazer para a frente.">
+                <span class="flag-art ds-window phrase-art postal-face">
+                  <img src="assets/images/postal-iguacu.jpg" width="1536" height="1024" alt="Aquarela das Cataratas do Iguaçu, com arco-íris e um quati na pedra." loading="lazy" decoding="async">
+                  <span class="annot coord phrase-coordinates">FOZ DO IGUAÇU · 25°41′ S 54°26′ W</span>
+                  <span class="window-caption">A FRASE DE TODA AULA.</span>
+                </span>
+              </button>
+            </div>
             <div class="postmark" aria-hidden="true">
               <svg viewBox="0 0 120 120"><defs><path id="a-frase-stamp-ring" d="M60 12a48 48 0 1 1-.1 0"/></defs><text><textPath href="#a-frase-stamp-ring" textLength="298">FEITO DE AFETO · FEITO DE BRASIL · </textPath></text></svg>
               <span><svg class="icon"><use href="#i-sun"/></svg></span>
             </div>
-            <figcaption class="window-caption">A FRASE DE TODA AULA.</figcaption>
           </figure>
-          <figure class="notebook phrase-cover" data-reveal>
-            <img src="assets/images/capa.jpg" width="1054" height="1493" alt="Capa inteira do Caderninho na mão!, da Profa. Marcia Macedo, com arte brasileira em verde, amarelo e azul." loading="lazy" decoding="async">
-          </figure>
+          <div class="caderno-3d frase-book" id="caderno-frase" data-caderno data-caderno-closed data-reveal role="img" aria-label="Capa inteira do Caderninho na mão!, da Profa. Marcia Macedo, com arte brasileira em verde, amarelo e azul.">
+            <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+          </div>
         </div>
         <div class="principles" data-reveal>
           <div><b>01.</b><span><strong>Nasceu na sala de aula:</strong> a frase que a professora repete em toda aula.</span></div>

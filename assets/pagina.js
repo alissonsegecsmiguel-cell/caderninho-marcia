@@ -377,3 +377,125 @@
     new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
   }
 })();
+
+/* A frase: leque de postais, caderno com inclinação e ondas com parallax.
+   O estado final fica visível sem JS e com movimento reduzido. */
+(() => {
+  'use strict';
+  const section = document.getElementById('a-frase');
+  if (!section) return;
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const precise = window.matchMedia('(hover:hover) and (pointer:fine)');
+  const calm = () => reduced.matches || root.classList.contains('motion-paused');
+  const io = 'IntersectionObserver' in window;
+  let visible = !io;
+
+  // Postais: a ordem do array é a ordem da pilha, da frente para trás.
+  const fan = section.querySelector('[data-postais]');
+  let order = fan ? [...fan.querySelectorAll('[data-postal]')] : [];
+  function stack(arriving) {
+    order.forEach((card, slot) => {
+      card.dataset.slot = String(slot);
+      card.setAttribute('aria-current', String(slot === 0));
+    });
+    if (!arriving || calm()) return;
+    arriving.classList.remove('is-chegando');
+    void arriving.offsetWidth;
+    arriving.classList.add('is-chegando');
+  }
+  order.forEach(card => {
+    card.addEventListener('animationend', () => card.classList.remove('is-chegando'));
+    card.addEventListener('click', () => {
+      // O postal da frente vai para o fim; qualquer outro vem para a frente.
+      order = card === order[0] ? [...order.slice(1), card] : [card, ...order.filter(item => item !== card)];
+      stack(order[0]);
+    });
+  });
+  stack();
+
+  // Caderno: inclinação e brilho seguem o mouse; no toque, a capa entreabre uma vez.
+  const book = section.querySelector('.frase-book');
+  let pointer = null, frame = 0, peeked = false;
+  function paint() {
+    frame = 0;
+    if (!pointer || !book) return;
+    const rect = book.getBoundingClientRect();
+    const x = Math.min(1, Math.max(0, (pointer.x - rect.left) / rect.width));
+    const y = Math.min(1, Math.max(0, (pointer.y - rect.top) / rect.height));
+    book.style.setProperty('--inclina-y', `${((x - .5) * 18).toFixed(2)}deg`);
+    book.style.setProperty('--inclina-x', `${((.5 - y) * 16).toFixed(2)}deg`);
+    book.style.setProperty('--brilho-x', `${(x * 100).toFixed(1)}%`);
+    book.style.setProperty('--brilho-y', `${(y * 100).toFixed(1)}%`);
+  }
+  function rest() {
+    pointer = null;
+    book.classList.remove('is-hover', 'is-entreaberto');
+    ['--inclina-x', '--inclina-y'].forEach(name => book.style.removeProperty(name));
+  }
+  if (book) {
+    book.addEventListener('pointerenter', event => {
+      if (!precise.matches || event.pointerType === 'touch' || calm()) return;
+      book.classList.add('is-hover', 'is-entreaberto');
+    });
+    book.addEventListener('pointermove', event => {
+      if (!book.classList.contains('is-hover')) return;
+      pointer = {x:event.clientX, y:event.clientY};
+      if (!frame) frame = requestAnimationFrame(paint);
+    }, {passive:true});
+    book.addEventListener('pointerleave', rest);
+  }
+  function peek() {
+    if (peeked || !book || precise.matches || calm()) return;
+    peeked = true;
+    book.classList.add('is-entreaberto');
+    setTimeout(() => book.classList.remove('is-entreaberto'), 1600);
+  }
+
+  // Ondas: o padrão anda mais devagar que o conteúdo, só com a dobra na tela.
+  const waves = section.querySelector('.frase-ondas');
+  let queued = false;
+  function drift() {
+    queued = false;
+    if (!waves) return;
+    if (calm()) { waves.style.removeProperty('--ondas-y'); return; }
+    const rect = section.getBoundingClientRect();
+    const limit = rect.height * .16;
+    const offset = Math.max(-limit, Math.min(limit, -rect.top * .22));
+    waves.style.setProperty('--ondas-y', `${offset.toFixed(1)}px`);
+  }
+  function queue() {
+    if (queued || !visible || calm()) return;
+    queued = true;
+    requestAnimationFrame(drift);
+  }
+  addEventListener('scroll', queue, {passive:true});
+  addEventListener('resize', queue, {passive:true});
+
+  function open() {
+    fan?.classList.add('is-open');
+    setTimeout(peek, calm() ? 0 : 900);
+  }
+  if (io) {
+    new window.IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) queue();
+    }, {rootMargin:'100px'}).observe(section);
+    const opener = new window.IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      open();
+      opener.disconnect();
+    }, {threshold:.3});
+    opener.observe(fan || section);
+  } else open();
+  if (calm()) fan?.classList.add('is-open');
+
+  const syncMotion = () => {
+    if (calm()) { fan?.classList.add('is-open'); if (book) rest(); drift(); }
+    else queue();
+  };
+  reduced.addEventListener('change', syncMotion);
+  if ('MutationObserver' in window) {
+    new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
+  }
+})();
