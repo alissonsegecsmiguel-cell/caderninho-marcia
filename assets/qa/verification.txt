@@ -1,0 +1,17 @@
+PASS Unique IDs and valid anchors, SVG references and accessible descriptions
+PASS Every linked local asset and all four local font files exist
+PASS Labels and non-submit demo controls have accessible names
+PASS Catalogue boots: 16 text roles, 12 colors, 8 full component specs, 12 icons
+PASS Reveal observer exposes entered content
+PASS Typography editor and range update safely as text
+PASS Form rejects empty/malformed values, focuses invalid field, accepts valid values locally
+PASS Tabs support click, arrow keys, selection and panel association
+PASS Modal opens, locks background scroll, closes and restores the opener focus
+PASS Mobile menu semantics and Escape close state
+PASS Word card, favorite and tooltip actions respond
+PASS Pause control stops decoration and exposes its pressed state
+PASS Generated IDs, SVGs and descriptions still resolve after all interactions
+PASS Copy buttons emit the selected hex and a standalone SVG
+
+14 checks passed.
+Browser rendering, native validation and native dialog focus-trapping were not tested in this DOM-only environment.

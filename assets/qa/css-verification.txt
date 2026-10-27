@@ -1,0 +1,2 @@
+CSS parse verified: 2449 declarations. Non-variable standard property value issues: 0.
+Custom-property expressions and font-face descriptors checked structurally, not as normal properties.
