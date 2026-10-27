@@ -3,7 +3,7 @@
 ## Última sessão
 - Ferramenta: Codex
 - Data: 27/10/2026
-- Resumo: texto de apoio da hero simplificado para "Para anotar, praticar e revisar sempre que precisar. Caderno com 100 folhas.", conforme solicitado. Mantidos o componente .lead, as animações de surgimento e o restante do design.
+- Resumo: suporte configurado em LINK_CONTATO para +55 11 93618-3790 com a mensagem "Tenho dúvidas sobre o caderninho, consegue me ajudar?". Os links do FAQ e do cartão de compra usam o mesmo WhatsApp; rodapé ganhou número clicável e botão animado para tirar dúvidas.
 
 ## Leia primeiro: feito e não feito
 
@@ -11,8 +11,8 @@
 - As alterações locais dos detalhes, que os registros anteriores citam como "fora do commit", foram revisadas e são consolidadas neste fechamento: CSS, JS, HTML e testes. Esses avisos nas entradas históricas não indicam mais trabalho local por registrar.
 - Feito: remoção de `#a-frase` e `#como-comprar`, links e etiquetas corrigidos; chamada final "Tem uma página em branco esperando por você." sem texto de apoio; FAQ da nota fiscal; remoção de "200 páginas" do conteúdo e metadados; botão dos detalhes maior, com halo e brilho; detalhes do celular com caderno fixo e troca pela rolagem.
 - Ordem atual: `#inicio`, `#para-que` (02), `#detalhes` (03), `#oferta` (04), `#perguntas` (05), `#chamada-final`. Não restaurar as seções removidas nem a numeração antiga descrita no histórico.
-- Validado neste fechamento: `npm.cmd run build`, `npm.cmd test` (31 verificações), Chrome 1440 x 900 e 390 x 844. No celular: os cinco itens, progresso de 20% a 100%, toque nativo com rolagem, volta ao layout de computador no resize e movimento reduzido com todas as descrições abertas. As rotinas de QA ficam em `assets/qa/runtime/`, ignorado pelo git.
-- Não feito: configurar o contato, obter/aprovar novas fotos e arte, definir pagamentos e aplicar as mudanças visuais opcionais do relatório de desempenho. Dependem das decisões listadas em "Pendências".
+- Validado neste fechamento: `npm.cmd run build`, `npm.cmd test` (31 verificações) e Chrome nas larguras 1440, 390 e 320 px. Os quatro links de suporte têm o número e a mensagem exatos; botão conferido visualmente, com foco de teclado, pausa fora da tela/aba oculta e movimento reduzido. Links de compra preservados e sem erros de JavaScript ou arquivos ausentes. As rotinas de QA ficam em `assets/qa/runtime/`, ignorado pelo git.
+- Não feito: obter/aprovar novas fotos e arte, definir pagamentos e aplicar as mudanças visuais opcionais do relatório de desempenho. Dependem das decisões listadas em "Pendências".
 - Não validado neste fechamento: checkout real, aparelho físico, novo Lighthouse, compartilhamento em redes sociais e deploy público. Build/testes locais e push não substituem essas verificações. O bloqueio da Vercel do portfólio pertence ao outro projeto e ficou para depois por orientação do usuário.
 
 ## Estado atual da página
@@ -29,23 +29,22 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Dobra 4, oferta (#oferta; a pílula "04 / A OFERTA" faz o papel da etiqueta numerada): fundo verde escuro quase preto com bloom do design system e brilho fraco no canto; varal de bandeirinhas em catenária; título "Seu caderninho, pronto para a próxima aula." Três colunas (até 1180 px): 1) produto, sem card: caderno 3D inteiro com glow, sombra, folha e lápis, lista "O QUE VEM NO CADERNO"; 2) card "Moro no Brasil" (ENVIO NACIONAL, marcador de mapa, frete pelo CEP, entrega pelo correio ou retirada, "Desejo receber pelo correio"); 3) card "Moro fora do Brasil" (ENVIO INTERNACIONAL, globo, frete para o país, número fiscal). Os dois cards são idênticos em estilo e altura: borda com brilho cônico girando (fases diferentes), glow, preço em gradiente creme-ouro que conta de 0,00 até PRECO nos dois juntos, botão .btn-gold com brilho a cada 6 s (defasado). Tablet: produto em cima (caderno e lista lado a lado) e cards lado a lado; celular: caderno, lista, Brasil, exterior. Cabe em 1366 x 768 com os botões visíveis.
 - Dobra 5 (#perguntas): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato. Segunda pergunta: "Preciso de uma nota fiscal.". Resposta: "Você vai receber a sua nota fiscal que será enviada pelo Clube dos Autores, empresa responsável pela impressão e envio do seu caderninho.".
 - Chamada final (#chamada-final): duas colunas (no celular, caderno em cima). Assinatura "CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO." acima do título "Tem uma página em branco esperando por você.", sem parágrafo de apoio, botão dourado e preço; à direita, caderno 3D grande (320 a 380 px) com rotação real, sombra no chão que acompanha a flutuação, brilho dourado atrás, folha, selo e lápis flutuando em volta, hover com inclinação e capa entreaberta.
-- Rodapé: crédito do Clube de Autores, Instagram @portugues_marciamacedo e botão de voltar ao topo.
+- Rodapé: crédito do Clube de Autores, Instagram @portugues_marciamacedo e botão de voltar ao topo. Bloco de suporte com telefone +55 11 93618-3790 e botão "Tirar dúvidas no WhatsApp" (.support-cta), halo verde e brilho periódico. Os quatro links [data-contato] (FAQ, cartão, telefone e botão) usam LINK_CONTATO, com a mensagem pronta.
 - Barra de compra no celular: aparece depois da hero, some enquanto a oferta está na tela e some de vez ao chegar na chamada final.
 - Botões de compra ([data-compra]): depois do primeiro clique, todos ignoram novos cliques por 3 s e ficam com opacidade .7 (classe .is-enviando, aria-busy). O evento pageshow libera os botões ao voltar pelo histórico. O aria-label de cada botão começa pelo texto visível dele (fora do topo, com " por PRECO" no fim).
 - Componente reutilizável Caderninho3D (template #caderno-3d-template) com estados loop, interativo e fechado. O atributo data-caderno-hover liga inclinação pelo mouse, brilho e capa entreaberta (usado na oferta e na chamada final).
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Nenhuma implementação solicitada em aberto. Os ajustes de detalhes no celular foram concluídos e validados neste fechamento.
+- Nenhuma implementação solicitada em aberto. WhatsApp e botão de suporte no rodapé concluídos e validados; ajustes anteriores dos detalhes no celular preservados.
 
 ## Próximas tarefas (em ordem)
 1. Conferir o deploy público da main e a prévia de compartilhamento quando disponíveis. Não considerar publicação aprovada só porque o push terminou.
-2. Aguardar as decisões de conteúdo, contato e assets abaixo. Nenhuma dessas alterações foi aplicada automaticamente.
+2. Aguardar as decisões de conteúdo e assets abaixo. Nenhuma dessas alterações foi aplicada automaticamente.
 3. Se forem autorizadas novas otimizações, usar RELATORIO-DESEMPENHO.md como histórico e medir novamente a versão atual antes de comparar resultados.
 
 ## Pendências que dependem de pessoas (não implementar sem confirmação)
 - Retrato da Marcia em aquarela (marcia-aquarela.png), aguardando aprovação dela.
-- LINK_CONTATO: canal e responsável ainda não definidos.
 - Fotos reais do caderno quando a amostra chegar (substituir a foto da mão, que tem o Pão de Açúcar ao fundo).
 - Aprovação final dos textos e artes pela Marcia; as citações da antiga seção #a-frase foram removidas junto com a seção.
 - Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
@@ -55,6 +54,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Conferir o primeiro deploy com o build: a página publicada deve ter o CSS inline (procure por <style> no código-fonte) e os scripts em assets/min/. Se o deploy falhar na Vercel, a versão anterior continua no ar.
 
 ## Concluído
+- 27/10/2026: WhatsApp do suporte configurado para +55 11 93618-3790 com a mensagem "Tenho dúvidas sobre o caderninho, consegue me ajudar?". Quatro links centralizados em LINK_CONTATO; botão do rodapé com ícone de WhatsApp, tamanho grande do DS, efeito magnético, seta, halo e brilho. Pausa fora da tela, com aba oculta e em movimento reduzido. Nenhuma mensagem é enviada automaticamente: o link abre a conversa com o texto preenchido.
 - 27/10/2026: texto de apoio da hero substituído por "Para anotar, praticar e revisar sempre que precisar. Caderno com 100 folhas.". Removido o texto anterior sobre palavra nova, arte das aulas e espiral; mantidos estilos, classes e animações. Teste existente atualizado; build e 31 testes aprovados. Conferido no Chrome em 1440 x 900 e 390 x 844, sem erros ou rolagem horizontal.
 - 27/10/2026: concluídos e consolidados os ajustes locais dos detalhes no celular: caderno fixo abaixo de 900 px, seleção automática dos cinco itens por IntersectionObserver, progresso, número animado, toque com rolagem, reposicionamento do preço/CTA e fallback de movimento reduzido. Item 03 atualizado para "Espiral com capa protegida" e descrição do acetato; "transparente" removido do aria-label da espiral na hero. Computador preservado. Build e 31 testes aprovados; comportamento conferido no Chrome com rolagem, toque real e troca de viewport/preferência.
 - 27/10/2026: CTA de #detalhes em .details-cta com .btn-lg: largura de até 440 px, altura de 72 px (68 px no celular), texto 16 px/700 (15 px no celular), brilho de oferta-brilho a cada 6 s e halo de 4,8 s só com transform/opacity. Hover e foco mantêm o efeito magnético e a seta. Halo e brilho pausam fora da tela e com aba oculta; movimento reduzido mantém o destaque estático. Build e 31 testes aprovados; conferido no Chrome em 1440 x 900 e 390 x 844, incluindo dimensões, link, pausas e movimento reduzido.

@@ -386,6 +386,20 @@
         <a class="icon-btn footer-top magnetic" href="#inicio" aria-label="Voltar ao topo">↑</a>
       </div>
     </div>
+    <div class="container support-footer" data-reveal>
+      <div class="support-copy">
+        <span class="label">SUPORTE DO CADERNINHO</span>
+        <p class="body-lg">Ficou com alguma dúvida?</p>
+        <a class="caption support-number" data-contato target="_blank" rel="noopener noreferrer">+55 11 93618-3790</a>
+      </div>
+      <div class="support-cta">
+        <a class="btn btn-primary btn-lg magnetic support-button" data-contato target="_blank" rel="noopener noreferrer">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.2 7.65L3 20.5l1.35-5.3A8.5 8.5 0 1 1 20.5 11.5Z"/><path d="M8 7.5h1.5l1 3-1.25 1.25a9 9 0 0 0 3.5 3.5L14 14l3 1v1.5a1 1 0 0 1-1 1A10.5 10.5 0 0 1 6.5 8.5a1 1 0 0 1 1-1H8Z"/></svg>
+          <span>Tirar dúvidas no WhatsApp</span>
+          <span class="arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up"/></svg></span>
+        </a>
+      </div>
+    </div>
     <div class="footer-tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
   </footer>
 
@@ -415,8 +429,8 @@
   <script>
     // URL completa de compra do caderno no Clube de Autores; usada em todos os botões.
     const LINK_COMPRA = "https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true";
-    // Link da equipe: use uma URL de WhatsApp (https://wa.me/...) ou e-mail (mailto:...).
-    const LINK_CONTATO = "COLAR_AQUI_O_LINK_DO_WHATSAPP_OU_EMAIL";
+    // WhatsApp do suporte (+55 11 93618-3790), com a mensagem inicial já preenchida.
+    const LINK_CONTATO = "https://wa.me/5511936183790?text=Tenho%20d%C3%BAvidas%20sobre%20o%20caderninho%2C%20consegue%20me%20ajudar%3F";
     // Preço exibido na ficha de compra e nos botões fora da primeira dobra.
     const PRECO = "R$ 65,44";
 
@@ -462,7 +476,7 @@
     document.querySelectorAll('[data-contato]').forEach(link => {
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      const rotuloContato = link.textContent.trim() || 'Fale com a equipe';
+      const rotuloContato = link.textContent.replace(/\s+/g, ' ').trim() || 'Fale com a equipe';
       link.setAttribute('aria-label', destinoContato ? `${rotuloContato} (abre em nova aba)` : `${rotuloContato} (indisponível no momento)`);
       if (destinoContato) {
         link.href = destinoContato;

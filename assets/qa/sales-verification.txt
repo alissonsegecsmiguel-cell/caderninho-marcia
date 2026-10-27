@@ -23,7 +23,7 @@ PASS Details copy, price, gold CTA and all five accessible disclosure regions ma
 PASS Hover, focus and keyboard navigate details; coarse touch does not activate on pointer entry
 PASS Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed
 PASS Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus
-PASS Editable contact supports WhatsApp and mailto in both locations, blocks placeholder and unsafe URLs, and stays separate from price/checkout
+PASS Support links share the configured WhatsApp number and message, allow edits, and block placeholders and unsafe URLs
 PASS Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it
 PASS Footer keeps the catalogue brand, production credit, external Instagram, return-to-top control and tricolor
 PASS Mobile bar appears only after passing the hero, hides at and after closing, and follows reverse scrolling

@@ -902,12 +902,15 @@ depoisDaCarga(() => {
 });
 
 
-/* O CTA dos detalhes reutiliza a pausa do design system também quando só o botão sai da tela. */
+/* CTAs reutilizam a pausa do design system quando o próprio botão sai da tela. */
 depoisDaCarga(() => {
-  const cta = document.querySelector('.details-cta');
-  if (!cta || !('IntersectionObserver' in window)) return;
-  cta.classList.add('is-offscreen');
-  new window.IntersectionObserver(entries => {
+  const ctas = [...document.querySelectorAll('.details-cta, .support-cta')];
+  if (!ctas.length || !('IntersectionObserver' in window)) return;
+  const observer = new window.IntersectionObserver(entries => {
     entries.forEach(entry => entry.target.classList.toggle('is-offscreen', !entry.isIntersecting));
-  }, {threshold:.1}).observe(cta);
+  }, {threshold:.1});
+  ctas.forEach(cta => {
+    cta.classList.add('is-offscreen');
+    observer.observe(cta);
+  });
 });

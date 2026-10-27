@@ -501,7 +501,21 @@ check('Purchase accordion opens one answer at a time, toggles closed, names regi
     assert.equal(fallback.document.querySelector('#compra-resposta-01').getAttribute('aria-hidden'),'true');
   }
 });
-check('Editable contact supports WhatsApp and mailto in both locations, blocks placeholder and unsafe URLs, and stays separate from price/checkout',()=>{
+check('Support links share the configured WhatsApp number and message, allow edits, and block placeholders and unsafe URLs',()=>{
+  const contacts=$$('[data-contato]');
+  assert.equal(contacts.length,4);
+  for(const link of contacts){
+    const url=new URL(link.getAttribute('href'));
+    assert.equal(url.origin,'https://wa.me');
+    assert.equal(url.pathname,'/5511936183790');
+    assert.equal(url.searchParams.get('text'),"Tenho dúvidas sobre o caderninho, consegue me ajudar?");
+    assert.equal(link.getAttribute('aria-disabled'),null);
+    assert.equal(link.target,'_blank');
+    assert.ok(link.rel.includes('noopener')&&link.rel.includes('noreferrer'));
+  }
+  assert.ok($('footer .support-button[data-contato]').matches('.btn.btn-primary.btn-lg.magnetic'));
+  assert.equal($('footer .support-number').textContent,'+55 11 93618-3790');
+  assert.ok($('footer .support-button').textContent.replace(/\s+/g,' ').trim().includes('Tirar dúvidas no WhatsApp'));
   for(const contact of ['https://wa.me/5511999999999','mailto:equipe@example.com']){
     const configured=load({contact,price:'R$ 70,00'});
     for(const link of configured.document.querySelectorAll('[data-contato]')){
@@ -513,7 +527,7 @@ check('Editable contact supports WhatsApp and mailto in both locations, blocks p
     assert.equal(configured.document.querySelector('.purchase-total [data-preco]').textContent,'R$ 70,00');
     assert.equal(configured.document.querySelector('.purchase-postcard [data-compra]').getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
   }
-  for(const options of [{},{contact:'javascript:alert(1)'},{contact:'data:text/html,test'},{contact:'mailto:'}]){
+  for(const options of [{contact:'COLAR_AQUI_O_LINK_DO_WHATSAPP_OU_EMAIL'},{contact:'javascript:alert(1)'},{contact:'data:text/html,test'},{contact:'mailto:'}]){
     const unavailable=load(options);
     for(const link of unavailable.document.querySelectorAll('[data-contato]')){
       assert.equal(link.hasAttribute('href'),false);assert.equal(link.getAttribute('aria-disabled'),'true');

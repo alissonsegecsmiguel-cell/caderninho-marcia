@@ -805,3 +805,17 @@ html.js .passos-bilhete[data-revealed=true]{transform:none}
   .details-progresso{display:none}
 }
 @keyframes detalhe-numero-sai{from{opacity:.5;transform:translateY(0)}to{opacity:0;transform:translateY(-24px)}}
+
+
+/* Suporte no rodapé: os mesmos botões, tokens e movimentos suaves do design system. */
+.support-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:32px;border-top:1px solid var(--line);padding-block:30px 40px}
+.support-copy .label{display:block;margin-bottom:8px}.support-copy .body-lg{font-weight:600;letter-spacing:-.025em}.support-number{display:inline-block;margin-top:6px}
+.support-cta{position:relative;isolation:isolate;display:inline-flex;max-width:100%}
+.support-cta::before{content:"";position:absolute;z-index:-1;inset:-6px;border:1px solid rgba(var(--green-rgb),.4);border-radius:var(--radius-pill);box-shadow:0 0 24px rgba(var(--green-rgb),.12);pointer-events:none;animation:details-cta-halo calc(var(--entrance) * 6) var(--ease) infinite}
+.support-button[data-contato]{min-height:64px;gap:14px;color:var(--surface);text-decoration:none;white-space:normal;font-weight:700}
+.support-button[data-contato]:is(:hover,:focus-visible){color:var(--surface)}
+.support-button::before{animation:oferta-brilho calc(var(--entrance) * 7.5) var(--ease) calc(var(--entrance) * 2) infinite}
+.support-button:is(:hover,:focus-visible)::before{animation:none}
+.support-cta:is(:hover,:focus-within)::before,.support-cta.is-offscreen::before,.support-cta.is-offscreen .support-button::before{animation-play-state:paused}
+@media(max-width:720px){.support-footer{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:28px calc(34px + env(safe-area-inset-bottom,0px));text-align:center}.support-cta,.support-button{width:100%}.support-copy .body-lg{font-size:18px}.support-button[data-contato]{font-size:13px;padding-inline:18px}}
+@media(prefers-reduced-motion:reduce){.support-cta::before{animation:none;opacity:.3;transform:none}.support-button::before{animation:none}}
