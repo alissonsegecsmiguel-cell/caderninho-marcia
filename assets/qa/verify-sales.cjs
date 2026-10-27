@@ -402,7 +402,7 @@ check('Details copy, price, gold CTA and all five accessible disclosure regions 
     '14,8 x 21 cm. Cabe na bolsa e na mochila.',
     'Colorida, com acetato transparente que protege do dia a dia.',
     'Abre totalmente plano, para escrever com conforto.',
-    '100 folhas (200 páginas) em papel offset 75 g.',
+    '100 folhas em papel offset 75 g.',
     'Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega no Brasil e no exterior.'
   ]);
   assert.deepEqual($$('#detalhes .detail-number').map(el=>el.textContent),['01','02','03','04','05']);
