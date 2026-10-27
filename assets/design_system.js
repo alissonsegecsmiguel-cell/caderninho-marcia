@@ -31,7 +31,7 @@
   }
 
   const typography = [
-    {role:'H1 / display',family:'Inter Tight',weight:700,size:'clamp(56, 7.7vw, 116)',lh:'1.02',ls:'−0.055em',sample:'Um Brasil de encontros.',css:'font-family:var(--sans);font-weight:700;font-size:60px;line-height:1.02;letter-spacing:-.055em',note:'56–116 px; hero 0.99; ≤720 px: 67–88 px; ≤370 px: 62 px'},
+    {role:'H1 / display',family:'Inter Tight',weight:700,size:'clamp(56, 7.7vw, 116)',lh:'1.02',ls:'−0.055em',sample:'Um Brasil de encontros.',css:'font-family:var(--sans);font-weight:700;font-size:60px;line-height:1.02;letter-spacing:-.055em',note:'56–116 px; hero: 76–104 px / 0.99; ≥1600 px: 116 px; ≤720 px: 67–88 px; ≤370 px: 62 px'},
     {role:'Lettering / transparente',family:'Inter Tight',weight:600,size:'1.19 × H1',lh:'1.08',ls:'−0.065em',sample:'brasileira.',css:'font-family:var(--sans);font-weight:600;font-size:60px;line-height:1.08;letter-spacing:-.065em;color:transparent;-webkit-text-fill-color:transparent;-webkit-text-stroke:1.35px #00854A',note:'Contorno 1,35 px; mobile: 1,13 × H1, contorno 1,1 px. Expressivo; não carrega instruções essenciais.'},
     {role:'H2 / seção',family:'Inter Tight',weight:600,size:'clamp(40, 4.6vw, 72)',lh:'1.06',ls:'−0.04em',sample:'O Brasil acontece.',css:'font-family:var(--sans);font-weight:600;font-size:45px;line-height:1.06;letter-spacing:-.04em',note:'40–72 px; ajustes da seção: 38–54 px no celular'},
     {role:'H3 / grupo',family:'Inter Tight',weight:600,size:'32',lh:'1.18',ls:'−0.035em',sample:'Uma conversa boa.',css:'font-family:var(--sans);font-weight:600;font-size:32px;line-height:1.18;letter-spacing:-.035em'},
@@ -100,10 +100,10 @@
       ['Conteúdo','Exemplos explicitamente identificados como conteúdo/atividade de demonstração; não representam aulas, ofertas ou resultados reais da professora.']
     ]},
     navbars:{name:'Navegação',rows:[
-      ['Estrutura e tokens','<code>.site-chrome > .topbar + .nav</code>; marca + .nav-links + CTA. Topbar 33 px; nav 85 px; fundo branco 93%, blur 18 px; hairline 1 px; link Manrope 500 / 12 px / 1.4.'],
-      ['Responsividade','Até 1200 px remove CTA; até 960 px nav 76 px; até 720 px nav 73 px + topbar 28 px, menu recolhível de largura total. Toggle 44×44 px.'],
-      ['Estados','Link atual verde com sublinhado de duas cores; hover sublinhado scaleX 0→1; focus outline universal. Toggle aria-expanded false/true. Conteúdo atual acompanhado via IntersectionObserver.'],
-      ['Animação','180 ms cor; 320 ms sublinhado, sombra e toggle. Barra sticky permanece acessível durante rolagem.'],
+      ['Estrutura e tokens','<code>.site-chrome > .nav</code>; marca + .nav-links + CTA. Menu absoluto sobre o background da hero, transparente e sem borda ou sombra; altura 88 px; link Manrope 500 / 12 px / 1.4.'],
+      ['Responsividade','Até 1200 px remove CTA; até 960 px altura 80 px; até 720 px altura 76 px, menu recolhível em painel flutuante com cantos arredondados. Toggle 44×44 px. O conteúdo começa 28 px abaixo do menu no desktop e 16 px no celular.'],
+      ['Estados','Link atual verde com sublinhado de duas cores; hover sublinhado scaleX 0→1; focus outline universal. Toggle aria-expanded false/true. Conteúdo atual acompanhado durante a rolagem.'],
+      ['Animação','180 ms cor; 320 ms sublinhado e toggle. Menu acompanha a hero ao rolar, sem criar uma barra fixa sobre as demais seções.'],
       ['Interação e acesso','<code>nav aria-label</code>; aria-current=location no link atual; menu fecha ao selecionar, clicar fora ou pressionar Esc. Esc devolve foco ao toggle. Links âncora reais.'],
       ['Tabs de demonstração','Tablist com três botões tab; roving tabindex; setas, Home e End mudam aba; aria-selected e aria-labelledby; painel focável. Exemplo independente da navegação principal.']
     ]},
@@ -171,7 +171,6 @@
   }
 
   // Shared active-link class; native anchors remain usable with JS off.
-  const chrome = $('.site-chrome');
   const menu = $('#primary-nav');
   const toggle = $('[data-nav-toggle]');
   function closeMenu(restoreFocus = false) {
@@ -191,7 +190,6 @@
   document.addEventListener('click', e => { if (!menu.contains(e.target) && !toggle.contains(e.target)) closeMenu(); });
   let scrollQueued = false;
   function updateChrome() {
-    chrome.classList.toggle('is-scrolled', scrollY > 12);
     let current = '#identidade';
     $$('.nav-link', menu).forEach(link => {
       const section = $(link.getAttribute('href'));

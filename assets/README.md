@@ -7,6 +7,7 @@ Abra **[design_system.html](design_system.html)** diretamente no navegador. Não
 ## Conteúdo
 
 - Hero com lettering transparente, aquarela original e selo animado.
+- Menu transparente sobre o fundo da hero, sem faixa superior nem molduras laterais; abertura e transição para a próxima seção com espaçamento compacto.
 - Essência da marca, bandeira abstrata em pinceladas e aplicação ilustrativa em caderno.
 - 16 papéis tipográficos, incluindo lettering transparente, famílias, fallback stacks, pesos, tamanhos, entrelinhas, tracking e transformação.
 - 12 cores, valores HEX/RGB/HSL, variações de opacidade, contraste calculado, uso semântico, gradientes e estados.
