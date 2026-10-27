@@ -48,6 +48,8 @@ function load({link, contact, price, reduced=false, precise=false, extraButton=f
   if(price)config=config.replace('R$ 65,44',price);
   vm.runInContext(config,context,{filename:'index.html:purchase-config'});
   vm.runInContext(notebookRuntime,context,{filename:'pagina.js'});
+  // As dobras abaixo da primeira inicializam depois do load, como no navegador.
+  window.dispatchEvent(new window.Event('load'));advance(1);
   return {document,window,observers,media,mobileMedia,layout,advance,timers};
 }
 function mountBooks(loaded){

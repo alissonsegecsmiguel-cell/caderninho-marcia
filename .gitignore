@@ -1,2 +1,4 @@
 assets/qa/npm-cache/
 assets/qa/runtime/
+node_modules/
+dist/

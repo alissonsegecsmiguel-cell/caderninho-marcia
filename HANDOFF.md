@@ -3,10 +3,10 @@
 ## Última sessão
 - Ferramenta: Claude Code
 - Data: 27/10/2026
-- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova; Dobra 3 com carrossel automático; chamada final em duas colunas; proteção contra clique duplo; compartilhamento, favicons e 404; envio para o Brasil e o exterior em toda a página; dobra "Como comprar" em 5 passos; imagens em WebP; oferta com o mesmo peso para Brasil e exterior (coluna do produto + dois cards iguais)
+- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova; Dobra 3 com carrossel automático; chamada final em duas colunas; proteção contra clique duplo; compartilhamento, favicons e 404; envio para o Brasil e o exterior em toda a página; dobra "Como comprar" em 5 passos; imagens em WebP; oferta com o mesmo peso para Brasil e exterior (coluna do produto + dois cards iguais); revisão de desempenho concluída (RELATORIO-DESEMPENHO.md)
 
 ## Estado atual da página
-Arquivo único index.html, com estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html.
+Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html. A versão publicada sai de `npm run build` (scripts/build.cjs) em dist/: CSS minificado inline no <head> e JS minificado com hash em assets/min/. O vercel.json manda a Vercel rodar o build e publicar dist/, com cache longo para fontes, JS com hash e imagens. dist/ e node_modules/ ficam fora do git.
 
 - <head>: title "Caderninho na Mão! | Profa. Marcia Macedo", description nova, canonical, Open Graph, Twitter (summary_large_image) e theme-color #00854A. A URL de produção (https://caderninho-marcia.vercel.app/) está num comentário no topo do <head>; ao trocar de domínio, mude canonical, og:url, og:image e twitter:image.
 - Compartilhamento e ícones: assets/images/og-image.jpg (1200 x 630, cerca de 105 KB), favicon.ico (32 x 32), favicon.svg e apple-touch-icon.png (180 x 180) na raiz, com o ícone de caderno do design system em verde sobre creme.
@@ -28,17 +28,10 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Revisão de desempenho (Claude Code, 27/10/2026), PAUSADA a pedido do usuário. Só retomar quando ele pedir. Ponto estável:
-  - Medição antes (Lighthouse 12.2.1 local com gzip, sem cache): celular 31 (FCP 2,9 s, LCP 47,8 s, TBT 4.060 ms, CLS 0, 12,8 MB, 24 requisições); computador 40 (LCP 7,8 s, TBT 690 ms, CLS 0,002). Os maiores arquivos eram selo.png 2,7 MB, brasil-aquarela.png 2,6 MB, contra capa.png 2,3 MB, folha.png 2,1 MB, miolo.png 550 KB e os postais JPG (390 a 460 KB).
-  - Feito: versões WebP responsivas (sufixos -240 a -1536.webp) em <picture> com srcset e sizes, original mantido no src; contra-capa.webp para o verso do caderno; preload da aquarela da hero (fetchpriority high) e da capa em WebP; picture{display:contents} e seletores ">img" trocados por " img" em pagina.css; arquivos sem uso movidos para assets/extras/ (caderno-abrindo.mp4, postal.png, caderno-aberto.jpg, caderno-primeiro-quadro.jpg). Comparação de capturas de página inteira: mesma altura e mesmo layout no computador e no celular.
-  - Feito também (27/10/2026, segunda rodada): animações em ::before/::after agora pausam fora da tela (o seletor * do design system não alcançava pseudo-elementos; section-light e os brilhos da oferta rodavam sempre); .pulse sem box-shadow animado (anel em pseudo-elemento com transform e opacity); cadernos 3D fora da hero são montados só a 900 px da tela; a dobra de passos só mede o layout quando chega perto. Capturas de página inteira iguais às da versão anterior.
-  - Medição do estado atual antes dessa rodada: celular 48 (LCP 7,6 s, TBT 1.080 ms, 1,4 MB); computador 74. O LCP é o título da hero, que depende do script de surgimento [data-reveal]; parado, cada animação em andamento ainda gera um recálculo de estilo por quadro (inclusive animações dentro de SVG, que o Chrome não leva para o compositor).
-  - Falta: hero-letter-shine (background-position) fica e vai para o relatório; minificar CSS e JS (mantendo os legíveis); vercel.json com cache longo; medir de novo (celular, computador e CPU 4x); escrever RELATORIO-DESEMPENHO.md.
-  - Medição intermediária, depois do WebP e antes da oferta nova: celular 44 (FCP 2,3 s, LCP 7,6 s, TBT 1.580 ms, CLS 0, 1,4 MB); computador 81 (LCP 1,3 s, TBT 250 ms). O TBT vem de trabalho contínuo de estilo e pintura das animações (Style & Layout 4,1 s e Other 4,0 s no celular simulado). Refazer a medição "antes" ao retomar, porque a oferta mudou.
+- Nada no momento.
 
 ## Próximas tarefas (em ordem)
-0. Depois da revisão de desempenho (commit separado): dobra de detalhes no celular com caderno fixo (sticky) e troca dos itens pelo scroll, indicador de progresso, toque que rola até o item, item 03 "Espiral com capa protegida" com a nova descrição. Pedido completo na conversa do Claude Code. Atenção: a lista agora tem 5 itens, não 6 (o pedido fala em 6 pontinhos).
-1. Revisão final de velocidade e fluidez, só quando o usuário pedir (sempre por último): ver "Em andamento".
+1. Próxima (commit separado): dobra de detalhes no celular com caderno fixo (sticky) e troca dos itens pelo scroll, indicador de progresso, toque que rola até o item, item 03 "Espiral com capa protegida" com a nova descrição. Pedido completo na conversa do Claude Code. Atenção: a lista agora tem 5 itens, não 6 (o pedido fala em 6 pontinhos).
 
 ## Pendências que dependem de pessoas (não implementar sem confirmação)
 - Retrato da Marcia em aquarela (marcia-aquarela.png), aguardando aprovação dela.
@@ -49,6 +42,8 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Trocar o card do passo 5 pela captura passo-5-pagamento.jpg quando ela existir (há um comentário no HTML, dentro do passo 5).
 - Adicionar a imagem de fundo oferta-fundo.jpg na dobra de oferta quando ela for gerada (o CSS comentado está no início do bloco da oferta em pagina.css).
 - Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://caderninho-marcia.vercel.app/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
+- Decidir os itens da seção 4 do RELATORIO-DESEMPENHO.md (mudam o visual ou as animações; nenhum foi aplicado): textura de papel, filtros e máscaras da hero, caderno 3D em ciclo, quantidade de animações contínuas, animações dentro de SVG, fade do título e hero-letter-shine.
+- Conferir o primeiro deploy com o build: a página publicada deve ter o CSS inline (procure por <style> no código-fonte) e os scripts em assets/min/. Se o deploy falhar na Vercel, a versão anterior continua no ar.
 
 ## Concluído
 - 27/10/2026: design system com identidade brasileira, cores creme e paleta verde, ouro e azul-marinho.
@@ -76,6 +71,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - 27/10/2026: "Como comprar" com fundo creme, etiquetas renumeradas (05 / A OFERTA na pílula, 06 / COMO COMPRAR, 07 / PERGUNTAS) e teste automático atualizado e passando (31 verificações).
 - 27/10/2026: detalhes com "Feito com carinho", descrição "100 folhas (200 páginas) em papel offset 75 g." e o item "Ilustrações do Brasil" removido a pedido do usuário.
 - 27/10/2026: oferta sem "menos de R$ 0,33 por página", sem "200 páginas pautadas" no primeiro item do produto (ficou "Caderno A5 (14,8 x 21 cm)") e sem "Nota fiscal emitida pelo Clube de Autores" no card do Brasil, a pedido do usuário. Os cards continuam com a mesma altura e os botões alinhados.
+- 27/10/2026: revisão de desempenho concluída. Título da hero entra com animação CSS (sem esperar o JS), content-visibility nas dobras abaixo da primeira, inicialização dessas dobras depois do load, sem layout síncrono nos reinícios de animação, build com CSS inline e JS minificado, vercel.json com cache. Celular: LCP de 7,2 s para 4,1 s (simulado) e 3,1 s (lentidão real); computador: 91 a 94. Detalhes em RELATORIO-DESEMPENHO.md. Visual conferido tela a tela contra a versão anterior, no computador e no celular.
 
 ## Decisões registradas
 - Venda pelo Clube de Autores, R$ 65,44, com envio para o Brasil e para o exterior (no carrinho, "Desejo receber fora do Brasil", com número fiscal ou documento do país). Textos da página atualizados em 27/10/2026.
@@ -93,5 +89,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Clique duplo: o estilo de desabilitado do design system (.btn:disabled) troca o botão para cinza e só vale para <button>; como os botões de compra são links e o pedido aceitava opacidade reduzida, foi usada só a opacidade .7, sem mudar cores.
 - og-image: gerada com Playwright a partir de um HTML temporário (já apagado), com as fontes e cores do design system; nenhum texto a menos de 84 px das laterais. O marca.svg antigo continua em assets/images/, mas a página agora usa os favicons da raiz.
 - Como comprar: a dobra passou para o fundo creme (como #para-que) para alternar claro e escuro: oferta escura acima, perguntas claras abaixo. Linha do tempo tracejada em verde, números em verde dentro de círculos tracejados em ouro (acesos: verde cheio com número creme), capturas com borda clara e sombra suave, bilhete em papel creme mais claro. A passagem usa a onda do design system no fim da oferta.
-- QA: assets/qa/verify-sales.cjs reflete a página atual (title e meta tags, envio Brasil e exterior, dobra 2 com postais, oferta, como comprar, FAQ internacional, cinco cadernos 3D com montagem perto da tela, proteção de clique duplo, barra móvel escondida na oferta). Rodar com: node assets/qa/verify-sales.cjs (31 verificações; o relatório vai para assets/qa/sales-verification.txt). O teste simula a aproximação dos cadernos com mountBooks(), porque fora da hero eles só montam perto da tela.
+- QA: assets/qa/verify-sales.cjs reflete a página atual (title e meta tags, envio Brasil e exterior, dobra 2 com postais, oferta, como comprar, FAQ internacional, cinco cadernos 3D com montagem perto da tela, proteção de clique duplo, barra móvel escondida na oferta). Rodar com: node assets/qa/verify-sales.cjs (31 verificações; o relatório vai para assets/qa/sales-verification.txt). O teste simula a aproximação dos cadernos com mountBooks(), porque fora da hero eles só montam perto da tela. O carregamento do teste dispara o evento load e avança 1 ms, porque as dobras abaixo da primeira só inicializam depois do load.
+- Desempenho: a entrada da hero começa em 1% de opacidade (imperceptível) para o Chrome contar o título já na primeira pintura; o fade continua igual (0,8 s). Explicado no relatório.
+- Desempenho: as dobras abaixo da primeira usam content-visibility: auto. Capturas de página inteira (fullPage) no Playwright saem em branco nessas dobras; para comparar o visual, role a página e capture tela a tela.
 - As pastas assets/qa/npm-cache/ e assets/qa/runtime/ são cache local dos testes e ficam fora do git (.gitignore).

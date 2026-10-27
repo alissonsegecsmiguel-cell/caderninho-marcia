@@ -8,6 +8,7 @@
 ## Regras obrigatórias
 - Sempre use o design system. Use as classes, cores, fontes, easings e animações que já existem. Nunca crie um visual novo do zero.
 - Estilos novos vão em assets/pagina.css. Scripts novos vão em assets/pagina.js.
+- Os arquivos legíveis (index.html, assets/*.css, assets/*.js) são a fonte. A versão publicada é gerada em dist/ por `npm run build` (CSS minificado inline, JS minificado em assets/min/); a Vercel roda o build sozinha a cada deploy. Nunca edite dist/. Depois de mudar CSS, JS ou HTML, rode `npm run build` e `npm test` para conferir.
 - Paleta: verde #00854A, ouro #F4C542, azul-marinho #17365B, base creme.
 - Variáveis editáveis ficam no topo do script: LINK_COMPRA, PRECO e LINK_CONTATO.
 - Imagens ficam em assets/images/. Use JPG para fotos e aquarelas; PNG só quando houver transparência.

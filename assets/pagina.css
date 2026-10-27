@@ -1,6 +1,28 @@
 /* As imagens com versões WebP ficam dentro de <picture>; a caixa do <picture> não entra no layout. */
 picture{display:contents}
 
+/* Entrada da hero sem esperar o JS: as mesmas keyframes, durações e atrasos do [data-reveal]
+   do design system, mas começando já na primeira pintura (o título é o elemento de LCP).
+   O design system continua marcando data-revealed depois; o estado final é o mesmo. */
+#inicio .hero-discord-pill{--reveal-delay:0ms}
+#inicio .display{--reveal-delay:80ms}
+#inicio .lead{--reveal-delay:160ms}
+#inicio .hero-actions{--reveal-delay:240ms}
+#inicio .hero-purchase-note{--reveal-delay:320ms}
+#inicio .hero-art{--reveal-delay:400ms}
+#inicio .hero-bottom{--reveal-delay:480ms}
+#inicio [data-reveal]{animation:hero-reveal var(--entrance) var(--ease) var(--reveal-delay,0ms) both}
+#inicio [data-reveal="scale"]{animation-name:hero-reveal-scale}
+html.motion-paused #inicio [data-reveal]{animation:none;opacity:1;transform:none}
+/* Começa em 1% de opacidade (imperceptível) em vez de 0: assim o Chrome conta o título como
+   pintado na primeira pintura. O movimento e a duração são os do reveal-rise do design system. */
+@keyframes hero-reveal{from{opacity:.01;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hero-reveal-scale{from{opacity:.01;transform:translateY(15px) scale(.97)}to{opacity:1;transform:none}}
+
+/* Dobras abaixo da primeira: o navegador só calcula estilo, layout e pintura quando elas
+   chegam perto da tela. As seções já cortam o que passa da borda (overflow: clip), então nada muda no visual. */
+main > .section:not(#inicio){content-visibility:auto;contain-intrinsic-size:auto 1000px}
+
 /* Pausa fora da tela também para as animações em ::before e ::after
    (o seletor * do design system não alcança pseudo-elementos). */
 .section.is-offscreen::before,.section.is-offscreen::after,.section.is-offscreen *::before,.section.is-offscreen *::after,.wire.is-offscreen *::before,.wire.is-offscreen *::after{animation-play-state:paused!important}

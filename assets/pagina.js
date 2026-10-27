@@ -1,3 +1,11 @@
+/* Dobras abaixo da primeira: a inicialização espera o evento load e um momento ocioso,
+   para não competir com a primeira pintura no celular. */
+const depoisDaCarga = setup => {
+  const run = () => (window.requestIdleCallback ? window.requestIdleCallback(setup, {timeout:1500}) : setTimeout(setup, 1));
+  if (document.readyState === 'complete') run();
+  else window.addEventListener('load', run, {once:true});
+};
+
 /* Caderno A5 reutilizável. A estrutura vem de #caderno-3d-template;
    o design system continua responsável por ícones, fundos e surgimentos. */
 (() => {
@@ -163,7 +171,7 @@
 })();
 
 /* Diferenciais: botões de disclosure, com foco, toque e hover equivalentes. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   const section = document.getElementById('detalhes');
   const group = section?.querySelector('[data-details]');
@@ -193,9 +201,9 @@
     caption.textContent = title;
     // O número grande segue a numeração visível da lista; data-detail guarda a pose do caderno.
     number.textContent = row.querySelector('.detail-number')?.textContent.trim() || feature;
+    // Reinicia a animação do número em dois quadros, sem forçar layout síncrono.
     number.classList.remove('is-changing');
-    void number.offsetWidth;
-    number.classList.add('is-changing');
+    requestAnimationFrame(() => requestAnimationFrame(() => number.classList.add('is-changing')));
   }
   rows.forEach((row, index) => {
     const button = buttons[index];
@@ -216,10 +224,10 @@
   });
   activate(rows[0]);
   group.classList.add('disclosure-ready');
-})();
+});
 
 /* Perguntas da compra: disclosure nativo de botão, sem alturas fixas. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   document.querySelectorAll('[data-faq]').forEach(group => {
     const rows = [...group.querySelectorAll('.detail-item')];
@@ -239,7 +247,7 @@
     open(rows[0]);
     group.classList.add('disclosure-ready');
   });
-})();
+});
 
 /* Compra móvel: visibilidade por posição, sem duplicar a chamada final. */
 (() => {
@@ -311,7 +319,7 @@
 })();
 
 /* Vitrine: navegação manual, gestos e objetos decorativos. Independente do 3D. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   const section = document.getElementById('para-que');
   if (!section) return;
@@ -363,12 +371,16 @@
 
     // A barra dourada é o relógio: ao completar 5 s, a página avança.
     const autoplayAllowed = () => !reduced.matches && Boolean(progress);
+    let restarts = 0;
     function restart() {
       if (!progress) return;
       carousel.classList.remove('is-autoplay');
       if (!autoplayAllowed()) return;
-      void progress.offsetWidth;
-      carousel.classList.add('is-autoplay');
+      // A barra recomeça dois quadros depois, sem forçar layout síncrono; só vale o pedido mais recente.
+      const ticket = ++restarts;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (ticket === restarts) carousel.classList.add('is-autoplay');
+      }));
     }
     function sync() {
       carousel.classList.toggle('is-autoplay-paused', holds.size > 0);
@@ -510,11 +522,11 @@
   if ('MutationObserver' in window) {
     new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
   }
-})();
+});
 
 /* A frase: leque de postais e ondas com parallax.
    O estado final fica visível sem JS e com movimento reduzido. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   const section = document.getElementById('a-frase');
   if (!section) return;
@@ -535,8 +547,7 @@
     });
     if (!arriving || calm()) return;
     arriving.classList.remove('is-chegando');
-    void arriving.offsetWidth;
-    arriving.classList.add('is-chegando');
+    requestAnimationFrame(() => requestAnimationFrame(() => arriving.classList.add('is-chegando')));
   }
   order.forEach(card => {
     card.addEventListener('animationend', () => card.classList.remove('is-chegando'));
@@ -591,11 +602,11 @@
   if ('MutationObserver' in window) {
     new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
   }
-})();
+});
 
 /* Cadernos com [data-caderno-hover]: inclinação e brilho seguem o mouse e a capa
    entreabre; no toque, a capa entreabre uma vez quando o caderno entra na tela. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   const books = [...document.querySelectorAll('.caderno-3d[data-caderno-hover]')];
   if (!books.length) return;
@@ -646,11 +657,11 @@
     }, {threshold:.5});
     peek.observe(book);
   });
-})();
+});
 
 /* Oferta: a entrada dispara uma vez, quando a dobra entra na tela, e os preços dos dois
    cards contam juntos de 0,00 até o valor de PRECO. Com movimento reduzido, tudo começa no estado final. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   const section = document.querySelector('[data-oferta]');
   if (!section) return;
@@ -687,7 +698,7 @@
   }, {threshold:.2});
   observer.observe(section);
   reduced.addEventListener('change', () => { if (reduced.matches) deliver(); });
-})();
+});
 
 /* Compra: depois do primeiro clique, os botões de compra ignoram novos cliques por 3 s.
    Ao voltar pelo histórico (pageshow), eles ficam normais de novo. */
@@ -722,7 +733,7 @@
 
 /* Como comprar: a linha verde e o lápis acompanham o scroll; cada passo acende quando
    a linha chega nele. As imagens abrem ampliadas no modal do design system. */
-(() => {
+depoisDaCarga(() => {
   'use strict';
   const section = document.querySelector('[data-passos]');
   if (!section) return;
@@ -815,4 +826,4 @@
     root.classList.remove('modal-open');
     opener?.focus();
   });
-})();
+});

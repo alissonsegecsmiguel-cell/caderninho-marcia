@@ -1,0 +1,12 @@
+{
+  "name": "caderninho-marcia",
+  "private": true,
+  "description": "Página de vendas do Caderninho na Mão!, da Profa. Marcia Macedo.",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node assets/qa/verify-sales.cjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0"
+  }
+}
