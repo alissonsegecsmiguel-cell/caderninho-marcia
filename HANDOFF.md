@@ -3,7 +3,7 @@
 ## Última sessão
 - Ferramenta: Codex
 - Data: 27/10/2026
-- Resumo: suporte configurado em LINK_CONTATO para +55 11 93618-3790 com a mensagem "Tenho dúvidas sobre o caderninho, consegue me ajudar?". Os links do FAQ e do cartão de compra usam o mesmo WhatsApp; rodapé ganhou número clicável e botão animado para tirar dúvidas.
+- Resumo: legendas da paisagem na hero simplificadas para apenas "Rio de Janeiro / Brasil". Removidos as coordenadas e o selo de texto "A ARTE DAS AULAS. NO SEU CADERNO."; mantidos o design system e os demais elementos da página.
 
 ## Leia primeiro: feito e não feito
 
@@ -11,7 +11,7 @@
 - As alterações locais dos detalhes, que os registros anteriores citam como "fora do commit", foram revisadas e são consolidadas neste fechamento: CSS, JS, HTML e testes. Esses avisos nas entradas históricas não indicam mais trabalho local por registrar.
 - Feito: remoção de `#a-frase` e `#como-comprar`, links e etiquetas corrigidos; chamada final "Tem uma página em branco esperando por você." sem texto de apoio; FAQ da nota fiscal; remoção de "200 páginas" do conteúdo e metadados; botão dos detalhes maior, com halo e brilho; detalhes do celular com caderno fixo e troca pela rolagem.
 - Ordem atual: `#inicio`, `#para-que` (02), `#detalhes` (03), `#oferta` (04), `#perguntas` (05), `#chamada-final`. Não restaurar as seções removidas nem a numeração antiga descrita no histórico.
-- Validado neste fechamento: `npm.cmd run build`, `npm.cmd test` (31 verificações) e Chrome nas larguras 1440, 390 e 320 px. Os quatro links de suporte têm o número e a mensagem exatos; botão conferido visualmente, com foco de teclado, pausa fora da tela/aba oculta e movimento reduzido. Links de compra preservados e sem erros de JavaScript ou arquivos ausentes. As rotinas de QA ficam em `assets/qa/runtime/`, ignorado pelo git.
+- Validado neste fechamento: `npm.cmd run build`, `npm.cmd test` (31 verificações) e hero no Chrome nas larguras 1440 e 390 px. Legenda "Rio de Janeiro / Brasil" visível, etiqueta anterior ausente, sem rolagem horizontal, erros de JavaScript ou arquivos ausentes. As rotinas de QA ficam em `assets/qa/runtime/`, ignorado pelo git.
 - Não feito: obter/aprovar novas fotos e arte, definir pagamentos e aplicar as mudanças visuais opcionais do relatório de desempenho. Dependem das decisões listadas em "Pendências".
 - Não validado neste fechamento: checkout real, aparelho físico, novo Lighthouse, compartilhamento em redes sociais e deploy público. Build/testes locais e push não substituem essas verificações. O bloqueio da Vercel do portfólio pertence ao outro projeto e ficou para depois por orientação do usuário.
 
@@ -36,7 +36,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Nenhuma implementação solicitada em aberto. WhatsApp e botão de suporte no rodapé concluídos e validados; ajustes anteriores dos detalhes no celular preservados.
+- Nenhuma implementação solicitada em aberto. Legenda da hero simplificada; suporte WhatsApp e ajustes anteriores preservados.
 
 ## Próximas tarefas (em ordem)
 1. Conferir o deploy público da main e a prévia de compartilhamento quando disponíveis. Não considerar publicação aprovada só porque o push terminou.
@@ -54,6 +54,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Conferir o primeiro deploy com o build: a página publicada deve ter o CSS inline (procure por <style> no código-fonte) e os scripts em assets/min/. Se o deploy falhar na Vercel, a versão anterior continua no ar.
 
 ## Concluído
+- 27/10/2026: substituídas as coordenadas da hero por "Rio de Janeiro / Brasil" e removida a etiqueta "A ARTE DAS AULAS. NO SEU CADERNO.", deixando apenas a localização solicitada. Mantidas as classes da legenda e os outros elementos da hero. Catálogo do design system e cópia do portfólio preservados. Build e 31 verificações aprovados; conferido visualmente no Chrome em 1440 e 390 px, sem erros ou rolagem horizontal.
 - 27/10/2026: WhatsApp do suporte configurado para +55 11 93618-3790 com a mensagem "Tenho dúvidas sobre o caderninho, consegue me ajudar?". Quatro links centralizados em LINK_CONTATO; botão do rodapé com ícone de WhatsApp, tamanho grande do DS, efeito magnético, seta, halo e brilho. Pausa fora da tela, com aba oculta e em movimento reduzido. Nenhuma mensagem é enviada automaticamente: o link abre a conversa com o texto preenchido.
 - 27/10/2026: texto de apoio da hero substituído por "Para anotar, praticar e revisar sempre que precisar. Caderno com 100 folhas.". Removido o texto anterior sobre palavra nova, arte das aulas e espiral; mantidos estilos, classes e animações. Teste existente atualizado; build e 31 testes aprovados. Conferido no Chrome em 1440 x 900 e 390 x 844, sem erros ou rolagem horizontal.
 - 27/10/2026: concluídos e consolidados os ajustes locais dos detalhes no celular: caderno fixo abaixo de 900 px, seleção automática dos cinco itens por IntersectionObserver, progresso, número animado, toque com rolagem, reposicionamento do preço/CTA e fallback de movimento reduzido. Item 03 atualizado para "Espiral com capa protegida" e descrição do acetato; "transparente" removido do aria-label da espiral na hero. Computador preservado. Build e 31 testes aprovados; comportamento conferido no Chrome com rolagem, toque real e troca de viewport/preferência.

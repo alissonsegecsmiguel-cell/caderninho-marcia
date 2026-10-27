@@ -166,7 +166,7 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
 });
 check('Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip',()=>{
   const reference=parseHTML(fs.readFileSync(path.join(project,'assets/design_system.html'),'utf8')).document;
-  for(const selector of ['.hero','.hero-glow.bloom[data-ds-bloom]','.hero-grid','.hero-copy','.hero-discord-pill','.display','.lettering-transparent','.lead','.hero-actions','.hero-art','.postmark','.handwritten','.art-caption','.annot.coord','.hero-bottom']){
+  for(const selector of ['.hero','.hero-glow.bloom[data-ds-bloom]','.hero-grid','.hero-copy','.hero-discord-pill','.display','.lettering-transparent','.lead','.hero-actions','.hero-art','.postmark','.handwritten','.annot.coord','.hero-bottom']){
     const original=reference.querySelector('#inicio '+selector)||reference.querySelector(selector);
     const actual=$('#inicio '+selector)||$(selector);
     assert.ok(actual,selector);
