@@ -1,7 +1,7 @@
 PASS Seven sections remain in order; the five sections after a-frase are still placeholders
 PASS A-frase reuses the green identity layout, exact copy, watercolor details and full cover
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
-PASS Hero retains catalogue composition, decorative layers, side rails and a continuous word strip
+PASS Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip
 PASS Shared CSS, JS, fonts and image paths resolve from the root
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
 PASS Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation

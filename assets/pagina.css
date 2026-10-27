@@ -2,9 +2,32 @@
    animações são importados de design_system.css e design_system.js. */
 .sales-section{min-height:340px;display:flex;align-items:center;padding-block:84px 108px}
 .sales-section h2{max-width:900px}
-/* A hero usa a composição original do catálogo; só a mídia substitui a aquarela. */
-.hero-art .hero-video-media{mix-blend-mode:multiply;border:0;border-radius:0;box-shadow:none;background:transparent;mask-image:radial-gradient(ellipse at 50% 50%,#000 42%,rgba(0,0,0,.94) 58%,transparent 74%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 42%,rgba(0,0,0,.94) 58%,transparent 74%)}
+/* A paisagem mantém a escala do catálogo; o caderno abre diante da vista. */
+.hero{padding-bottom:44px}
+.hero-art .hero-landscape{z-index:0}
+.hero-notebook{position:absolute;left:14%;bottom:18px;width:78%;aspect-ratio:16/9;z-index:1;mix-blend-mode:multiply}
+.hero-art .hero-video-media{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;border:0;border-radius:0;box-shadow:none;background:transparent;mask-image:radial-gradient(ellipse at 50% 50%,#000 42%,rgba(0,0,0,.94) 58%,transparent 74%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 42%,rgba(0,0,0,.94) 58%,transparent 74%)}
 .hero-art [hidden]{display:none!important}
+.hero-art :is(.postmark,.coord,.handwritten,.art-caption){z-index:2}
+.hero-art .handwritten{text-shadow:0 1px 8px var(--paper),0 0 18px var(--paper)}
+.hero>.hero-bottom{z-index:3}
+
+/* Pigmentos suaves atrás do texto; as cores cheias ficam na base. */
+.hero-copy .hero-flag{position:absolute;top:20px;left:-70px;width:430px;height:360px;z-index:-1;background:transparent;opacity:.075;pointer-events:none;animation:hero-flag-turn 180s linear infinite}
+.hero>.section-ribbon{z-index:0;height:94px}
+.hero>.section-ribbon path{fill:var(--primary);opacity:1}
+.hero>.section-ribbon path:nth-child(2){fill:var(--accent)}
+.hero>.section-ribbon path:nth-child(3){fill:var(--secondary)}
+.hero-tropical{position:absolute;width:clamp(190px,23vw,330px);height:auto;z-index:0;pointer-events:none;opacity:.2;mix-blend-mode:multiply;mask-image:radial-gradient(ellipse,#000 30%,transparent 73%);-webkit-mask-image:radial-gradient(ellipse,#000 30%,transparent 73%);animation:leaf-sway 18s ease-in-out infinite alternate;transform-origin:50% 80%}
+.hero-tropical-top{left:-140px;top:-135px;transform:rotate(38deg);opacity:.15}
+.hero-tropical-bottom{right:-120px;bottom:-100px;transform:rotate(-28deg);animation-delay:-9s}
+
+/* O ouro atravessa o interior das letras, preservando o contorno verde. */
+.hero .lettering-transparent{display:inline-block;-webkit-text-stroke-color:var(--primary);background-image:linear-gradient(112deg,transparent 39%,rgba(var(--gold-rgb),.9) 49%,var(--accent) 50%,transparent 61%);background-size:260% 100%;background-position:180% 0;background-clip:text;-webkit-background-clip:text;animation:hero-letter-shine 7.2s var(--ease) infinite}
+.hero .display .dot{filter:drop-shadow(0 0 10px rgba(var(--gold-rgb),.4))}
+@keyframes hero-letter-shine{0%,65%{background-position:180% 0}95%,100%{background-position:-80% 0}}
+@keyframes hero-flag-turn{from{transform:rotate(-12deg)}to{transform:rotate(348deg)}}
+
 .hero .mini-flag{flex-shrink:0}
 .hero-purchase-note{line-height:1.7}
 .hero-purchase-note strong{font-weight:600;color:var(--ink)}
@@ -32,6 +55,12 @@
 
 @media(max-width:960px){.side-rail{display:none}}
 @media(max-width:720px){
+  .hero{padding-bottom:36px}
+  .hero>.section-ribbon{height:70px}
+  .hero-notebook{left:7%;bottom:14px;width:86%}
+  .hero-copy .hero-flag{left:-50px;top:5px;width:320px;height:290px;opacity:.06}
+  .hero-tropical-top{left:-110px;top:-105px}
+  .hero-tropical-bottom{right:-95px;bottom:-65px;opacity:.15}
   .sales-page .nav-inner{gap:12px}
   .sales-page .brand{font-size:19px;gap:8px}
   .purchase-button{font-size:10px;min-height:44px;padding:8px 12px;gap:2px;flex-direction:column}
@@ -43,6 +72,11 @@
   .phrase-art .postmark{width:62px;height:62px;top:43px;right:8px}
   .phrase-art .postmark>span{inset:14px}
   .phrase-art .postmark .icon{width:18px;height:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero .lettering-transparent{animation:none;background-position:180% 0}
+  .hero-copy .hero-flag{animation:none;transform:rotate(-12deg)}
+  .hero-tropical{animation:none}
 }
 @media(max-width:370px){
   .sales-page .brand{font-size:17px;gap:6px}

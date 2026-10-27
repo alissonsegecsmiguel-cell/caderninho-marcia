@@ -89,7 +89,7 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
   assert.equal($('#inicio a[data-compra]').textContent,'Quero o meu caderninho');
   assert.equal($('.hero-purchase-note').textContent,'R$ 65,44 + frete · Envio para endereços no Brasil');
 });
-check('Hero retains catalogue composition, decorative layers, side rails and a continuous word strip',()=>{
+check('Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip',()=>{
   const reference=parseHTML(fs.readFileSync(path.join(project,'assets/design_system.html'),'utf8')).document;
   for(const selector of ['.hero','.hero-glow.bloom[data-ds-bloom]','.hero-grid','.hero-copy','.hero-discord-pill','.display','.lettering-transparent','.lead','.hero-actions','.hero-art','.postmark','.handwritten','.art-caption','.annot.coord','.hero-bottom']){
     const original=reference.querySelector('#inicio '+selector)||reference.querySelector(selector);
@@ -98,8 +98,14 @@ check('Hero retains catalogue composition, decorative layers, side rails and a c
     for(const className of original.classList)assert.ok(actual.classList.contains(className),selector+' '+className);
   }
   assert.equal($('#inicio .hero-art .ds-window'),null);
-  assert.ok($('#inicio .hero-art > video.landscape'));
-  assert.ok($('#inicio .hero-art > img.landscape'));
+  const landscape=$('#inicio .hero-art > img.landscape');
+  assert.equal(landscape.getAttribute('src'),'assets/images/brasil-aquarela.png');
+  assert.ok($('#inicio .hero-art .hero-notebook > video.hero-video-media'));
+  assert.ok($('#inicio .hero-art .hero-notebook > img.hero-video-media'));
+  assert.ok(landscape.nextElementSibling.classList.contains('hero-notebook'));
+  assert.equal($$('#inicio .hero-copy .hero-flag[aria-hidden="true"] .flag-wash').length,2);
+  assert.ok($('#inicio .hero-flag .flag-orb'));
+  assert.equal($$('#inicio img.hero-tropical[aria-hidden="true"][alt=""]').length,2);
   assert.equal($('#inicio .handwritten').childNodes[0].textContent,'Caderninho na mão!');
   assert.ok($('#inicio .hero-actions .btn.btn-primary.magnetic .arrow .icon'));
   assert.equal($$('#inicio .side-rail[aria-hidden="true"]').length,2);
@@ -203,6 +209,7 @@ check('Reduced motion shows only the opened notebook, without assigning or playi
   assert.equal(calm.document.getElementById('caderno-video').hidden,true);
   assert.equal(calm.document.getElementById('caderno-aberto').hidden,false);
   assert.equal(calm.document.querySelector('video source').hasAttribute('src'),false);
+  assert.equal(calm.document.querySelector('#inicio .hero-landscape').hidden,false);
   assert.equal(calm.playback.play,0);
   assert.equal(calm.playback.load,0);
 });
