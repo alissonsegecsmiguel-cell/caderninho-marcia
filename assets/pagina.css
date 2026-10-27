@@ -2,12 +2,25 @@
    animações são importados de design_system.css e design_system.js. */
 .sales-section{min-height:340px;display:flex;align-items:center;padding-block:84px 108px}
 .sales-section h2{max-width:900px}
-.sales-hero{min-height:540px;padding-top:calc(var(--nav-height) + var(--hero-gap));padding-bottom:88px}
+.sales-hero{min-height:0;padding-top:calc(var(--nav-height) + var(--hero-gap));padding-bottom:60px}
 .sales-hero>.container{z-index:1}
-.sales-hero::after{content:"";position:absolute;inset:24px -2% 32px auto;width:58%;background:url("images/brasil-aquarela.png") center/contain no-repeat;mix-blend-mode:multiply;opacity:.72;pointer-events:none;z-index:-1}
+.sales-hero-grid{min-height:520px;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:64px}
+.sales-hero .hero-copy{align-self:center;pointer-events:auto;min-width:0}
+.sales-hero .hero-discord-pill{max-width:100%;font-size:10px;line-height:1.6;letter-spacing:.02em;margin-bottom:20px}
+.sales-hero .mini-flag{flex-shrink:0}
+.sales-hero .display{font-size:clamp(64px,6.8vw,104px)}
+.sales-hero .lead{max-width:480px;font-size:16px;line-height:1.8;margin:24px 0}
+.hero-purchase-note{font-size:12px;line-height:1.7;color:var(--text-muted);margin-top:14px}
+.hero-purchase-note strong{font-weight:600;color:var(--ink)}
+.hero-product{position:relative;isolation:isolate;min-width:0;grid-column:2;grid-row:1}
+.hero-product-glow{position:absolute;inset:-15% -10%;z-index:-1;background:radial-gradient(ellipse at 25% 45%,rgba(var(--gold-rgb),.35),transparent 65%),radial-gradient(ellipse at 80% 65%,rgba(var(--green-rgb),.18),transparent 65%);filter:blur(24px);pointer-events:none}
+.hero-product-frame{aspect-ratio:16/9;background:var(--paper);box-shadow:var(--shadow);border-radius:var(--radius-lg)}
+.hero-product-frame video,.hero-product-frame img{display:block;width:100%;height:100%;object-fit:contain}
+.hero-product [hidden]{display:none!important}
 .purchase-price{padding-left:16px;border-left:1px solid rgba(255,255,255,.35);font-weight:400}
 .purchase-button[aria-disabled=true]{cursor:default}
 .sales-footer{font-size:12px}
+@media(max-width:1100px){.sales-hero-grid{gap:36px}}
 @media(max-width:720px){
   .sales-page .nav-inner{gap:12px}
   .sales-page .brand{font-size:19px;gap:8px}
@@ -15,12 +28,18 @@
   .purchase-button{font-size:11px;min-height:44px;padding:11px 14px;gap:0}
   .purchase-price{display:none}
   .sales-section{min-height:280px;padding-block:64px 84px}
-  .sales-hero{min-height:460px;padding-top:calc(var(--nav-height) + var(--hero-gap));padding-bottom:70px}
-  .sales-hero::after{inset:auto -12% 25px auto;width:95%;height:75%;opacity:.3}
+  .sales-hero{padding-top:calc(var(--nav-height) + var(--hero-gap));padding-bottom:64px}
+  .sales-hero-grid{min-height:0;display:flex;flex-direction:column;gap:28px}
+  .sales-hero .hero-copy{align-self:stretch}
+  .sales-hero .hero-discord-pill{font-size:9px;margin-bottom:18px}
+  .sales-hero .lead{font-size:15px;line-height:1.8;margin:20px 0}
+  .hero-product{order:-1;width:min(100%,520px);margin-inline:auto}
+  .hero-purchase-note{font-size:11px;margin-top:12px}
   .sales-footer{font-size:10px;line-height:1.8}
 }
 @media(max-width:370px){
   .sales-page .brand{font-size:17px;gap:6px}
   .sales-page .brand img{width:25px;height:25px}
   .purchase-button{font-size:10px;padding-inline:12px}
+  .sales-hero .display{font-size:56px}
 }

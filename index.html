@@ -9,6 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/images/marca.svg">
   <link rel="preload" href="assets/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/images/caderno-primeiro-quadro.jpg" as="image" media="(prefers-reduced-motion: no-preference)">
   <link rel="stylesheet" href="assets/design_system.css">
   <link rel="stylesheet" href="assets/pagina.css">
   <script src="assets/design_system.js" defer></script>
@@ -31,10 +32,27 @@
   </header>
 
   <main id="conteudo">
-    <!-- Estrutura provisória: acrescentar o conteúdo de cada seção nas próximas etapas. -->
+    <!-- As demais seções serão preenchidas nas próximas etapas. -->
     <section class="hero section section-cream sales-section sales-hero" id="inicio" aria-labelledby="inicio-titulo">
-      <div class="container">
-        <h1 class="display" id="inicio-titulo" data-reveal>Caderninho<br><span class="lettering-transparent">na Mão!</span></h1>
+      <div class="container hero-grid sales-hero-grid">
+        <div class="hero-copy">
+          <div class="hero-discord-pill" data-reveal><span class="mini-flag" aria-hidden="true"><i></i></span>O caderno oficial das aulas da Profa. Marcia Macedo</div>
+          <h1 class="display" id="inicio-titulo" data-reveal>Caderninho<br><span class="lettering-transparent">na mão!</span></h1>
+          <p class="lead" data-reveal>Para anotar cada palavra nova, praticar a escrita e revisar o seu português. Com a arte das aulas, espiral e 100 folhas.</p>
+          <div class="hero-actions" data-reveal>
+            <a class="btn btn-primary magnetic" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>Quero o meu caderninho</a>
+          </div>
+          <p class="hero-purchase-note" data-reveal><strong data-preco></strong><span> · endereços no Brasil</span></p>
+        </div>
+        <figure class="hero-product ds-live" data-reveal="scale">
+          <div class="hero-product-glow bloom" data-ds-bloom aria-hidden="true"></div>
+          <div class="hero-product-frame ds-window">
+            <video id="caderno-video" width="1280" height="720" autoplay muted playsinline preload="none" poster="assets/images/caderno-primeiro-quadro.jpg" aria-label="Caderno da Profa. Marcia Macedo abrindo." hidden>
+              <source data-src="assets/caderno-abrindo.mp4" type="video/mp4">
+            </video>
+            <img id="caderno-aberto" src="assets/images/caderno-aberto.jpg" width="1280" height="720" alt="Caderno aberto com espiral e página pautada, decorada com a arte das aulas." fetchpriority="high" decoding="async">
+          </div>
+        </figure>
       </div>
     </section>
 
@@ -71,8 +89,8 @@
   </footer>
 
   <script>
-    // Cole aqui a URL completa de compra do caderno no Clube de Autores.
-    const LINK_COMPRA = "COLAR_AQUI_O_LINK_DO_CLUBE_DE_AUTORES";
+    // URL completa de compra do caderno no Clube de Autores; usada em todos os botões.
+    const LINK_COMPRA = "https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo";
     // Preço exibido nos botões de compra; altere este valor quando necessário.
     const PRECO = "R$ 65,44";
 
@@ -84,7 +102,7 @@
     try {
       const url = new URL(LINK_COMPRA);
       if (url.protocol === 'https:' || url.protocol === 'http:') destinoCompra = url.href;
-    } catch { /* O placeholder será substituído quando o link de compra estiver disponível. */ }
+    } catch { /* Se a URL editada for inválida, os botões não levam a um destino incorreto. */ }
 
     document.querySelectorAll('[data-compra]').forEach(botao => {
       botao.target = '_blank';
@@ -98,6 +116,51 @@
         botao.addEventListener('click', evento => evento.preventDefault());
       }
     });
+
+    // O MP4 só recebe uma origem se movimento reduzido não estiver ativo.
+    // O primeiro quadro é o poster; ao terminar, o último quadro fica estático.
+    const videoCaderno = document.getElementById('caderno-video');
+    const imagemCaderno = document.getElementById('caderno-aberto');
+    const origemVideo = videoCaderno.querySelector('source');
+    const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let videoConcluido = false;
+
+    function mostrarCadernoAberto() {
+      videoCaderno.pause();
+      videoCaderno.hidden = true;
+      imagemCaderno.hidden = false;
+    }
+
+    function atualizarVideoCaderno() {
+      if (movimentoReduzido.matches || videoConcluido) {
+        mostrarCadernoAberto();
+        if (movimentoReduzido.matches && origemVideo.hasAttribute('src')) {
+          origemVideo.removeAttribute('src');
+          videoCaderno.load();
+        }
+        return;
+      }
+      videoCaderno.muted = true;
+      videoCaderno.defaultMuted = true;
+      videoCaderno.loop = false;
+      videoCaderno.hidden = false;
+      imagemCaderno.hidden = true;
+      if (!origemVideo.hasAttribute('src')) {
+        origemVideo.setAttribute('src', origemVideo.dataset.src);
+        videoCaderno.load();
+      }
+      const reproducao = videoCaderno.play();
+      if (reproducao) reproducao.catch(mostrarCadernoAberto);
+    }
+
+    videoCaderno.addEventListener('ended', () => {
+      videoConcluido = true;
+      mostrarCadernoAberto();
+    });
+    videoCaderno.addEventListener('error', mostrarCadernoAberto);
+    origemVideo.addEventListener('error', mostrarCadernoAberto);
+    movimentoReduzido.addEventListener('change', atualizarVideoCaderno);
+    atualizarVideoCaderno();
   </script>
 </body>
 </html>

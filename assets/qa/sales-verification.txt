@@ -1,10 +1,14 @@
-PASS Exactly seven empty sections in the requested order, with accessible titles
+PASS Seven sections remain in order; the six sections after the hero are still placeholders
+PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
 PASS Shared CSS, JS, fonts and image paths resolve from the root
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
-PASS Editable price is rendered; placeholder cannot navigate to an invalid checkout
+PASS All purchase links use the configured Clube de Autores destination and editable price
 PASS Configured URL and changed price apply to all purchase buttons, in new tabs
-PASS Reduced-motion preference works without the catalogue pause button
+PASS Reduced motion shows only the opened notebook, without assigning or playing the MP4
+PASS Normal playback starts muted/inline with a first-frame poster, no controls and no loop
+PASS Ending holds the open notebook image and never restarts the finished video
+PASS Enabling reduced motion during playback stops and unloads the MP4
 
-7 sales-page checks passed.
-Browser rendering and the real Clube de Autores destination were not verified; the purchase link remains a placeholder.
+11 sales-page checks passed.
+Media APIs are simulated: native autoplay/rendering and the live checkout destination were not verified in a browser.

@@ -1,3 +1,3 @@
 assets/design_system.css: 2447 declarations; zero parse or standard-value errors.
-assets/pagina.css: 50 declarations; zero parse or standard-value errors.
+assets/pagina.css: 96 declarations; zero parse or standard-value errors.
 Custom-property expressions and font-face descriptors checked structurally, not as normal properties.

@@ -1,0 +1,7 @@
+Source: assets/caderno-abrindo.mp4
+8.00 seconds; H.264; 1280x720; 24 fps.
+Full video stream decoded successfully with FFmpeg. Original MP4 unchanged.
+First-frame poster: assets/images/caderno-primeiro-quadro.jpg
+Last-frame still: assets/images/caderno-aberto.jpg
+Both extracted frames inspected visually.
+Native browser autoplay and responsive rendering not verified.

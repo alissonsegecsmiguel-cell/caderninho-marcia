@@ -4,9 +4,11 @@ Design system local para a **Profa. Marcia Macedo**, com o universo “Caderninh
 
 ## Página de vendas
 
-Abra **[../index.html](../index.html)** na raiz. A página contém somente o cabeçalho, sete seções com títulos provisórios e o rodapé. Ela importa `assets/design_system.css` e `assets/design_system.js`; a composição específica fica em `assets/pagina.css`. Fontes, marca e aquarela são os mesmos arquivos locais do catálogo.
+Abra **[../index.html](../index.html)** na raiz. A hero está preenchida com os textos fornecidos e o vídeo do caderno à direita; no celular, o vídeo vem antes do texto. As outras seis seções continuam com títulos provisórios. A página importa `assets/design_system.css` e `assets/design_system.js`; a composição específica fica em `assets/pagina.css`. Fontes, cores, marca, faixas, glow e surgimentos são compartilhados com o catálogo.
 
-No script ao final de `index.html`, edite `LINK_COMPRA` com a URL completa do Clube de Autores e `PRECO` com o preço exibido. Todos os links com `data-compra` usam essa configuração e abrem em nova aba quando o destino está configurado. Enquanto o link for o placeholder, a ação fica desabilitada para evitar uma navegação inválida. Não foi criado conteúdo de vendas além dos títulos solicitados.
+No topo do script ao final de `index.html`, `LINK_COMPRA` já aponta para a página do caderno no Clube de Autores e `PRECO` contém `R$ 65,44`. Todos os links com `data-compra` usam essa configuração e abrem em nova aba. Se a URL editada for inválida, os botões não navegam para um checkout incorreto. A linha de preço da hero usa a variável e o trecho fornecido “endereços no Brasil”, sem adicionar condições de entrega.
+
+O vídeo `assets/caderno-abrindo.mp4` tem 8 segundos, 1280 × 720 px, a 24 fps. Ele inicia automaticamente, mudo e inline, sem controles nem loop. `images/caderno-primeiro-quadro.jpg` é o primeiro quadro extraído com FFmpeg, usado como poster. `images/caderno-aberto.jpg` é o último quadro, extraído do mesmo vídeo e inspecionado visualmente; aparece após a reprodução e quando `prefers-reduced-motion` está ativo. Com movimento reduzido, o MP4 não recebe `src`, portanto não é carregado nem reproduzido. Bloqueio de autoplay ou erro de mídia também mostra a imagem estática do caderno aberto. O MP4 original não foi alterado.
 
 O sprite SVG e os efeitos de fundo e surgimento são compartilhados pelo JS. As demonstrações do catálogo só inicializam quando seus elementos estão presentes, permitindo importar o mesmo arquivo em outras páginas sem reproduzir o catálogo.
 
@@ -64,6 +66,8 @@ Todas usam `font-display: swap`. Inter Tight e Manrope recebem preload. Os arqui
 Foram aprovados 15 grupos de verificações de estrutura, arquivos, geração de catálogo, contraste e interações em DOM. Contrastes dos pares sólidos: azul/creme **11,35:1**, creme/verde-floresta **7,33:1**, ouro/verde-floresta **4,86:1**, ouro/azul **7,53:1**, links verde-escuro/creme **6,15:1** e branco/verde de ação **4,71:1**. O verde de ação original sobre creme tem **4,37:1**, por isso fica restrito a títulos grandes e lettering nesse fundo; textos pequenos usam `#006B3C`. Os valores descrevem os pares, sem certificar a página inteira quanto a WCAG.
 
 Não havia navegador disponibilizado pelo ambiente. Renderização visual, fontes realmente pintadas, layout responsivo, comportamento nativo de validação e contenção de foco do `dialog` precisam de revisão em navegador; os testes em DOM usam adaptadores dessas APIs e não substituem essa revisão.
+
+A página de vendas tem 11 grupos adicionais de verificações, incluindo textos da hero, links de compra, estados de reprodução e ausência de carregamento de vídeo com movimento reduzido. Os estados usam APIs de mídia simuladas; autoplay nativo e renderização em navegador não foram verificados. Os quadros extraídos foram conferidos como imagens.
 
 Para repetir a verificação de DOM, a partir da pasta do projeto:
 
