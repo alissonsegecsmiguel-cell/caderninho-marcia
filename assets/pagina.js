@@ -100,3 +100,108 @@
   window.Caderninho3D = Object.freeze({init, replay});
   init();
 })();
+
+/* Vitrine: navegação manual, gestos e objetos decorativos. Independente do 3D. */
+(() => {
+  'use strict';
+  const section = document.getElementById('para-que');
+  if (!section) return;
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const calm = () => reduced.matches || root.classList.contains('motion-paused');
+
+  section.querySelectorAll('[data-notes-carousel]').forEach(carousel => {
+    const slides = [...carousel.querySelectorAll('[data-note-slide]')];
+    const viewport = carousel.querySelector('.notes-viewport');
+    const track = carousel.querySelector('.notes-track');
+    if (!slides.length || !viewport || !track) return;
+    let current = 0, gesture = null;
+    function show(index) {
+      current = (index + slides.length) % slides.length;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      slides.forEach((slide, i) => {
+        const active = i === current;
+        slide.classList.toggle('is-current', active);
+        slide.setAttribute('aria-hidden', String(!active));
+        slide.toggleAttribute('inert', !active);
+      });
+      carousel.querySelector('[data-note-position]').textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      carousel.querySelector('[data-note-announcement]').textContent = ` · ${slides[current].dataset.noteLabel}`;
+    }
+    carousel.querySelector('[data-note-prev]').addEventListener('click', () => show(current - 1));
+    carousel.querySelector('[data-note-next]').addEventListener('click', () => show(current + 1));
+    carousel.addEventListener('keydown', event => {
+      const destination = {ArrowLeft:current - 1, ArrowRight:current + 1, Home:0, End:slides.length - 1}[event.key];
+      if (destination === undefined) return;
+      event.preventDefault();
+      show(destination);
+    });
+    viewport.addEventListener('pointerdown', event => {
+      if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      gesture = {id:event.pointerId, x:event.clientX, y:event.clientY};
+      viewport.setPointerCapture?.(event.pointerId);
+    });
+    viewport.addEventListener('pointermove', event => {
+      if (!gesture || gesture.id !== event.pointerId) return;
+      const x = event.clientX - gesture.x, y = event.clientY - gesture.y;
+      if (Math.abs(x) < 8 || Math.abs(x) <= Math.abs(y) * 1.2) return;
+      carousel.classList.add('is-dragging');
+      // Limita o arraste a uma página sem bloquear o scroll vertical do celular.
+      const width = viewport.getBoundingClientRect?.().width || 320;
+      const delta = Math.max(-width, Math.min(width, x));
+      track.style.transform = `translateX(calc(-${current * 100}% + ${delta}px))`;
+    });
+    function finish(event, cancelled = false) {
+      if (!gesture || gesture.id !== event.pointerId) return;
+      const x = event.clientX - gesture.x, y = event.clientY - gesture.y;
+      gesture = null;
+      carousel.classList.remove('is-dragging');
+      if (viewport.hasPointerCapture?.(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+      const horizontal = !cancelled && Math.abs(x) >= 40 && Math.abs(x) > Math.abs(y) * 1.2;
+      show(current + (horizontal ? x < 0 ? 1 : -1 : 0));
+    }
+    viewport.addEventListener('pointerup', event => finish(event));
+    viewport.addEventListener('pointercancel', event => finish(event, true));
+    carousel.querySelector('[data-notes-controls]').hidden = false;
+    show(0);
+  });
+
+  const objects = [...section.querySelectorAll('[data-vitrine-object]')];
+  objects.forEach(object => {
+    object.querySelector('img')?.addEventListener('error', () => { object.hidden = true; });
+  });
+  if (!objects.length) return;
+  let visible = false, queued = false;
+  function reset() { objects.forEach(object => object.style.removeProperty('--object-y')); }
+  function update() {
+    queued = false;
+    if (calm() || document.hidden) { reset(); return; }
+    if (!visible) return;
+    const rect = section.getBoundingClientRect?.();
+    if (!rect) return;
+    const distance = innerHeight / 2 - (rect.top + rect.height / 2);
+    const limit = innerWidth <= 720 ? 10 : 24;
+    objects.forEach(object => {
+      const offset = Math.max(-limit, Math.min(limit, distance * Number(object.dataset.depth)));
+      object.style.setProperty('--object-y', `${offset.toFixed(1)}px`);
+    });
+  }
+  function queue() {
+    if (queued || !visible || calm()) return;
+    queued = true;
+    requestAnimationFrame(update);
+  }
+  if ('IntersectionObserver' in window) {
+    new window.IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) queue();
+    }, {rootMargin:'100px'}).observe(section);
+  } else { visible = true; queue(); }
+  addEventListener('scroll', queue, {passive:true});
+  addEventListener('resize', queue, {passive:true});
+  const syncMotion = () => { if (calm()) reset(); else queue(); };
+  reduced.addEventListener('change', syncMotion);
+  if ('MutationObserver' in window) {
+    new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
+  }
+})();

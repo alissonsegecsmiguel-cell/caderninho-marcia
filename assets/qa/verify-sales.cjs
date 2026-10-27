@@ -45,19 +45,77 @@ const page=load();
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('Seven sections remain in order; four future sections remain placeholders',()=>{
+check('Seven sections remain in order; three future sections remain placeholders',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
     const title=page.document.getElementById(section.getAttribute('aria-labelledby'));
     assert.ok(title?.matches('h1,h2'));
-    if(!['inicio','a-frase','detalhes'].includes(section.id)){
+    if(!['inicio','a-frase','para-que','detalhes'].includes(section.id)){
       assert.equal(section.querySelectorAll('p,a,button,article,form').length,0);
       assert.equal(section.querySelectorAll('[data-reveal]').length,1);
     }
   });
   assert.equal($$('h1').length,1);
   assert.equal(page.document.title,'Caderninho na Mão! · Profa. Marcia Macedo');
+});
+check('Product showcase keeps the requested copy, purchase configuration and five real annotated pages',()=>{
+  assert.ok($('#para-que.section.ds-group.section-cream'));
+  assert.deepEqual($$('#para-que .sec-rule span').map(el=>el.textContent),['03 / O CADERNO POR DENTRO','UM CADERNO, MUITOS USOS']);
+  assert.equal($('#para-que-titulo').textContent,'Tudo o que você aprende, num só lugar.');
+  assert.equal($('#para-que-titulo .lettering-transparent').textContent,'num só lugar.');
+  assert.equal($('#para-que .vitrine-copy p').textContent,'Use o caderninho nas aulas, nos estudos em casa ou quando ouvir uma palavra nova numa música, num filme ou numa conversa. Anote o vocabulário, pratique a escrita, guarde as dúvidas para a próxima aula e revise tudo quando quiser.');
+  assert.equal($('#para-que .vitrine-photo img').getAttribute('src'),'assets/images/mao-caderno.jpg');
+  assert.equal($('#para-que [data-preco]').textContent,'R$ 65,44');
+  assert.equal($('#para-que a[href="#detalhes"]').textContent,'Ver todos os detalhes do caderno ↓');
+  assert.deepEqual($$('#para-que .vitrine-prices tr').map(el=>[...el.children].map(cell=>cell.textContent)),[
+    ['Caderninho na Mão!','R$ 65,44'],['Frete','Calculado pelo CEP'],['Entrega','Para endereços no Brasil']
+  ]);
+  assert.deepEqual($$('[data-note-slide]').map(slide=>[...slide.querySelectorAll('.note-writing p')].map(p=>p.textContent)),[
+    ['saudade · /sawˈda.dʒi/ · substantivo','A falta que a gente sente de alguém, de um lugar ou de um momento.','"Que saudade das nossas aulas!"'],
+    ['cafuné · /ka.fuˈnɛ/ · substantivo','Carinho que a gente faz passando a mão, de leve, nos cabelos de alguém.','"Tem palavras que parecem um abraço."'],
+    ['Eu moro em Buenos Aires.','Eu gosto de café com leite.','Amanhã eu vou à praia com meus amigos.'],
+    ['Perguntar na aula:','Qual a diferença entre "por" e "para"?','Quando eu uso "a gente" no lugar de "nós"?'],
+    ['Palavras da semana: saudade, cafuné, cheiro, abraço, sobremesa.','Já sei usar 4 de 5! ✓']
+  ]);
+  assert.deepEqual($$('.note-label').map(el=>el.textContent),['VOCABULÁRIO','VOCABULÁRIO','ESCRITA','DÚVIDAS','REVISÃO']);
+  for(const img of $$('.note-paper > img'))assert.equal(img.getAttribute('src'),'assets/images/miolo.png');
+});
+check('Carousel arrows and keyboard update one accessible slide, wrap around and announce position',()=>{
+  const active=load();const doc=active.document;
+  const position=()=>doc.querySelector('[data-note-position]').textContent;
+  const next=doc.querySelector('[data-note-next]'),prev=doc.querySelector('[data-note-prev]');
+  assert.equal(doc.querySelector('[data-notes-controls]').hidden,false);
+  next.click();assert.equal(position(),'02 / 05');
+  assert.equal(doc.querySelectorAll('[data-note-slide][aria-hidden="false"]').length,1);
+  assert.equal(doc.querySelectorAll('[data-note-slide]:not([inert])').length,1);
+  prev.click();prev.click();assert.equal(position(),'05 / 05');
+  const key=key=>{const event=Object.assign(new active.window.Event('keydown',{bubbles:true,cancelable:true}),{key});doc.querySelector('.notes-viewport').dispatchEvent(event);assert.equal(event.defaultPrevented,true);};
+  key('Home');assert.equal(position(),'01 / 05');key('End');assert.equal(position(),'05 / 05');key('ArrowLeft');assert.equal(position(),'04 / 05');
+  assert.ok(doc.querySelector('[data-note-announcement]').textContent.includes('DÚVIDAS'));
+});
+check('Horizontal drag advances pages; vertical scroll, cancellation and small drags do not',()=>{
+  const active=load();const viewport=active.document.querySelector('.notes-viewport');
+  const position=()=>active.document.querySelector('[data-note-position]').textContent;
+  const pointer=(type,x,y)=>viewport.dispatchEvent(Object.assign(new active.window.Event(type,{bubbles:true}),{pointerId:1,pointerType:'touch',isPrimary:true,clientX:x,clientY:y}));
+  pointer('pointerdown',240,100);pointer('pointermove',120,105);
+  assert.ok(active.document.querySelector('.notes-carousel').classList.contains('is-dragging'));
+  pointer('pointerup',120,105);assert.equal(position(),'02 / 05');
+  pointer('pointerdown',120,100);pointer('pointermove',125,240);pointer('pointerup',125,240);assert.equal(position(),'02 / 05');
+  pointer('pointerdown',240,100);pointer('pointermove',120,105);pointer('pointercancel',120,105);assert.equal(position(),'02 / 05');
+  pointer('pointerdown',240,100);pointer('pointerup',225,100);assert.equal(position(),'02 / 05');
+});
+check('Decorative parallax stays bounded, hides missing images and resets with reduced motion while carousel remains usable',()=>{
+  const active=load();const section=active.document.getElementById('para-que');
+  section.getBoundingClientRect=()=>({top:-200,height:1000});
+  const observer=active.observers.find(item=>item.targets.length===1&&item.targets[0]===section);
+  assert.ok(observer);observer.cb([{target:section,isIntersecting:true}]);
+  const objects=[...section.querySelectorAll('[data-vitrine-object]')];assert.equal(objects.length,4);
+  for(const object of objects){const offset=parseFloat(object.style.getPropertyValue('--object-y'));assert.ok(Number.isFinite(offset)&&Math.abs(offset)<=10);}
+  objects[0].querySelector('img').dispatchEvent(new active.window.Event('error'));assert.equal(objects[0].hidden,true);
+  active.media.matches=true;active.media.listeners.forEach(listener=>listener({matches:true}));
+  for(const object of objects)assert.ok(!object.style.getPropertyValue('--object-y'));
+  section.querySelector('[data-note-next]').click();assert.equal(section.querySelector('[data-note-position]').textContent,'02 / 05');
 });
 check('A-frase reuses the green identity layout, exact copy, watercolor details and full cover',()=>{
   assert.ok($('#a-frase.section.ds-group.section-dark.section-forest'));
@@ -261,6 +319,6 @@ check('Without IntersectionObserver notebooks still open and content remains rev
   for(const element of active.document.querySelectorAll('[data-caderno]'))assert.equal(element.dataset.cadernoState,'open');
   assert.equal(active.document.querySelectorAll('[data-reveal]:not([data-revealed])').length,0);
 });
-const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, timers and viewport APIs are simulated: CSS 3D rendering, mobile composition and live checkout were not verified in a browser.\n';
+const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.\n';
 fs.writeFileSync(path.join(__dirname,'sales-verification.txt'),output);
 console.log(output);

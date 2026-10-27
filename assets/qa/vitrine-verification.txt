@@ -1,0 +1,14 @@
+PASS HTTP 200 index.html (20655 bytes)
+PASS HTTP 200 assets/pagina.css (15382 bytes)
+PASS HTTP 200 assets/pagina.js (9397 bytes)
+PASS HTTP 200 assets/images/mao-caderno.jpg (306868 bytes)
+PASS HTTP 200 assets/images/miolo.png (563398 bytes)
+PASS HTTP 200 assets/images/postal.png (2997742 bytes)
+PASS HTTP 200 assets/images/selo.png (2754717 bytes)
+PASS HTTP 200 assets/images/folha.png (2113485 bytes)
+PASS HTTP 200 assets/images/lapis.png (370418 bytes)
+PASS HTTP 200 assets/fonts/caveat-latin.woff2 (74932 bytes)
+PASS HTTP 200 assets/fonts/caveat-latin-ext.woff2 (29472 bytes)
+PASS #detalhes HTML unchanged from preceding commit.
+Typography uses the measured 63.5 px ruling pitch of miolo.png and Caveat metrics 960/-300 per 1000 units.
+20 DOM checks passed separately. Visual alignment, native gestures and mobile layout were not verified: no browser was available.

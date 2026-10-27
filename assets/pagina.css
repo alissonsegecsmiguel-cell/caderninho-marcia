@@ -1,3 +1,7 @@
+/* Caveat, do Google Fonts, servida localmente; licença em fonts/OFL-caveat.txt. */
+@font-face{font-family:Caveat;font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/caveat-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Caveat;font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/caveat-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
 /* Apenas composição da página de vendas. Tokens, fontes, componentes e
    animações são importados de design_system.css e design_system.js. */
 .sales-section{min-height:340px;display:flex;align-items:center;padding-block:84px 108px}
@@ -39,6 +43,58 @@
 .purchase-price{padding-left:16px;border-left:1px solid rgba(255,255,255,.35);font-weight:400}
 .purchase-button[aria-disabled=true]{cursor:default}
 .sales-footer{font-size:12px}
+
+/* Vitrine editorial: as áreas permitem reorganizar o conteúdo sem duplicá-lo. */
+.vitrine{--handwritten:Caveat,"Segoe Print",var(--serif)}
+.vitrine>.container{z-index:1}
+.vitrine-grid{grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);grid-template-areas:"photo carousel" "offer copy";align-items:start;gap:32px 60px;margin-top:32px}
+.vitrine-grid>*{min-width:0}
+.vitrine-photo{grid-area:photo;align-self:stretch;min-height:420px;box-shadow:var(--shadow)}
+.vitrine-photo>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.notes-carousel{grid-area:carousel;min-width:0}
+.notes-carousel [hidden]{display:none!important}
+.notes-viewport{overflow:hidden;touch-action:pan-y pinch-zoom;cursor:grab;user-select:none;padding:20px 12px}
+.notes-track{display:flex;transition:transform var(--gesture) var(--ease)}
+.notes-slide{flex:0 0 100%;min-width:0}
+.note-paper{position:relative;width:min(100%,380px);aspect-ratio:1748/2480;margin-inline:auto;container-type:inline-size;background:var(--surface);border-radius:calc(var(--radius-sm) / 2);box-shadow:var(--shadow)}
+.note-paper>img{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;pointer-events:none}
+.note-label{position:absolute;top:10.5%;left:15.5%;font-size:8px}
+/* Pautas reais a cada 63,5/1748 da largura. Cada linha manuscrita ocupa
+   duas pautas; o início considera as métricas 960/-300 da fonte Caveat. */
+.note-writing{--note-rule:3.633cqw;position:absolute;top:15.28%;left:15.5%;right:15.5%;font:600 20px/1.35 var(--handwritten);font-size:5.4cqw;line-height:calc(var(--note-rule) * 2);color:var(--ink);letter-spacing:0;overflow-wrap:break-word}
+.note-writing p+p{margin-top:var(--note-rule)}
+.note-term{font-weight:700}
+.note-pronunciation{font-size:.72em;font-family:var(--mono);font-weight:400;line-height:0}
+.notes-controls{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:16px}
+.notes-controls>.label{margin-right:auto;font-size:8px;letter-spacing:.08em}
+.notes-position{white-space:nowrap;font-size:10px}
+.notes-prev .icon{transform:rotate(180deg)}
+.notes-carousel.is-dragging .notes-viewport{cursor:grabbing}
+.notes-carousel.is-dragging .notes-track,html.motion-paused .notes-track{transition:none}
+.vitrine-copy{grid-area:copy}
+.vitrine-copy>p{max-width:600px;margin-top:24px;color:var(--text-soft)}
+.vitrine-offer{grid-area:offer}
+.vitrine-purchase{padding:24px;background:var(--paper-warm);border-color:var(--line-soft)}
+.vitrine-prices{font-size:12px}
+.vitrine-prices th,.vitrine-prices td{padding:12px 0}
+.vitrine-prices th{font-family:var(--body);font-weight:500;width:48%}
+.vitrine-prices td{text-align:right;color:var(--text-soft)}
+.vitrine-prices tr:first-child td{font-weight:700;color:var(--ink)}
+.vitrine-prices tr:last-child :is(th,td){border-bottom:0}
+.vitrine-purchase>.btn{width:100%;margin-top:20px}
+.vitrine-offer>.btn-text{margin-top:8px;white-space:normal;text-align:left}
+.vitrine-decor{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:clip}
+.vitrine-object{position:absolute;translate:0 var(--object-y,0px);pointer-events:none}
+.vitrine-object>img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;animation:leaf-sway 16s ease-in-out infinite alternate}
+/* Recorte do lado direito do postal: mantém o Pão de Açúcar em destaque. */
+.vitrine-postal{width:190px;height:250px;left:-90px;top:180px;transform:rotate(-14deg);opacity:.75}
+.vitrine-postal>img{object-fit:cover;object-position:right center;border-radius:var(--radius-sm)}
+.vitrine-selo{width:160px;right:-65px;top:120px;transform:rotate(14deg)}
+.vitrine-selo>img{animation-delay:-6s}
+.vitrine-folha{width:250px;left:-95px;bottom:35px;opacity:.16;transform:rotate(24deg)}
+.vitrine-folha>img{animation-delay:-10s}
+.vitrine-lapis{width:220px;right:-100px;bottom:90px;transform:rotate(-18deg)}
+.vitrine-lapis>img{animation-delay:-4s}
 
 /* Caderno A5: um único componente, sem fundo, com faces opacas e
    profundidade equivalente a 100 folhas na escala desta representação. */
@@ -82,8 +138,19 @@
 .notebook.phrase-cover::before{display:none}
 .phrase-cover>img{width:100%;height:100%;object-fit:contain;object-position:center}
 
+@media(max-width:1100px){.vitrine-grid{column-gap:32px}.note-paper{max-width:330px}}
 @media(max-width:960px){.side-rail{display:none}}
 @media(max-width:720px){
+  .vitrine-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"photo" "carousel" "copy" "offer";gap:28px}
+  .vitrine-photo{aspect-ratio:1;min-height:0}
+  .note-paper{max-width:380px}
+  .notes-viewport{padding:12px 4px}
+  .notes-controls>.label{font-size:6px;letter-spacing:.03em}
+  .notes-controls{gap:10px;margin-top:12px}
+  .vitrine-copy>p{margin-top:20px}
+  .vitrine-postal,.vitrine-folha{display:none}
+  .vitrine-selo{width:85px;right:-30px;top:90px}
+  .vitrine-lapis{width:125px;left:-50px;right:auto;bottom:120px;opacity:.6}
   .hero{padding-bottom:36px}
   .hero>.section-ribbon{height:70px}
   .hero .hero-grid{display:flex;flex-direction:column}
@@ -119,6 +186,9 @@
   .hero-tropical{animation:none}
   .caderno-3d .caderno-cover{transform:translateZ(3px) rotateY(-180deg);transition:none}
   .caderno-3d :is(.caderno-lift,.caderno-float){animation:none}
+  .vitrine-object{translate:0 0}
+  .vitrine-object>img{animation:none}
+  .notes-track{transition:none}
 }
 @media(max-width:370px){
   .sales-page .brand{font-size:17px;gap:6px}

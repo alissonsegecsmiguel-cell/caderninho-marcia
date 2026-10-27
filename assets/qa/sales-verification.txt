@@ -1,4 +1,8 @@
-PASS Seven sections remain in order; four future sections remain placeholders
+PASS Seven sections remain in order; three future sections remain placeholders
+PASS Product showcase keeps the requested copy, purchase configuration and five real annotated pages
+PASS Carousel arrows and keyboard update one accessible slide, wrap around and announce position
+PASS Horizontal drag advances pages; vertical scroll, cancellation and small drags do not
+PASS Decorative parallax stays bounded, hides missing images and resets with reduced motion while carousel remains usable
 PASS A-frase reuses the green identity layout, exact copy, watercolor details and full cover
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
 PASS Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip
@@ -15,5 +19,5 @@ PASS Reduced motion mounts both notebooks already open, with no pending opening 
 PASS Enabling reduced motion cancels opening timers and settles every notebook open
 PASS Without IntersectionObserver notebooks still open and content remains revealed
 
-16 sales-page checks passed.
-DOM, timers and viewport APIs are simulated: CSS 3D rendering, mobile composition and live checkout were not verified in a browser.
+20 sales-page checks passed.
+DOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.
