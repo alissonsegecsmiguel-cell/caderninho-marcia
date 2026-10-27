@@ -111,14 +111,14 @@
 .caderno-model{position:absolute;top:3%;left:51%;width:44%;aspect-ratio:148/210;transform-style:preserve-3d;transform-origin:0 50%;transform:rotateX(18deg) rotateY(-6deg) rotateZ(-5deg)}
 .caderno-shadow{position:absolute;left:6%;bottom:2%;width:90%;height:10%;border-radius:50%;background:radial-gradient(ellipse,rgba(var(--navy-rgb),.28),rgba(var(--navy-rgb),.08) 45%,transparent 72%);filter:blur(5px);transform:rotate(-5deg);pointer-events:none}
 .caderno-back,.caderno-page,.caderno-face{position:absolute;inset:0;border-radius:var(--caderno-raio);background:var(--paper)}
-.caderno-back{inset:-1px;transform:translateZ(calc(-1 * var(--caderno-espessura)));box-shadow:var(--shadow)}
+.caderno-back{inset:-1px;transform:translateZ(calc(-1 * var(--caderno-espessura))) rotateY(180deg);box-shadow:var(--shadow)}
 .caderno-back img,.caderno-page img,.caderno-cover-front img{width:100%;height:100%;object-fit:contain;border-radius:inherit}
 .caderno-page{inset:1px;background:var(--surface);transform:translateZ(1px);box-shadow:inset 6px 0 10px -8px rgba(var(--navy-rgb),.3)}
 .caderno-edge{position:absolute;background:repeating-linear-gradient(90deg,var(--surface) 0 .1px,var(--paper-warm) .1px .12px);border:1px solid rgba(var(--navy-rgb),.12)}
 .caderno-edge-right{left:100%;top:1px;width:var(--caderno-espessura);height:calc(100% - 2px);transform-origin:0 50%;transform:rotateY(90deg)}
 .caderno-edge-bottom{left:1px;top:100%;width:calc(100% - 2px);height:var(--caderno-espessura);transform-origin:50% 0;transform:rotateX(-90deg);background:repeating-linear-gradient(0deg,var(--surface) 0 .1px,var(--paper-warm) .1px .12px)}
 .caderno-cover{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:0 50%;transform:translateZ(3px) rotateY(0deg);transition:transform calc(var(--entrance) * 2) var(--ease)}
-.caderno-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.caderno-back,.caderno-page,.caderno-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .caderno-cover-front{transform:translateZ(.5px);box-shadow:var(--shadow)}
 .caderno-cover-inside{transform:rotateY(180deg) translateZ(.5px);box-shadow:inset -5px 0 12px -9px rgba(var(--navy-rgb),.3),var(--shadow)}
 .caderno-bindings{position:absolute;top:4%;bottom:4%;left:-11px;width:24px;display:flex;flex-direction:column;justify-content:space-between;transform:translateZ(10px);pointer-events:none}
@@ -162,7 +162,6 @@ html.js .is-active>.detail-description,.disclosure-ready .is-active>.detail-desc
 .details-book .caderno-cover{transition-duration:var(--detail-turn)}
 .details-book .caderno-float{animation:caderno-float calc(var(--entrance) * 16) ease-in-out infinite}
 .details-book .caderno-shadow{left:18%;width:64%;opacity:.8;mix-blend-mode:multiply;transition:transform var(--detail-turn) var(--ease),width var(--detail-turn) var(--ease),left var(--detail-turn) var(--ease)}
-.details-book .caderno-back img{transform:rotateY(180deg)}
 .details-book[data-caderno-feature="02"] .caderno-model{transform:translateX(-50%) rotateX(14deg) rotateY(-24deg) rotateZ(8deg)}
 .details-book .caderno-cover-front{overflow:hidden}
 .details-book .caderno-cover-front::after{content:"";position:absolute;inset:-50%;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.1) 44%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.1) 56%,transparent 62%);transform:translateX(-100%)}
