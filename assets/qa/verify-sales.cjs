@@ -434,7 +434,7 @@ check('Purchase section combines seven exact answers, portrait postcard, shared 
     'Porque cada caderninho é impresso sob encomenda e enviado direto para você. O Clube de Autores, a plataforma parceira da professora, cuida da impressão, do pagamento e da entrega.',
     'R$ 65,44, mais o frete. O frete é calculado pelo seu CEP na hora da compra.',
     'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende do frete que você escolher.',
-    'Por enquanto, o envio é feito apenas para endereços no Brasil.',
+    'Sim. No carrinho, em "Informações de envio", escolha "Desejo receber fora do Brasil". Tenha em mãos o seu número fiscal ou documento do seu país (por exemplo, DNI ou CUIT na Argentina e NIF em Portugal): ele é pedido para a entrega internacional. O frete e o prazo são calculados para o seu país antes do pagamento.',
     'Sim. A capa tem a arte das aulas da professora, e as páginas internas têm pautas e ilustrações suaves em tons de cinza, como você vê aqui.',
     'Fale com a gente pelo link "Fale com a equipe". Vamos te ajudar a resolver.'
   ]);
