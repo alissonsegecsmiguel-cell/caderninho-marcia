@@ -668,3 +668,97 @@
   }, true);
   window.addEventListener('pageshow', release);
 })();
+
+/* Como comprar: a linha verde e o lápis acompanham o scroll; cada passo acende quando
+   a linha chega nele. As imagens abrem ampliadas no modal do design system. */
+(() => {
+  'use strict';
+  const section = document.querySelector('[data-passos]');
+  if (!section) return;
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const calm = () => reduced.matches || root.classList.contains('motion-paused');
+  const trail = section.querySelector('.passos-trilha');
+  const line = section.querySelector('.passos-linha');
+  const pencil = section.querySelector('.passos-lapis');
+  const steps = [...section.querySelectorAll('[data-passo]')];
+  let visible = false, queued = false, length = 0;
+
+  // A linha vai do centro do primeiro número ao centro do último.
+  function measure() {
+    const numbers = steps.map(step => step.querySelector('.passo-numero'));
+    if (!numbers.length) return;
+    const base = trail.getBoundingClientRect().top;
+    const center = el => { const box = el.getBoundingClientRect(); return box.top + box.height / 2 - base; };
+    const top = center(numbers[0]);
+    length = Math.max(0, center(numbers[numbers.length - 1]) - top);
+    line.style.top = `${top}px`;
+    line.style.bottom = 'auto';
+    line.style.height = `${length}px`;
+  }
+  function finish() {
+    section.classList.add('is-calmo');
+    steps.forEach(step => step.classList.add('is-aceso'));
+    line.style.setProperty('--passos-progresso', '1');
+  }
+  function draw() {
+    queued = false;
+    if (calm()) { finish(); return; }
+    section.classList.remove('is-calmo');
+    const anchor = window.innerHeight * .62;
+    const box = line.getBoundingClientRect();
+    const progress = Math.min(1, Math.max(0, (anchor - box.top) / (box.height || 1)));
+    line.style.setProperty('--passos-progresso', progress.toFixed(4));
+    pencil?.style.setProperty('--lapis-y', `${(progress * length).toFixed(1)}px`);
+    steps.forEach(step => {
+      if (step.classList.contains('is-aceso')) return;
+      const number = step.querySelector('.passo-numero').getBoundingClientRect();
+      if (number.top + number.height / 2 <= anchor + 1) step.classList.add('is-aceso');
+    });
+  }
+  function queue() {
+    if (queued || !visible) return;
+    queued = true;
+    requestAnimationFrame(draw);
+  }
+  measure();
+  if ('IntersectionObserver' in window) {
+    new window.IntersectionObserver(entries => {
+      visible = entries.some(entry => entry.isIntersecting);
+      if (visible) queue();
+    }, {rootMargin:'100px'}).observe(section);
+  } else { visible = true; finish(); }
+  addEventListener('scroll', queue, {passive:true});
+  addEventListener('resize', () => { measure(); queue(); }, {passive:true});
+  if ('ResizeObserver' in window) new window.ResizeObserver(() => { measure(); queue(); }).observe(trail);
+  reduced.addEventListener('change', queue);
+  if (calm()) finish();
+
+  // Lightbox: showModal deixa o resto da página inerte e o Esc fecha; o foco volta à imagem.
+  const dialog = section.querySelector('[data-lightbox-dialog]');
+  const big = dialog?.querySelector('[data-lightbox-img]');
+  let opener = null;
+  if (!dialog?.showModal || !big) return;
+  section.querySelectorAll('[data-lightbox]').forEach(button => button.addEventListener('click', () => {
+    const image = button.querySelector('img');
+    opener = button;
+    big.src = image.currentSrc || image.src;
+    big.alt = image.alt;
+    big.width = image.naturalWidth || image.width;
+    big.height = image.naturalHeight || image.height;
+    dialog.showModal();
+    root.classList.add('modal-open');
+    dialog.querySelector('[data-lightbox-close]').focus();
+  }));
+  dialog.querySelector('[data-lightbox-close]').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => {
+    if (event.target !== dialog) return;
+    const box = dialog.getBoundingClientRect();
+    const inside = event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;
+    if (!inside) dialog.close();
+  });
+  dialog.addEventListener('close', () => {
+    root.classList.remove('modal-open');
+    opener?.focus();
+  });
+})();

@@ -8,7 +8,7 @@ const project = path.resolve(__dirname, '../..');
 const source = fs.readFileSync(path.join(project, 'index.html'), 'utf8');
 const runtime = fs.readFileSync(path.join(project, 'assets/design_system.js'), 'utf8');
 const notebookRuntime = fs.readFileSync(path.join(project, 'assets/pagina.js'), 'utf8');
-const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','chamada-final'];
+const ids = ['inicio','a-frase','para-que','detalhes','oferta','como-comprar','perguntas','chamada-final'];
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
@@ -420,10 +420,10 @@ check('Hover, focus and keyboard navigate details; coarse touch does not activat
 });
 check('Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed',()=>{
   assert.equal($('#perguntas'),null);assert.equal($('a[href="#perguntas"]'),null);
-  assert.ok($('#como-comprar.section.ds-group.section-cream'));
-  assert.deepEqual($$('#como-comprar .sec-rule > span').map(el=>el.textContent),['05 / COMO COMPRAR','TIRE SUAS DÚVIDAS']);
-  assert.equal($('#como-comprar-titulo').textContent,'Do clique até a sua casa.');
-  assert.equal($('#como-comprar-titulo .lettering-transparent').textContent,'casa.');
+  assert.ok($('#perguntas.section.ds-group.section-cream'));
+  assert.deepEqual($('#perguntas .sec-rule > span').map(el=>el.textContent),['07 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
+  assert.equal($('#perguntas-titulo').textContent,'Do clique até a sua casa.');
+  assert.equal($('#perguntas-titulo .lettering-transparent').textContent,'casa.');
   assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
     'Como eu compro o caderninho?','Por que a compra é feita no Clube de Autores?','Quanto custa?',
     'Quanto tempo demora para chegar?','Vocês enviam para fora do Brasil?',

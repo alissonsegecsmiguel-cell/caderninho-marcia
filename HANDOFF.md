@@ -3,7 +3,7 @@
 ## Última sessão
 - Ferramenta: Claude Code
 - Data: 27/10/2026
-- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers; caderno da chamada final integrado em duas colunas; nova dobra de oferta "A encomenda"; proteção contra clique duplo na compra; metadados de compartilhamento, favicons e 404
+- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers; caderno da chamada final integrado em duas colunas; nova dobra de oferta "A encomenda"; proteção contra clique duplo na compra; metadados de compartilhamento, favicons e 404; resposta sobre envio internacional; dobra "Como comprar" em 5 passos
 
 ## Estado atual da página
 Arquivo único index.html, com estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html.
@@ -18,7 +18,8 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Dobra 3 (#para-que): vitrine com foto da mão (zoom e brilho no hover; zoom de entrada no celular), carrossel de páginas anotadas que troca sozinho a cada 5 s com barra dourada de progresso, virada de página, botão de pausar, setas, teclado e arraste; ficha de preço com linhas em cascata; objetos decorativos com parallax (dois selos da bandeira, folha e lápis).
 - Dobra 4 (#detalhes): seis diferenciais em disclosure; o caderno 3D gira para mostrar cada um (A5, acetato, espiral, 100 folhas, miolo, contracapa real).
 - Dobra 5 (#oferta): "Seu caderninho, pronto para a próxima aula." Varal de bandeirinhas no topo; à esquerda, pacote kraft com barbante e laço (SVG) com o caderno 3D saindo de dentro, selo e lápis flutuando; à direita, etiqueta de envio (papel creme sobre kraft, borda tracejada, carimbo BRASIL · ENCOMENDA) com a lista "O QUE VAI NA CAIXA", preço em carimbo (texto real via data-preco), "menos de R$ 0,33 por página", botão de compra e textos de apoio. Sequência de entrada única ao entrar na tela (classe .is-entregue). A linha "Mora fora do Brasil? Fale com a gente." só aparece com LINK_CONTATO preenchido ([data-contato-opcional]).
-- Dobra 6 (#como-comprar): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato.
+- Dobra 6 (#como-comprar): "Comprar é simples. São 5 passos." Linha do tempo em <ol> (alternando lados no computador; à esquerda no celular), linha tracejada que se preenche de verde com o scroll e lápis na ponta, números em círculo que acendem, capturas do Clube de Autores (passo-1 a passo-4) em moldura de navegador com lightbox (dialog.modal do design system), card ilustrado no passo 5, bilhete "Mora fora do Brasil?" com selo e botão dourado com "Enviamos para o Brasil e para o exterior". Todos os botões de compra têm href="#como-comprar" como reserva, então apontam para esta dobra se LINK_COMPRA estiver vazio.
+- Dobra 7 (#perguntas): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato. Antes tinha o id como-comprar; o id passou para a dobra de passos.
 - Chamada final (#chamada-final): duas colunas (no celular, caderno em cima). Assinatura "CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO." acima do título "Tem uma palavra nova esperando por você.", botão dourado e preço; à direita, caderno 3D grande (320 a 380 px) com rotação real, sombra no chão que acompanha a flutuação, brilho dourado atrás, folha, selo e lápis flutuando em volta, hover com inclinação e capa entreaberta.
 - Rodapé: crédito do Clube de Autores, Instagram @portugues_marciamacedo e botão de voltar ao topo.
 - Barra de compra no celular: aparece depois da hero, some enquanto a oferta está na tela e some de vez ao chegar na chamada final.
@@ -38,6 +39,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Fotos reais do caderno quando a amostra chegar (substituir a foto da mão, que tem o Pão de Açúcar ao fundo).
 - Marcia precisa aprovar as citações atribuídas a ela.
 - Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
+- Trocar o card do passo 5 pela captura passo-5-pagamento.jpg quando ela existir (há um comentário no HTML, dentro do passo 5).
 - Envio internacional: a resposta do FAQ "Vocês enviam para fora do Brasil?" agora diz que sim (pelo carrinho do Clube de Autores, com documento fiscal do país). Outros textos ainda falam só em Brasil e precisam de decisão antes de mudar: hero ("Envio para endereços no Brasil"), ficha da dobra 3 ("Para endereços no Brasil"), detalhe "Impresso para você" ("Entrega para endereços no Brasil"), lista da oferta ("Nota fiscal e entrega em todo o Brasil"), texto de apoio da oferta, chamada final, meta description ("Envio para todo o Brasil") e a decisão registrada "envio só para o Brasil". A linha "Mora fora do Brasil? Fale com a gente." da oferta também pode mudar.
 - Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://caderninho-marcia.vercel.app/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
 
@@ -58,6 +60,8 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - 27/10/2026: caderno da chamada final corrigido: integrado à chamada em duas colunas, sem skew (rotateX 5° e rotateY -20°, sem rotateZ), espiral dentro da altura da capa, sombra no chão, composição com folha, selo e lápis; coração isolado removido. Conferido no computador e no celular.
 - 27/10/2026: dobra de oferta "A encomenda" (#oferta) entre detalhes e perguntas, com etiquetas de seção renumeradas. Conferida no computador e no celular.
 - 27/10/2026: botões de compra protegidos contra clique duplo (3 s), com liberação no pageshow. Testado no Chrome: o segundo clique é bloqueado, o bloqueio vale para todos os botões e some depois de 3 s ou ao voltar pelo histórico.
+- 27/10/2026: resposta do FAQ sobre envio para fora do Brasil atualizada.
+- 27/10/2026: dobra "Como comprar" com 5 passos, linha do tempo animada pelo scroll e lightbox. Conferida no computador e no celular; lightbox testado com Tab, Esc e volta do foco.
 - 27/10/2026: página pronta para compartilhar (title, description, Open Graph, Twitter, canonical, og-image, favicons, theme-color e 404.html).
 
 ## Decisões registradas
@@ -74,4 +78,6 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Oferta: kraft não existia no design system; os tons ficam como variáveis locais em .oferta (--kraft, --kraft-claro, --kraft-medio, --kraft-escuro, --barbante).
 - Clique duplo: o estilo de desabilitado do design system (.btn:disabled) troca o botão para cinza e só vale para <button>; como os botões de compra são links e o pedido aceitava opacidade reduzida, foi usada só a opacidade .7, sem mudar cores.
 - og-image: gerada com Playwright a partir de um HTML temporário (já apagado), com as fontes e cores do design system; nenhum texto a menos de 84 px das laterais. O marca.svg antigo continua em assets/images/, mas a página agora usa os favicons da raiz.
+- Como comprar: a dobra usa fundo azul-marinho (section-navy) para alternar com a oferta e as perguntas, que são creme, e para os números dourados terem contraste.
+- QA: assets/qa/verify-sales.cjs foi escrito para a versão anterior da página e ainda falha (o primeiro erro é o novo title). Os ids e rótulos das dobras já foram atualizados nele, mas as verificações das dobras novas ou alteradas hoje (2, 3, oferta, passos, chamada final, compartilhamento) precisam ser reescritas.
 - As pastas assets/qa/npm-cache/ e assets/qa/runtime/ são cache local dos testes e ficam fora do git (.gitignore).
