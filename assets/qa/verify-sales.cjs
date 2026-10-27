@@ -151,7 +151,8 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
   assert.equal($('#inicio-titulo .lettering-transparent').textContent,'na mão!');
   assert.equal($('#inicio .lead').textContent,'Para anotar cada palavra nova, praticar a escrita e revisar o seu português. Com a arte das aulas, espiral e 100 folhas.');
   assert.equal($('#inicio a[data-compra]').textContent,'Quero o meu caderninho');
-  assert.equal($('.hero-purchase-note').textContent,'R$ 65,44 + frete · Envio para endereços no Brasil');
+  assert.equal($('.hero-purchase-note').textContent,'Envio para endereços no Brasil');
+  assert.equal($('#inicio [data-preco]'),null);
 });
 check('Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip',()=>{
   const reference=parseHTML(fs.readFileSync(path.join(project,'assets/design_system.html'),'utf8')).document;
@@ -207,7 +208,8 @@ check('Only brand and purchase action in the header; requested footer and shared
   assert.equal(header.children[0].textContent.trim(),'marcia macedo');
   assert.equal(header.querySelector('.brand img'),null);
   assert.ok(header.children[1].hasAttribute('data-compra'));
-  assert.equal(header.querySelector('[data-preco]').textContent,'R$ 65,44');
+  assert.equal(header.querySelector('[data-preco]'),null);
+  assert.equal(header.children[1].textContent.trim(),'Quero o meu caderninho');
   assert.ok($('footer').textContent.includes('Profa. Marcia Macedo · @portugues_marciamacedo'));
   assert.equal($$('.footer-tricolor > i').length,3);
 });
@@ -249,7 +251,7 @@ check('All purchase links use the configured Clube de Autores destination and ed
     assert.equal(button.target,'_blank');
     assert.ok(button.rel.includes('noopener')&&button.rel.includes('noreferrer'));
     assert.equal(button.hasAttribute('aria-disabled'),false);
-    assert.ok(button.getAttribute('aria-label').includes('R$ 65,44'));
+    assert.equal(button.getAttribute('aria-label').includes('R$ 65,44'),!button.closest('header, #inicio'));
   }
   const unconfigured=load({link:'COLAR_AQUI_O_LINK_DO_CLUBE_DE_AUTORES'});
   const button=unconfigured.document.querySelector('[data-compra]');
@@ -262,7 +264,7 @@ check('Configured URL and changed price apply to all purchase buttons, in new ta
     assert.equal(button.getAttribute('href'),'https://example.com/caderninho');
     assert.equal(button.target,'_blank');
     assert.ok(button.rel.includes('noopener')&&button.rel.includes('noreferrer'));
-    assert.ok(button.getAttribute('aria-label').includes('R$ 70,00'));
+    assert.equal(button.getAttribute('aria-label').includes('R$ 70,00'),!button.closest('header, #inicio'));
     const event=new configured.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
     assert.equal(event.defaultPrevented,false);
   }

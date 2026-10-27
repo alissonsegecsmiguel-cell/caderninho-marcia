@@ -26,7 +26,7 @@
           <span>marcia macedo</span>
         </a>
         <a class="btn btn-primary magnetic purchase-button" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>
-          Quero o meu caderninho<span class="purchase-price" data-preco></span>
+          Quero o meu caderninho
         </a>
       </div>
     </div>
@@ -56,7 +56,7 @@
           <div class="hero-actions" data-reveal>
             <a class="btn btn-primary magnetic" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>Quero o meu caderninho<span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a>
           </div>
-          <div class="hero-foot hero-purchase-note" data-reveal><span class="tiny-icon"><svg class="icon"><use href="#i-book"/></svg></span><span><strong data-preco></strong> + frete · Envio para endereços no Brasil</span></div>
+          <div class="hero-foot hero-purchase-note" data-reveal><span class="tiny-icon"><svg class="icon"><use href="#i-book"/></svg></span><span>Envio para endereços no Brasil</span></div>
         </div>
       </div>
       <figure class="hero-art" data-reveal="scale" aria-label="O caderninho diante da paisagem em aquarela do Pão de Açúcar, com o bondinho visível.">
@@ -242,7 +242,7 @@
   <script>
     // URL completa de compra do caderno no Clube de Autores; usada em todos os botões.
     const LINK_COMPRA = "https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo";
-    // Preço exibido nos botões de compra; altere este valor quando necessário.
+    // Preço exibido na ficha de compra e nos botões fora da primeira dobra.
     const PRECO = "R$ 65,44";
 
     document.querySelectorAll('[data-preco]').forEach(elemento => {
@@ -258,7 +258,10 @@
     document.querySelectorAll('[data-compra]').forEach(botao => {
       botao.target = '_blank';
       botao.rel = 'noopener noreferrer';
-      botao.setAttribute('aria-label', `Quero o meu caderninho por ${PRECO} (abre em nova aba)`);
+      const rotuloCompra = botao.closest('header, #inicio')
+        ? 'Quero o meu caderninho'
+        : `Quero o meu caderninho por ${PRECO}`;
+      botao.setAttribute('aria-label', `${rotuloCompra} (abre em nova aba)`);
       if (destinoCompra) {
         botao.href = destinoCompra;
       } else {
