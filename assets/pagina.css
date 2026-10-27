@@ -229,6 +229,19 @@ html.js .is-active>.detail-description,.disclosure-ready .is-active>.detail-desc
 .details-purchase{display:flex;align-items:flex-start;flex-direction:column;gap:20px;padding-top:32px}
 .details-purchase strong{font-weight:500}
 .details-purchase .caption{color:var(--text-soft)}
+
+/* CTA dos detalhes: tamanho grande do catálogo, brilho da oferta e halo em transform/opacity. */
+.details-cta{position:relative;isolation:isolate;display:inline-flex;width:min(100%,440px);max-width:100%}
+.details-cta::before{content:"";position:absolute;z-index:-1;inset:-6px;border:1px solid rgba(var(--gold-rgb),.65);border-radius:var(--radius-pill);box-shadow:0 0 24px rgba(var(--gold-rgb),.18);pointer-events:none;animation:details-cta-halo calc(var(--entrance) * 6) var(--ease) infinite}
+.details-cta .btn{width:100%;min-height:72px;padding:22px 30px;gap:24px;font-size:16px;font-weight:700;box-shadow:0 12px 32px -12px rgba(var(--gold-rgb),.55)}
+.details-cta .btn::before{animation:oferta-brilho calc(var(--entrance) * 7.5) var(--ease) calc(var(--entrance) * 2) infinite}
+.details-cta .btn:is(:hover,:focus-visible){box-shadow:0 16px 36px -12px rgba(var(--gold-rgb),.65)}
+.details-cta .btn:is(:hover,:focus-visible)::before{animation:none}
+.details-cta:is(:hover,:focus-within)::before,.details-cta.is-offscreen::before,.details-cta.is-offscreen .btn::before,#detalhes.is-offscreen .details-cta::before,#detalhes.is-offscreen .details-cta .btn::before{animation-play-state:paused}
+@keyframes details-cta-halo{0%,20%{opacity:.55;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.045,1.22)}}
+@media(max-width:720px){.details-cta{width:100%}.details-cta .btn{min-height:68px;padding-inline:20px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){.details-cta::before{animation:none;opacity:.35;transform:none}.details-cta .btn::before{animation:none}}
+
 .details-stage{position:sticky;top:48px;min-width:0;margin:0;isolation:isolate;align-self:start}
 .details-stage .hero-glow{inset:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%,rgba(var(--gold-rgb),.22),transparent 70%)}
 .details-scene{position:relative;padding-block:24px 20px}
