@@ -5,11 +5,11 @@
 /* A paisagem mantém a escala do catálogo; o caderno abre diante da vista. */
 .hero{padding-bottom:44px}
 .hero-art .hero-landscape{z-index:0}
-.hero-notebook{position:absolute;left:14%;bottom:18px;width:78%;aspect-ratio:16/9;z-index:1;mix-blend-mode:multiply}
-.hero-art .hero-video-media{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;border:0;border-radius:0;box-shadow:none;background:transparent;mask-image:radial-gradient(ellipse at 50% 50%,#000 42%,rgba(0,0,0,.94) 58%,transparent 74%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,#000 42%,rgba(0,0,0,.94) 58%,transparent 74%)}
-.hero-art [hidden]{display:none!important}
-.hero-art :is(.postmark,.coord,.handwritten,.art-caption){z-index:2}
-.hero-art .handwritten{text-shadow:0 1px 8px var(--paper),0 0 18px var(--paper)}
+.hero .hero-art{mix-blend-mode:normal}
+.hero-art :is(.postmark,.coord,.handwritten,.art-caption){z-index:3}
+.hero-art .handwritten{bottom:8px;left:16%;text-shadow:0 1px 8px var(--paper),0 0 18px var(--paper)}
+.hero-art .art-caption{bottom:-14px}
+.hero-art .hero-book{position:absolute;left:14%;bottom:68px;width:min(68%,540px);z-index:2}
 .hero>.hero-bottom{z-index:3}
 
 /* Pigmentos suaves atrás do texto; as cores cheias ficam na base. */
@@ -40,6 +40,35 @@
 .purchase-button[aria-disabled=true]{cursor:default}
 .sales-footer{font-size:12px}
 
+/* Caderno A5: um único componente, sem fundo, com faces opacas e
+   profundidade equivalente a 100 folhas na escala desta representação. */
+.caderno-3d{--caderno-folhas:100;--caderno-folha:.12px;--caderno-espessura:calc(var(--caderno-folhas) * var(--caderno-folha));--caderno-raio:calc(var(--radius-sm) / 2);position:relative;width:min(100%,620px);aspect-ratio:1.4;perspective:1600px}
+.caderno-3d [hidden]{display:none!important}
+.caderno-fallback{position:absolute;right:5%;top:3%;width:44%;aspect-ratio:148/210;object-fit:contain;box-shadow:var(--shadow);border-radius:var(--caderno-raio)}
+.caderno-lift,.caderno-float{position:absolute;inset:0;transform-style:preserve-3d}
+.caderno-model{position:absolute;top:3%;left:51%;width:44%;aspect-ratio:148/210;transform-style:preserve-3d;transform-origin:0 50%;transform:rotateX(18deg) rotateY(-6deg) rotateZ(-5deg)}
+.caderno-shadow{position:absolute;left:6%;bottom:2%;width:90%;height:10%;border-radius:50%;background:radial-gradient(ellipse,rgba(var(--navy-rgb),.28),rgba(var(--navy-rgb),.08) 45%,transparent 72%);filter:blur(5px);transform:rotate(-5deg);pointer-events:none}
+.caderno-back,.caderno-page,.caderno-face{position:absolute;inset:0;border-radius:var(--caderno-raio);background:var(--paper)}
+.caderno-back{inset:-1px;transform:translateZ(calc(-1 * var(--caderno-espessura)));box-shadow:var(--shadow)}
+.caderno-back img,.caderno-page img,.caderno-cover-front img{width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.caderno-page{inset:1px;background:var(--surface);transform:translateZ(1px);box-shadow:inset 6px 0 10px -8px rgba(var(--navy-rgb),.3)}
+.caderno-edge{position:absolute;background:repeating-linear-gradient(90deg,var(--surface) 0 .1px,var(--paper-warm) .1px .12px);border:1px solid rgba(var(--navy-rgb),.12)}
+.caderno-edge-right{left:100%;top:1px;width:var(--caderno-espessura);height:calc(100% - 2px);transform-origin:0 50%;transform:rotateY(90deg)}
+.caderno-edge-bottom{left:1px;top:100%;width:calc(100% - 2px);height:var(--caderno-espessura);transform-origin:50% 0;transform:rotateX(-90deg);background:repeating-linear-gradient(0deg,var(--surface) 0 .1px,var(--paper-warm) .1px .12px)}
+.caderno-cover{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:0 50%;transform:translateZ(3px) rotateY(0deg);transition:transform calc(var(--entrance) * 2) var(--ease)}
+.caderno-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.caderno-cover-front{transform:translateZ(.5px);box-shadow:var(--shadow)}
+.caderno-cover-inside{transform:rotateY(180deg) translateZ(.5px);box-shadow:inset -5px 0 12px -9px rgba(var(--navy-rgb),.3),var(--shadow)}
+.caderno-bindings{position:absolute;top:4%;bottom:4%;left:-11px;width:24px;display:flex;flex-direction:column;justify-content:space-between;transform:translateZ(10px);pointer-events:none}
+.caderno-bindings i{width:25px;height:9px;flex-shrink:0;border:2px solid rgba(255,255,255,.82);border-top-color:rgba(var(--navy-rgb),.23);border-right-color:rgba(var(--navy-rgb),.27);border-radius:50%;background:linear-gradient(155deg,transparent 35%,rgba(255,255,255,.6) 48%,transparent 62%);box-shadow:inset 0 1px 2px rgba(var(--navy-rgb),.16),0 1px 1px rgba(var(--navy-rgb),.17);transform:rotateY(-22deg) rotateZ(-9deg)}
+.caderno-3d[data-caderno-state=entering] .caderno-lift{animation:reveal-rise var(--entrance) var(--ease) both}
+.caderno-3d[data-caderno-state=open] .caderno-cover{transform:translateZ(3px) rotateY(-180deg)}
+.caderno-3d[data-caderno-state=open] .caderno-float{animation:caderno-float calc(var(--entrance) * 16) ease-in-out infinite;animation-delay:calc(var(--entrance) * 2)}
+.caderno-3d:is(.is-still,.is-resetting) .caderno-cover{transition:none}
+.caderno-3d.is-still :is(.caderno-lift,.caderno-float){animation:none}
+.caderno-details{display:grid;justify-items:center;gap:32px}
+@keyframes caderno-float{0%,100%{translate:0 0;rotate:-.4deg}50%{translate:0 -5px;rotate:.4deg}}
+
 /* A frase: a grade, tipografia, cores e alturas vêm da seção de identidade.
    Apenas as artes e seus detalhes internos precisam de composição própria. */
 #a-frase{padding-top:56px}
@@ -57,7 +86,18 @@
 @media(max-width:720px){
   .hero{padding-bottom:36px}
   .hero>.section-ribbon{height:70px}
-  .hero-notebook{left:7%;bottom:14px;width:86%}
+  .hero .hero-grid{display:flex;flex-direction:column}
+  .hero .hero-copy{width:100%}
+  .hero .hero-art{order:-1;flex:none;margin-bottom:32px}
+  .hero-art .hero-book{left:14%;bottom:32px;width:72%}
+  .hero-art .handwritten{left:15%;bottom:0;font-size:25px}
+  .hero-art .coord{top:8px;font-size:5px}
+  .hero-art .postmark{right:8px;top:30px;width:62px;height:62px}
+  .hero-art .postmark>span{inset:14px}
+  .hero-art .postmark .icon{width:18px;height:18px}
+  .caderno-3d{--caderno-folha:.08px}
+  .caderno-bindings{left:-8px;width:18px}
+  .caderno-bindings i{width:19px;height:7px;border-width:1.5px}
   .hero-copy .hero-flag{left:-50px;top:5px;width:320px;height:290px;opacity:.06}
   .hero-tropical-top{left:-110px;top:-105px}
   .hero-tropical-bottom{right:-95px;bottom:-65px;opacity:.15}
@@ -77,6 +117,8 @@
   .hero .lettering-transparent{animation:none;background-position:180% 0}
   .hero-copy .hero-flag{animation:none;transform:rotate(-12deg)}
   .hero-tropical{animation:none}
+  .caderno-3d .caderno-cover{transform:translateZ(3px) rotateY(-180deg);transition:none}
+  .caderno-3d :is(.caderno-lift,.caderno-float){animation:none}
 }
 @media(max-width:370px){
   .sales-page .brand{font-size:17px;gap:6px}

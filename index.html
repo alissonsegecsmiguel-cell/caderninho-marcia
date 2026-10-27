@@ -9,10 +9,12 @@
   <link rel="icon" type="image/svg+xml" href="assets/images/marca.svg">
   <link rel="preload" href="assets/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/images/caderno-primeiro-quadro.jpg" as="image" media="(prefers-reduced-motion: no-preference)">
+  <link rel="preload" href="assets/images/capa.jpg" as="image">
+  <link rel="preload" href="assets/images/miolo.png" as="image">
   <link rel="stylesheet" href="assets/design_system.css">
   <link rel="stylesheet" href="assets/pagina.css">
   <script src="assets/design_system.js" defer></script>
+  <script src="assets/pagina.js" defer></script>
 </head>
 <body class="sales-page">
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -54,11 +56,8 @@
         </div>
         <figure class="hero-art" data-reveal="scale">
           <img class="landscape hero-landscape" src="assets/images/brasil-aquarela.png" width="1536" height="1024" alt="Aquarela colorida do Pão de Açúcar e seu bondinho, com mar azul, praia, coqueiros e uma arara entre folhas tropicais." fetchpriority="high" decoding="async">
-          <div class="hero-notebook">
-            <video class="hero-video-media" id="caderno-video" width="1280" height="720" autoplay muted playsinline preload="none" poster="assets/images/caderno-primeiro-quadro.jpg" aria-label="Caderno da Profa. Marcia Macedo abrindo." hidden>
-              <source data-src="assets/caderno-abrindo.mp4" type="video/mp4">
-            </video>
-            <img class="hero-video-media" id="caderno-aberto" src="assets/images/caderno-aberto.jpg" width="1280" height="720" alt="Caderno aberto com espiral e página pautada, decorada com a arte das aulas." decoding="async">
+          <div class="caderno-3d hero-book" id="caderno-hero" data-caderno role="img" aria-label="Caderninho na Mão! em 3D: capa ilustrada, miolo original, espiral transparente e 100 folhas, diante da praia do Rio.">
+            <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" decoding="async">
           </div>
           <figcaption class="annot coord">RIO DE JANEIRO · 22°57′ S 43°09′ W</figcaption>
           <div class="postmark" aria-hidden="true"><svg viewBox="0 0 120 120"><defs><path id="inicio-stamp-ring" d="M60 12a48 48 0 1 1-.1 0"/></defs><text><textPath href="#inicio-stamp-ring" textLength="298">FEITO DE AFETO · FEITO DE BRASIL · </textPath></text></svg><span><svg class="icon"><use href="#i-sun"/></svg></span></div>
@@ -109,8 +108,18 @@
       <div class="container"><h2 id="para-que-titulo" data-reveal>Para que usar</h2></div>
     </section>
 
-    <section class="section section-dark section-navy sales-section" id="detalhes" aria-labelledby="detalhes-titulo">
-      <div class="container"><h2 id="detalhes-titulo" data-reveal>Detalhes do caderno</h2></div>
+    <section class="section ds-group section-dark section-navy" id="detalhes" aria-labelledby="detalhes-titulo">
+      <div class="hero-glow bloom" data-ds-bloom aria-hidden="true"></div>
+      <div class="container">
+        <div class="sec-rule" data-reveal><span>04 / DETALHES</span><span>CADA PALAVRA TEM SEU LUGAR</span></div>
+        <div class="section-heading" data-reveal><h2 id="detalhes-titulo">Detalhes do <em>caderno.</em></h2><p>Formato A5, espiral transparente e 100 folhas para anotar, praticar e revisar.</p></div>
+        <div class="caderno-details" data-reveal="scale">
+          <div class="caderno-3d" id="caderno-detalhes" data-caderno role="img" aria-label="Caderninho na Mão! em 3D: capa ilustrada, miolo original, espiral transparente e 100 folhas.">
+            <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+          </div>
+          <button class="btn btn-white magnetic" type="button" data-caderno-replay="caderno-detalhes">Ver o caderno abrir <span class="arrow"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+        </div>
+      </div>
     </section>
 
     <section class="section section-cream sales-section" id="como-comprar" aria-labelledby="como-comprar-titulo">
@@ -132,6 +141,22 @@
     </div>
     <div class="footer-tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
   </footer>
+
+  <!-- Uma única estrutura para todas as instâncias. data-contracapa pode
+       apontar para uma imagem futura; sem ela, o verso é creme liso. -->
+  <template id="caderno-3d-template">
+    <div class="caderno-shadow" aria-hidden="true"></div>
+    <div class="caderno-lift"><div class="caderno-float"><div class="caderno-model">
+      <div class="caderno-back"><img data-caderno-back alt="" hidden></div>
+      <div class="caderno-edge caderno-edge-right"></div><div class="caderno-edge caderno-edge-bottom"></div>
+      <div class="caderno-page"><img src="assets/images/miolo.png" width="1748" height="2480" alt="" decoding="async"></div>
+      <div class="caderno-cover">
+        <div class="caderno-face caderno-cover-front"><img src="assets/images/capa.jpg" width="1054" height="1493" alt="" decoding="async"></div>
+        <div class="caderno-face caderno-cover-inside"></div>
+      </div>
+      <div class="caderno-bindings" aria-hidden="true"></div>
+    </div></div></div>
+  </template>
 
   <script>
     // URL completa de compra do caderno no Clube de Autores; usada em todos os botões.
@@ -162,50 +187,6 @@
       }
     });
 
-    // O MP4 só recebe uma origem se movimento reduzido não estiver ativo.
-    // O primeiro quadro é o poster; ao terminar, o último quadro fica estático.
-    const videoCaderno = document.getElementById('caderno-video');
-    const imagemCaderno = document.getElementById('caderno-aberto');
-    const origemVideo = videoCaderno.querySelector('source');
-    const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let videoConcluido = false;
-
-    function mostrarCadernoAberto() {
-      videoCaderno.pause();
-      videoCaderno.hidden = true;
-      imagemCaderno.hidden = false;
-    }
-
-    function atualizarVideoCaderno() {
-      if (movimentoReduzido.matches || videoConcluido) {
-        mostrarCadernoAberto();
-        if (movimentoReduzido.matches && origemVideo.hasAttribute('src')) {
-          origemVideo.removeAttribute('src');
-          videoCaderno.load();
-        }
-        return;
-      }
-      videoCaderno.muted = true;
-      videoCaderno.defaultMuted = true;
-      videoCaderno.loop = false;
-      videoCaderno.hidden = false;
-      imagemCaderno.hidden = true;
-      if (!origemVideo.hasAttribute('src')) {
-        origemVideo.setAttribute('src', origemVideo.dataset.src);
-        videoCaderno.load();
-      }
-      const reproducao = videoCaderno.play();
-      if (reproducao) reproducao.catch(mostrarCadernoAberto);
-    }
-
-    videoCaderno.addEventListener('ended', () => {
-      videoConcluido = true;
-      mostrarCadernoAberto();
-    });
-    videoCaderno.addEventListener('error', mostrarCadernoAberto);
-    origemVideo.addEventListener('error', mostrarCadernoAberto);
-    movimentoReduzido.addEventListener('change', atualizarVideoCaderno);
-    atualizarVideoCaderno();
   </script>
 </body>
 </html>

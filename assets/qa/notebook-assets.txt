@@ -1,0 +1,10 @@
+PASS HTTP 200 index.html (13171 bytes)
+PASS HTTP 200 assets/design_system.css (64759 bytes)
+PASS HTTP 200 assets/design_system.js (44293 bytes)
+PASS HTTP 200 assets/pagina.css (10024 bytes)
+PASS HTTP 200 assets/pagina.js (4194 bytes)
+PASS HTTP 200 assets/images/capa.jpg (362617 bytes)
+PASS HTTP 200 assets/images/miolo.png (563398 bytes)
+PASS HTTP 200 assets/images/brasil-aquarela.png (2635013 bytes)
+PASS No video element, MP4 reference, video mask or video blend rule remains in the sales page.
+CSS 3D rendering and visual comparison were not verified: no browser was available.

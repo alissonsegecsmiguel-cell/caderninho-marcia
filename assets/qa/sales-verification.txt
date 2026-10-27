@@ -1,4 +1,4 @@
-PASS Seven sections remain in order; the five sections after a-frase are still placeholders
+PASS Seven sections remain in order; four future sections remain placeholders
 PASS A-frase reuses the green identity layout, exact copy, watercolor details and full cover
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
 PASS Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip
@@ -8,10 +8,12 @@ PASS Shared glow and magnetic handlers work without catalogue elements, honor re
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
 PASS All purchase links use the configured Clube de Autores destination and editable price
 PASS Configured URL and changed price apply to all purchase buttons, in new tabs
-PASS Reduced motion shows only the opened notebook, without assigning or playing the MP4
-PASS Normal playback starts muted/inline with a first-frame poster, no controls and no loop
-PASS Ending holds the open notebook image and never restarts the finished video
-PASS Enabling reduced motion during playback stops and unloads the MP4
+PASS One shared 3D template mounts in hero and details with the real cover and inner page
+PASS Each notebook opens once after its own viewport entry and approximately one second
+PASS Details replay is independent, repeatable and initialization is idempotent
+PASS Reduced motion mounts both notebooks already open, with no pending opening timer
+PASS Enabling reduced motion cancels opening timers and settles every notebook open
+PASS Without IntersectionObserver notebooks still open and content remains revealed
 
-14 sales-page checks passed.
-Media APIs are simulated: native autoplay/rendering and the live checkout destination were not verified in a browser.
+16 sales-page checks passed.
+DOM, timers and viewport APIs are simulated: CSS 3D rendering, mobile composition and live checkout were not verified in a browser.

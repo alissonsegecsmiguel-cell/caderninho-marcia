@@ -7,46 +7,51 @@ const {parseHTML} = require('./runtime/node_modules/linkedom');
 const project = path.resolve(__dirname, '../..');
 const source = fs.readFileSync(path.join(project, 'index.html'), 'utf8');
 const runtime = fs.readFileSync(path.join(project, 'assets/design_system.js'), 'utf8');
+const notebookRuntime = fs.readFileSync(path.join(project, 'assets/pagina.js'), 'utf8');
 const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','perguntas','chamada-final'];
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
-function load({link, price, reduced=false, precise=false, extraButton=false}={}) {
+function load({link, price, reduced=false, precise=false, extraButton=false, withObserver=true}={}) {
   const {document, window} = parseHTML(source);
   const observers=[];
   class Observer { constructor(cb) { this.cb=cb;this.targets=[];observers.push(this); } observe(el) { this.targets.push(el); } unobserve() {} disconnect() {} }
-  window.IntersectionObserver=Observer;
+  if(withObserver)window.IntersectionObserver=Observer;
+  else delete window.IntersectionObserver;
   const media={matches:reduced,listeners:[],addEventListener(type,listener) { if(type==='change')this.listeners.push(listener); }};
   const matchMedia=q=>q.includes('pointer:fine')?{matches:precise}:media;
   window.matchMedia=matchMedia;
-  const playback={play:0,pause:0,load:0};
-  const video=document.getElementById('caderno-video');
-  video.play=()=>{playback.play++;return Promise.resolve();};
-  video.pause=()=>{playback.pause++;};
-  video.load=()=>{playback.load++;};
+  const timers=new Map();let now=0,nextTimer=0;
+  const advance=ms=>{const end=now+ms;for(let steps=0;steps<1000;steps++){
+    const next=[...timers.entries()].filter(([,timer])=>timer.time<=end).sort((a,b)=>a[1].time-b[1].time)[0];
+    if(!next)break;timers.delete(next[0]);now=next[1].time;next[1].callback();
+  }now=end;};
   const context=vm.createContext({document,window,URL,HTMLElement:window.HTMLElement,
     navigator:{},IntersectionObserver:Observer,matchMedia,
     requestAnimationFrame:cb=>cb(),addEventListener:window.addEventListener.bind(window),
-    innerWidth:390,innerHeight:844,scrollY:0,setTimeout:()=>1,clearTimeout() {},console});
+    innerWidth:390,innerHeight:844,scrollY:0,
+    setTimeout:(callback,delay=0)=>{const id=++nextTimer;timers.set(id,{callback,time:now+delay});return id;},
+    clearTimeout:id=>timers.delete(id),console});
   vm.runInContext(runtime,context,{filename:'design_system.js'});
   if(extraButton)document.querySelector('footer').insertAdjacentHTML('beforeend','<a data-compra><span data-preco></span></a>');
   let config=[...document.querySelectorAll('script:not([src])')][0].textContent;
   if(link)config=config.replace(/const LINK_COMPRA = "[^"]+";/,`const LINK_COMPRA = ${JSON.stringify(link)};`);
   if(price)config=config.replace('R$ 65,44',price);
   vm.runInContext(config,context,{filename:'index.html:purchase-config'});
-  return {document,window,observers,media,playback};
+  vm.runInContext(notebookRuntime,context,{filename:'pagina.js'});
+  return {document,window,observers,media,advance,timers};
 }
 const page=load();
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('Seven sections remain in order; the five sections after a-frase are still placeholders',()=>{
+check('Seven sections remain in order; four future sections remain placeholders',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
     const title=page.document.getElementById(section.getAttribute('aria-labelledby'));
     assert.ok(title?.matches('h1,h2'));
-    if(!['inicio','a-frase'].includes(section.id)){
+    if(!['inicio','a-frase','detalhes'].includes(section.id)){
       assert.equal(section.querySelectorAll('p,a,button,article,form').length,0);
       assert.equal(section.querySelectorAll('[data-reveal]').length,1);
     }
@@ -100,9 +105,8 @@ check('Hero retains catalogue composition with Rio behind the notebook, decorati
   assert.equal($('#inicio .hero-art .ds-window'),null);
   const landscape=$('#inicio .hero-art > img.landscape');
   assert.equal(landscape.getAttribute('src'),'assets/images/brasil-aquarela.png');
-  assert.ok($('#inicio .hero-art .hero-notebook > video.hero-video-media'));
-  assert.ok($('#inicio .hero-art .hero-notebook > img.hero-video-media'));
-  assert.ok(landscape.nextElementSibling.classList.contains('hero-notebook'));
+  assert.ok($('#inicio .hero-art > .caderno-3d[data-caderno]'));
+  assert.ok(landscape.nextElementSibling.classList.contains('caderno-3d'));
   assert.equal($$('#inicio .hero-copy .hero-flag[aria-hidden="true"] .flag-wash').length,2);
   assert.ok($('#inicio .hero-flag .flag-orb'));
   assert.equal($$('#inicio img.hero-tropical[aria-hidden="true"][alt=""]').length,2);
@@ -121,6 +125,7 @@ check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
   assert.ok($('link[href="assets/design_system.css"]'));
   assert.ok($('link[href="assets/pagina.css"]'));
   assert.ok($('script[src="assets/design_system.js"]'));
+  assert.ok($('script[src="assets/pagina.js"]'));
   for(const el of $$('link[href],img[src],script[src]')){
     const ref=el.getAttribute('href')||el.getAttribute('src');
     assert.ok(fs.existsSync(path.join(project,ref)),ref);
@@ -131,8 +136,8 @@ check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
       if(!ref.startsWith('data:'))assert.ok(fs.existsSync(path.resolve(path.dirname(file),ref)),ref);
     }
   }
-  assert.ok(fs.existsSync(path.join(project,$('video').getAttribute('poster'))));
-  assert.ok(fs.existsSync(path.join(project,$('video source').dataset.src)));
+  assert.equal($$('video, source').length,0);
+  assert.equal(source.includes('caderno-abrindo.mp4'),false);
 });
 check('Only brand and purchase action in the header; requested footer and shared tricolor',()=>{
   const header=$('header .nav-inner');
@@ -202,45 +207,60 @@ check('Configured URL and changed price apply to all purchase buttons, in new ta
   }
   for(const element of configured.document.querySelectorAll('[data-preco]'))assert.equal(element.textContent,'R$ 70,00');
 });
-check('Reduced motion shows only the opened notebook, without assigning or playing the MP4',()=>{
+function intersectBook(loaded,id){
+  const element=loaded.document.getElementById(id);
+  const observer=loaded.observers.find(item=>item.targets.includes(element));
+  assert.ok(observer);observer.cb([{target:element,isIntersecting:true}]);return element;
+}
+check('One shared 3D template mounts in hero and details with the real cover and inner page',()=>{
+  assert.equal($$('[data-caderno]').length,2);
+  for(const element of $$('[data-caderno]')){
+    assert.equal(element.getAttribute('role'),'img');assert.ok(element.getAttribute('aria-label'));
+    assert.equal(element.querySelectorAll('.caderno-model').length,1);
+    assert.equal(element.querySelector('.caderno-page img').getAttribute('src'),'assets/images/miolo.png');
+    assert.equal(element.querySelector('.caderno-cover-front img').getAttribute('src'),'assets/images/capa.jpg');
+    assert.equal(element.querySelector('[data-caderno-back]').hidden,true);
+    assert.equal(element.querySelector('.caderno-fallback').hidden,true);
+  }
+});
+check('Each notebook opens once after its own viewport entry and approximately one second',()=>{
+  const active=load();const hero=intersectBook(active,'caderno-hero');
+  const details=active.document.getElementById('caderno-detalhes');
+  assert.equal(hero.dataset.cadernoState,'entering');assert.equal(details.dataset.cadernoState,'closed');
+  active.advance(979);assert.equal(hero.dataset.cadernoState,'entering');
+  active.advance(1);assert.equal(hero.dataset.cadernoState,'open');assert.equal(details.dataset.cadernoState,'closed');
+  intersectBook(active,'caderno-detalhes');active.advance(980);assert.equal(details.dataset.cadernoState,'open');
+  active.advance(30000);assert.equal(hero.dataset.cadernoState,'open');assert.equal(details.dataset.cadernoState,'open');
+});
+check('Details replay is independent, repeatable and initialization is idempotent',()=>{
+  const active=load();const hero=intersectBook(active,'caderno-hero');const details=intersectBook(active,'caderno-detalhes');
+  active.advance(980);const button=active.document.querySelector('[data-caderno-replay]');
+  button.click();button.click();assert.equal(details.dataset.cadernoState,'entering');assert.equal(hero.dataset.cadernoState,'open');
+  assert.equal(active.timers.size,1);active.advance(980);assert.equal(details.dataset.cadernoState,'open');
+  active.window.Caderninho3D.init();
+  assert.equal(active.document.querySelectorAll('.caderno-model').length,2);
+});
+check('Reduced motion mounts both notebooks already open, with no pending opening timer',()=>{
   const calm=load({reduced:true});
-  assert.ok(calm.document.documentElement.classList.contains('motion-paused'));
-  assert.equal(calm.document.querySelectorAll('[data-reveal]:not([data-revealed])').length,0);
-  assert.equal(calm.document.getElementById('caderno-video').hidden,true);
-  assert.equal(calm.document.getElementById('caderno-aberto').hidden,false);
-  assert.equal(calm.document.querySelector('video source').hasAttribute('src'),false);
+  for(const element of calm.document.querySelectorAll('[data-caderno]')){
+    assert.equal(element.dataset.cadernoState,'open');assert.ok(element.classList.contains('is-still'));
+  }
+  assert.equal(calm.timers.size,0);
+  calm.document.querySelector('[data-caderno-replay]').click();assert.equal(calm.timers.size,0);
   assert.equal(calm.document.querySelector('#inicio .hero-landscape').hidden,false);
-  assert.equal(calm.playback.play,0);
-  assert.equal(calm.playback.load,0);
 });
-check('Normal playback starts muted/inline with a first-frame poster, no controls and no loop',()=>{
-  const video=$('video');
-  assert.ok(video.hasAttribute('autoplay')&&video.hasAttribute('muted')&&video.hasAttribute('playsinline'));
-  assert.equal(video.hasAttribute('controls'),false);
-  assert.equal(video.hasAttribute('loop'),false);
-  assert.equal(video.loop,false);
-  assert.equal(video.muted,true);
-  assert.equal(video.hidden,false);
-  assert.equal($('#caderno-aberto').hidden,true);
-  assert.equal(video.getAttribute('poster'),'assets/images/caderno-primeiro-quadro.jpg');
-  assert.equal(page.playback.play,1);
-  assert.equal(page.playback.load,1);
+check('Enabling reduced motion cancels opening timers and settles every notebook open',()=>{
+  const active=load();const hero=intersectBook(active,'caderno-hero');active.advance(300);
+  active.media.matches=true;active.media.listeners.forEach(listener=>listener({matches:true}));
+  assert.equal(active.timers.size,0);assert.equal(hero.dataset.cadernoState,'open');
+  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'open');
+  active.advance(3000);assert.equal(hero.dataset.cadernoState,'open');
 });
-check('Ending holds the open notebook image and never restarts the finished video',()=>{
-  $('video').dispatchEvent(new page.window.Event('ended'));
-  assert.equal($('video').hidden,true);
-  assert.equal($('#caderno-aberto').hidden,false);
-  page.media.listeners.forEach(listener=>listener({matches:false}));
-  assert.equal(page.playback.play,1);
+check('Without IntersectionObserver notebooks still open and content remains revealed',()=>{
+  const active=load({withObserver:false});active.advance(980);
+  for(const element of active.document.querySelectorAll('[data-caderno]'))assert.equal(element.dataset.cadernoState,'open');
+  assert.equal(active.document.querySelectorAll('[data-reveal]:not([data-revealed])').length,0);
 });
-check('Enabling reduced motion during playback stops and unloads the MP4',()=>{
-  const active=load();active.media.matches=true;
-  active.media.listeners.forEach(listener=>listener({matches:true}));
-  assert.equal(active.document.getElementById('caderno-video').hidden,true);
-  assert.equal(active.document.getElementById('caderno-aberto').hidden,false);
-  assert.equal(active.document.querySelector('video source').hasAttribute('src'),false);
-  assert.ok(active.playback.pause>0);
-});
-const output=`${report.join('\n')}\n\n${report.length} sales-page checks passed.\nMedia APIs are simulated: native autoplay/rendering and the live checkout destination were not verified in a browser.\n`;
+const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, timers and viewport APIs are simulated: CSS 3D rendering, mobile composition and live checkout were not verified in a browser.\n';
 fs.writeFileSync(path.join(__dirname,'sales-verification.txt'),output);
 console.log(output);
