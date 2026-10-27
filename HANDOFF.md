@@ -38,6 +38,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Fotos reais do caderno quando a amostra chegar (substituir a foto da mão, que tem o Pão de Açúcar ao fundo).
 - Marcia precisa aprovar as citações atribuídas a ela.
 - Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
+- Envio internacional: a resposta do FAQ "Vocês enviam para fora do Brasil?" agora diz que sim (pelo carrinho do Clube de Autores, com documento fiscal do país). Outros textos ainda falam só em Brasil e precisam de decisão antes de mudar: hero ("Envio para endereços no Brasil"), ficha da dobra 3 ("Para endereços no Brasil"), detalhe "Impresso para você" ("Entrega para endereços no Brasil"), lista da oferta ("Nota fiscal e entrega em todo o Brasil"), texto de apoio da oferta, chamada final, meta description ("Envio para todo o Brasil") e a decisão registrada "envio só para o Brasil". A linha "Mora fora do Brasil? Fale com a gente." da oferta também pode mudar.
 - Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://caderninho-marcia.vercel.app/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
 
 ## Concluído
