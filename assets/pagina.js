@@ -22,10 +22,11 @@
     item.timer = null;
     item.started = true;
     item.element.classList.add('is-still');
-    item.element.dataset.cadernoState = 'open';
+    item.element.dataset.cadernoState = item.interactive ? 'interactive' : 'open';
     observer?.unobserve(item.element);
   }
   function enter(item) {
+    if (item.interactive) return;
     if (calm()) { settle(item); return; }
     if (item.started) return;
     item.started = true;
@@ -60,6 +61,7 @@
     const element = typeof target === 'string' ? document.getElementById(target) : target;
     const item = instances.get(element);
     if (!item) return;
+    if (item.interactive) { showFeature(element, '05'); return; }
     if (calm()) { settle(item); return; }
     clearTimeout(item.timer);
     observer?.unobserve(element);
@@ -88,15 +90,15 @@
       }
       const bindings = element.querySelector('.caderno-bindings');
       for (let ring = 0; ring < 22; ring++) bindings.append(document.createElement('i'));
-      const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop')};
+      const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop'), interactive:element.hasAttribute('data-caderno-interactive')};
       instances.set(element, item);
-      element.dataset.cadernoState = 'closed';
+      element.dataset.cadernoState = item.interactive ? 'interactive' : 'closed';
       if (item.loop && loopVisibility) {
         element.classList.add('is-loop-paused');
         loopVisibility.observe(element.closest('.section') || element);
       }
       if (calm()) settle(item);
-      else if (observer) observer.observe(element);
+      else if (observer && !item.interactive) observer.observe(element);
       else enter(item);
     });
     scope.querySelectorAll('[data-caderno-replay]').forEach(button => {
@@ -104,6 +106,14 @@
       boundButtons.add(button);
       button.addEventListener('click', () => replay(button.dataset.cadernoReplay));
     });
+  }
+  // A mesma montagem aceita poses dirigidas por uma lista, sem iniciar o loop.
+  function showFeature(target, feature) {
+    const element = typeof target === 'string' ? document.getElementById(target) : target;
+    const item = instances.get(element);
+    if (!item?.interactive || !/^0[1-6]$/.test(feature)) return false;
+    element.dataset.cadernoFeature = feature;
+    return true;
   }
   function syncMotion() {
     instances.forEach(item => {
@@ -120,8 +130,62 @@
   if ('MutationObserver' in window) {
     new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
   }
-  window.Caderninho3D = Object.freeze({init, replay});
+  window.Caderninho3D = Object.freeze({init, replay, showFeature});
   init();
+})();
+
+/* Diferenciais: botões de disclosure, com foco, toque e hover equivalentes. */
+(() => {
+  'use strict';
+  const section = document.getElementById('detalhes');
+  const group = section?.querySelector('[data-details]');
+  if (!group || !window.Caderninho3D) return;
+  const rows = [...group.querySelectorAll('[data-detail]')];
+  const buttons = rows.map(row => row.querySelector('.detail-trigger'));
+  const stage = group.querySelector('.details-stage');
+  const book = stage.querySelector('[data-caderno]');
+  const number = stage.querySelector('.details-active-number');
+  const caption = stage.querySelector('[data-detail-caption]');
+  const precise = window.matchMedia('(hover:hover) and (pointer:fine)');
+  let current = null;
+  function activate(row) {
+    if (row === current) return;
+    current = row;
+    rows.forEach(item => {
+      const active = item === row;
+      item.classList.toggle('is-active', active);
+      item.querySelector('.detail-trigger').setAttribute('aria-expanded', String(active));
+      item.querySelector('.detail-description').setAttribute('aria-hidden', String(!active));
+    });
+    const feature = row.dataset.detail;
+    const title = row.querySelector('.detail-title').textContent;
+    window.Caderninho3D.showFeature(book, feature);
+    stage.dataset.activeDetail = feature;
+    book.setAttribute('aria-label', `Caderninho na Mão! em 3D: ${title}.`);
+    caption.textContent = title;
+    number.textContent = feature;
+    number.classList.remove('is-changing');
+    void number.offsetWidth;
+    number.classList.add('is-changing');
+  }
+  rows.forEach((row, index) => {
+    const button = buttons[index];
+    button.addEventListener('pointerenter', event => {
+      if (precise.matches && event.pointerType !== 'touch') activate(row);
+    });
+    button.addEventListener('focus', () => activate(row));
+    button.addEventListener('click', () => activate(row));
+    button.addEventListener('keydown', event => {
+      const next = event.key === 'ArrowDown' ? (index + 1) % rows.length
+        : event.key === 'ArrowUp' ? (index + rows.length - 1) % rows.length
+        : event.key === 'Home' ? 0 : event.key === 'End' ? rows.length - 1 : null;
+      if (next === null) return;
+      event.preventDefault();
+      buttons[next].focus();
+      activate(rows[next]);
+    });
+  });
+  activate(rows[0]);
 })();
 
 /* Vitrine: navegação manual, gestos e objetos decorativos. Independente do 3D. */

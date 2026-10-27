@@ -286,15 +286,14 @@ check('One shared 3D template mounts in hero and details with the real cover and
     assert.equal(element.querySelector('.caderno-fallback').hidden,true);
   }
 });
-check('Hero enters a CSS loop without recurring timers; details keeps its original one-shot opening',()=>{
+check('Hero loop stays independent while details waits for interaction without timers',()=>{
   const active=load();const hero=intersectBook(active,'caderno-hero');
   const details=active.document.getElementById('caderno-detalhes');
-  assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoState,'closed');
+  assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoState,'interactive');
   assert.equal(active.timers.size,0);assert.equal(hero.hasAttribute('data-caderno-loop'),true);
   assert.equal(details.hasAttribute('data-caderno-loop'),false);
-  intersectBook(active,'caderno-detalhes');active.advance(979);assert.equal(details.dataset.cadernoState,'entering');
-  active.advance(1);assert.equal(details.dataset.cadernoState,'open');
-  active.advance(30000);assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoState,'open');
+  assert.equal(details.dataset.cadernoFeature,'01');
+  active.advance(30000);assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoFeature,'01');
 });
 check('Loop pauses outside the hero and in hidden tabs without resetting; an initially hidden tab starts paused',()=>{
   const active=load();const hero=intersectBook(active,'caderno-hero');
@@ -314,35 +313,99 @@ check('Loop pauses outside the hero and in hidden tabs without resetting; an ini
   assert.equal(hero.dataset.cadernoState,'cycling');
   const background=load({hidden:true});assert.ok(background.document.documentElement.classList.contains('page-hidden'));
 });
-check('Details replay is independent, repeatable and initialization is idempotent',()=>{
-  const active=load();const hero=intersectBook(active,'caderno-hero');const details=intersectBook(active,'caderno-detalhes');
-  active.advance(980);const button=active.document.querySelector('[data-caderno-replay]');
-  button.click();button.click();assert.equal(details.dataset.cadernoState,'entering');assert.equal(hero.dataset.cadernoState,'cycling');
-  assert.equal(active.timers.size,1);active.advance(980);assert.equal(details.dataset.cadernoState,'open');
+check('Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent',()=>{
+  const active=load();const hero=intersectBook(active,'caderno-hero');const details=active.document.getElementById('caderno-detalhes');
+  const section=active.document.getElementById('detalhes');
+  for(const code of ['05','06','03','03','01']){
+    section.querySelector('#detalhe-'+code).click();
+    assert.equal(details.dataset.cadernoFeature,code);
+    assert.equal(section.querySelectorAll('.detail-trigger[aria-expanded="true"]').length,1);
+    assert.equal(section.querySelectorAll('.detail-description[aria-hidden="false"]').length,1);
+    assert.equal(section.querySelector('.details-active-number').textContent,code);
+    assert.ok(section.querySelector('.detail-item.is-active').contains(section.querySelector('#detalhe-'+code)));
+  }
+  assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(active.timers.size,0);
   active.window.Caderninho3D.init();
   assert.equal(active.document.querySelectorAll('.caderno-model').length,2);
+  assert.equal(active.window.Caderninho3D.showFeature(details,'07'),false);
+  assert.equal(details.dataset.cadernoFeature,'01');
 });
-check('Reduced motion mounts both notebooks already open, with no pending opening timer',()=>{
+check('Reduced motion keeps hero open and details in a static front pose while disclosures remain usable',()=>{
   const calm=load({reduced:true});
   for(const element of calm.document.querySelectorAll('[data-caderno]')){
-    assert.equal(element.dataset.cadernoState,'open');assert.ok(element.classList.contains('is-still'));
+    assert.equal(element.dataset.cadernoState,element.id==='caderno-hero'?'open':'interactive');assert.ok(element.classList.contains('is-still'));
   }
   assert.equal(calm.timers.size,0);
-  calm.document.querySelector('[data-caderno-replay]').click();assert.equal(calm.timers.size,0);
+  calm.document.querySelector('#detalhe-05').click();assert.equal(calm.timers.size,0);
+  assert.equal(calm.document.querySelector('#detalhe-05').getAttribute('aria-expanded'),'true');
+  assert.ok(calm.document.querySelector('#caderno-detalhes').classList.contains('is-still'));
   assert.equal(calm.document.querySelector('#inicio .hero-landscape').hidden,false);
 });
-check('Enabling reduced motion cancels opening timers and settles every notebook open',()=>{
-  const active=load();const hero=intersectBook(active,'caderno-hero');intersectBook(active,'caderno-detalhes');active.advance(300);
+check('Enabling reduced motion stops the hero loop and preserves the selected disclosure in static details',()=>{
+  const active=load();const hero=intersectBook(active,'caderno-hero');active.document.querySelector('#detalhe-06').click();
   active.media.matches=true;active.media.listeners.forEach(listener=>listener({matches:true}));
   assert.equal(active.timers.size,0);assert.equal(hero.dataset.cadernoState,'open');
-  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'open');
+  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'interactive');
+  assert.ok(active.document.getElementById('caderno-detalhes').classList.contains('is-still'));
+  assert.equal(active.document.querySelector('#detalhe-06').getAttribute('aria-expanded'),'true');
   active.advance(3000);assert.equal(hero.dataset.cadernoState,'open');
 });
-check('Without IntersectionObserver hero cycles, details opens and content remains revealed',()=>{
+check('Without IntersectionObserver hero cycles, details responds and content remains revealed',()=>{
   const active=load({withObserver:false});active.advance(980);
   assert.equal(active.document.getElementById('caderno-hero').dataset.cadernoState,'cycling');
-  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'open');
+  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'interactive');
+  active.document.querySelector('#detalhe-04').click();
+  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoFeature,'04');
   assert.equal(active.document.querySelectorAll('[data-reveal]:not([data-revealed])').length,0);
+});
+check('Details copy, price, gold CTA and all six accessible disclosure regions match the request',()=>{
+  assert.equal($('#detalhes h2').textContent,'Feito com cuidado,página por página.');
+  assert.equal($('#detalhes h2 em').textContent,'cuidado,');
+  assert.equal($('#detalhes .section-heading > p'),null);
+  assert.deepEqual($$('#detalhes .detail-title').map(el=>el.textContent),['Tamanho A5','Capa com a arte das aulas','Espiral transparente','100 folhas pautadas','Ilustrações do Brasil','Impresso para você']);
+  assert.deepEqual($$('#detalhes .detail-description p').map(el=>el.textContent),[
+    '14,8 x 21 cm. Cabe na bolsa e na mochila.',
+    'Colorida, com acetato transparente que protege do dia a dia.',
+    'Abre totalmente plano, para escrever com conforto.',
+    '200 páginas em papel offset 75 g.',
+    'Pão de Açúcar, folhas e coqueiros em tons suaves em cada página.',
+    'Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega para endereços no Brasil.'
+  ]);
+  for(const button of $$('#detalhes .detail-trigger')){
+    const region=page.document.getElementById(button.getAttribute('aria-controls'));
+    assert.equal(region.getAttribute('aria-labelledby'),button.id);
+  }
+  assert.equal($('#detalhes [data-caderno-replay]'),null);
+  assert.equal($('#detalhes [data-preco]').textContent,'R$ 65,44');
+  assert.ok($('#detalhes [data-compra]').matches('.btn.btn-gold.magnetic'));
+  assert.equal($('#detalhes .details-hint-desktop').textContent,'PASSE O MOUSE PARA VER');
+  assert.equal($('#detalhes .details-hint-touch').textContent,'TOQUE PARA VER');
+});
+check('Hover, focus and keyboard navigate details; coarse touch does not activate on pointer entry',()=>{
+  const active=load({precise:true});
+  const doc=active.document;
+  const pointer=new active.window.Event('pointerenter');pointer.pointerType='mouse';
+  doc.querySelector('#detalhe-02').dispatchEvent(pointer);
+  assert.equal(doc.querySelector('#caderno-detalhes').dataset.cadernoFeature,'02');
+  doc.querySelector('#detalhe-03').dispatchEvent(new active.window.Event('focus'));
+  assert.equal(doc.querySelector('[data-detail-caption]').textContent,'Espiral transparente');
+  let focused=null;
+  for(const button of doc.querySelectorAll('.detail-trigger'))button.focus=()=>{focused=button.id;};
+  const key=(id,key)=>{
+    const event=Object.assign(new active.window.Event('keydown',{cancelable:true}),{key});
+    doc.getElementById(id).dispatchEvent(event);assert.equal(event.defaultPrevented,true);
+  };
+  key('detalhe-03','ArrowDown');assert.equal(focused,'detalhe-04');
+  assert.equal(doc.querySelector('#caderno-detalhes').dataset.cadernoFeature,'04');
+  key('detalhe-04','End');assert.equal(focused,'detalhe-06');
+  key('detalhe-06','ArrowDown');assert.equal(focused,'detalhe-01');
+  key('detalhe-01','ArrowUp');assert.equal(focused,'detalhe-06');
+  key('detalhe-06','Home');assert.equal(focused,'detalhe-01');
+  const touch=load();const entry=new touch.window.Event('pointerenter');entry.pointerType='touch';
+  touch.document.querySelector('#detalhe-02').dispatchEvent(entry);
+  assert.equal(touch.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'01');
+  touch.document.querySelector('#detalhe-02').click();
+  assert.equal(touch.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'02');
 });
 const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.\n';
 fs.writeFileSync(path.join(__dirname,'sales-verification.txt'),output);

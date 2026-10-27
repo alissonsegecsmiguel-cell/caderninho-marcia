@@ -13,12 +13,14 @@ PASS Shared runtime boots without catalogue elements and adds every background/r
 PASS All purchase links use the configured Clube de Autores destination and editable price
 PASS Configured URL and changed price apply to all purchase buttons, in new tabs
 PASS One shared 3D template mounts in hero and details with the real cover and inner page
-PASS Hero enters a CSS loop without recurring timers; details keeps its original one-shot opening
+PASS Hero loop stays independent while details waits for interaction without timers
 PASS Loop pauses outside the hero and in hidden tabs without resetting; an initially hidden tab starts paused
-PASS Details replay is independent, repeatable and initialization is idempotent
-PASS Reduced motion mounts both notebooks already open, with no pending opening timer
-PASS Enabling reduced motion cancels opening timers and settles every notebook open
-PASS Without IntersectionObserver hero cycles, details opens and content remains revealed
+PASS Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent
+PASS Reduced motion keeps hero open and details in a static front pose while disclosures remain usable
+PASS Enabling reduced motion stops the hero loop and preserves the selected disclosure in static details
+PASS Without IntersectionObserver hero cycles, details responds and content remains revealed
+PASS Details copy, price, gold CTA and all six accessible disclosure regions match the request
+PASS Hover, focus and keyboard navigate details; coarse touch does not activate on pointer entry
 
-21 sales-page checks passed.
+23 sales-page checks passed.
 DOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.

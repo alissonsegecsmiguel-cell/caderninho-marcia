@@ -132,7 +132,82 @@
 .caderno-3d.is-loop-paused *{animation-play-state:paused!important}
 .caderno-3d:is(.is-still,.is-resetting) .caderno-cover{transition:none}
 .caderno-3d.is-still :is(.caderno-lift,.caderno-float){animation:none}
-.caderno-details{display:grid;justify-items:center;gap:32px}
+/* Detalhes: a lista dirige o mesmo modelo 3D, em poses de 900 ms (800 x 1,125). */
+.details-grid{--detail-turn:calc(var(--entrance) * 1.125);grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+#detalhes .section-heading{margin-bottom:48px}
+.details-content{min-width:0}
+.details-list{list-style:none;padding:0;border-top:1px solid var(--section-line)}
+.detail-item{border-bottom:1px solid rgba(var(--gold-rgb),.25)}
+.detail-trigger{display:grid;grid-template-columns:26px 1fr 24px;align-items:start;gap:16px;width:100%;border:0;padding:24px 0;background:transparent;text-align:left;color:var(--text);transition:color var(--micro)}
+.detail-number{padding-top:7px;color:var(--accent)}
+.detail-title{font-family:var(--sans);font-size:var(--h3);font-weight:500;line-height:1.18;letter-spacing:-.035em}
+.detail-arrow{font:400 26px/1.2 var(--sans);transition:transform var(--gesture) var(--ease)}
+.detail-trigger:hover,.detail-trigger:focus-visible,.is-active>h3>.detail-trigger{color:var(--accent)}
+.is-active .detail-arrow{transform:rotate(20deg)}
+.detail-description{display:grid;grid-template-rows:1fr;opacity:1;padding:0 24px 24px 42px;transition:grid-template-rows var(--gesture) var(--ease),opacity var(--gesture) var(--ease),padding-bottom var(--gesture) var(--ease)}
+.detail-description>p{overflow:hidden;min-height:0;color:var(--text-soft);font:400 .875rem/1.7 var(--body)}
+html.js .detail-description{grid-template-rows:0fr;opacity:0;padding-bottom:0}
+html.js .is-active>.detail-description{grid-template-rows:1fr;opacity:1;padding-bottom:24px}
+.details-purchase{display:flex;align-items:flex-start;flex-direction:column;gap:20px;padding-top:32px}
+.details-purchase strong{font-weight:500}
+.details-purchase .caption{color:var(--text-soft)}
+.details-stage{position:sticky;top:48px;min-width:0;margin:0;isolation:isolate;align-self:start}
+.details-stage .hero-glow{inset:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%,rgba(var(--gold-rgb),.22),transparent 70%)}
+.details-scene{position:relative;padding-block:24px 20px}
+.details-book{width:100%;z-index:1;pointer-events:none}
+.details-book>.caderno-fallback{right:28%}
+.details-book .caderno-model{left:50%;transform-origin:50% 50%;transform:translateX(-50%) rotateX(10deg) rotateY(-8deg) rotateZ(-5deg);transition:transform var(--detail-turn) var(--ease)}
+.details-book .caderno-cover{transition-duration:var(--detail-turn)}
+.details-book .caderno-float{animation:caderno-float calc(var(--entrance) * 16) ease-in-out infinite}
+.details-book .caderno-shadow{left:18%;width:64%;opacity:.8;mix-blend-mode:multiply;transition:transform var(--detail-turn) var(--ease),width var(--detail-turn) var(--ease),left var(--detail-turn) var(--ease)}
+.details-book .caderno-back img{transform:rotateY(180deg)}
+.details-book[data-caderno-feature="02"] .caderno-model{transform:translateX(-50%) rotateX(14deg) rotateY(-24deg) rotateZ(8deg)}
+.details-book .caderno-cover-front{overflow:hidden}
+.details-book .caderno-cover-front::after{content:"";position:absolute;inset:-50%;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.1) 44%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.1) 56%,transparent 62%);transform:translateX(-100%)}
+.details-book[data-caderno-feature="02"] .caderno-cover-front::after{animation:acetato-shine calc(var(--entrance) * 3) var(--ease) both}
+.details-book[data-caderno-feature="03"] .caderno-model{transform:translateX(-50%) rotateX(8deg) rotateY(58deg) rotateZ(-4deg)}
+.details-book[data-caderno-feature="03"] .caderno-bindings{filter:drop-shadow(0 0 4px rgba(var(--gold-rgb),.65))}
+.details-book[data-caderno-feature="04"] .caderno-model{transform:translateX(-50%) rotateX(24deg) rotateY(-58deg) rotateZ(-3deg)}
+.details-book[data-caderno-feature="04"] .caderno-edge{border-color:var(--accent)}
+.details-book[data-caderno-feature="05"] .caderno-model{transform:translateX(0) rotateX(14deg) rotateY(-8deg) rotateZ(-4deg)}
+.details-book[data-caderno-feature="05"] .caderno-cover{transform:translateZ(3px) rotateY(-180deg)}
+.details-book[data-caderno-feature="05"] .caderno-shadow{left:4%;width:92%}
+.details-book[data-caderno-feature="06"] .caderno-model{transform:translateX(-50%) rotateX(10deg) rotateY(540deg) rotateZ(4deg);transition-delay:var(--detail-turn)}
+.details-ruler{position:absolute;left:22%;top:11%;height:65%;width:12px;border-block:1px solid var(--accent);border-left:1px solid var(--accent);opacity:0;transition:opacity var(--gesture) var(--ease);pointer-events:none}
+.details-ruler .meta{position:absolute;top:50%;left:-26px;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);color:var(--accent);white-space:nowrap}
+.details-stage[data-active-detail="01"] .details-ruler{opacity:1}
+.details-active-number{position:absolute;bottom:0;right:0;font:300 clamp(90px,10vw,150px)/1 var(--sans);letter-spacing:-.055em;color:var(--accent);opacity:.5;pointer-events:none}
+.details-active-number.is-changing{animation:reveal-rise var(--gesture) var(--ease) both}
+.details-caption{display:flex;justify-content:center;align-items:center;gap:10px;min-height:32px;text-align:center;color:var(--text-muted)}
+.details-caption .pulse{background:var(--accent)}
+.details-hint-touch{display:none}
+#detalhes>.section-ribbon path:first-child{fill:var(--accent);opacity:.16}
+#detalhes>.section-ribbon path:nth-child(2){opacity:.65}
+#detalhes.is-offscreen .caderno-cover-front::after{animation-play-state:paused}
+.details-book.is-still .caderno-model{transform:translateX(-50%) rotateX(0deg) rotateY(0deg) rotateZ(-3deg);transition:none}
+.details-book.is-still .caderno-cover{transform:translateZ(3px) rotateY(0deg)!important;transition:none}
+.details-book.is-still .caderno-cover-front::after{animation:none}
+.details-book.is-still .caderno-float{animation:none}
+.details-book.is-still .caderno-shadow{left:18%;width:64%;transition:none}
+html.motion-paused :is(.detail-description,.detail-trigger,.detail-arrow,.details-ruler){transition:none}
+@keyframes acetato-shine{to{transform:translateX(100%)}}
+@media(hover:none){.details-hint-desktop{display:none}.details-hint-touch{display:inline}}
+@media(max-width:960px){.details-grid{gap:32px}.detail-title{font-size:var(--h4)}.details-stage{top:32px}.detail-trigger{gap:12px;grid-template-columns:22px 1fr 22px}.detail-description{padding-left:34px}}
+@media(max-width:720px){
+  .details-grid{display:flex;flex-direction:column;gap:24px}
+  .details-content{width:100%}
+  .details-stage{order:-1;top:0;z-index:4;width:100%;padding-block:8px 12px;background:linear-gradient(180deg,var(--secondary) 90%,transparent)}
+  .details-scene{width:min(100%,340px);margin-inline:auto;padding-block:8px}
+  .details-book{width:min(100%,36svh);margin-inline:auto}
+  .details-ruler{left:23%;top:10%;height:67%}
+  .details-active-number{right:4%;font-size:80px}
+  .details-caption{font-size:8px;min-height:24px}
+  .detail-trigger{padding-block:20px}
+  .detail-title{font-size:var(--h4)}
+  .detail-number{padding-top:4px}
+  .details-purchase .btn{width:100%}
+  .details-hint-desktop{display:none}.details-hint-touch{display:inline}
+}
 @keyframes caderno-float{0%,100%{translate:0 0;rotate:-.4deg}50%{translate:0 -5px;rotate:.4deg}}
 /* 12 s = 3 s fechado + 2,5 s abrindo + 4 s aberto + 2,5 s fechando. */
 @keyframes caderno-cycle{0%,25%{transform:translateZ(3px) rotateY(0deg);animation-timing-function:var(--ease)}45.833333%,79.166667%{transform:translateZ(3px) rotateY(-180deg);animation-timing-function:var(--ease)}100%{transform:translateZ(3px) rotateY(0deg)}}
@@ -205,6 +280,10 @@
   .caderno-3d .caderno-cover{transform:translateZ(3px) rotateY(-180deg);transition:none}
   .caderno-3d :is(.caderno-lift,.caderno-float){animation:none}
   .caderno-3d[data-caderno-loop] .caderno-cover{animation:none!important;transform:translateZ(3px) rotateY(-180deg)}
+  .details-book .caderno-model{transform:translateX(-50%) rotateX(0deg) rotateY(0deg) rotateZ(-3deg)!important;transition:none}
+  .details-book .caderno-cover{transform:translateZ(3px) rotateY(0deg)!important;transition:none}
+  .details-book .caderno-cover-front::after{animation:none}
+  :is(.detail-description,.detail-trigger,.detail-arrow,.details-ruler){transition:none}
   .vitrine-object{translate:0 0}
   .vitrine-object>img{animation:none}
   .notes-track{transition:none}

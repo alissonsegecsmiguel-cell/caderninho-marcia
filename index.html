@@ -190,15 +190,53 @@
     </section>
 
     <section class="section ds-group section-dark section-navy" id="detalhes" aria-labelledby="detalhes-titulo">
-      <div class="hero-glow bloom" data-ds-bloom aria-hidden="true"></div>
       <div class="container">
-        <div class="sec-rule" data-reveal><span>04 / DETALHES</span><span>CADA PALAVRA TEM SEU LUGAR</span></div>
-        <div class="section-heading" data-reveal><h2 id="detalhes-titulo">Detalhes do <em>caderno.</em></h2><p>Formato A5, espiral transparente e 100 folhas para anotar, praticar e revisar.</p></div>
-        <div class="caderno-details" data-reveal="scale">
-          <div class="caderno-3d" id="caderno-detalhes" data-caderno role="img" aria-label="Caderninho na Mão! em 3D: capa ilustrada, miolo original, espiral transparente e 100 folhas.">
-            <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+        <div class="sec-rule" data-reveal><span>04 / DETALHES</span><span><span class="details-hint-desktop">PASSE O MOUSE PARA VER</span><span class="details-hint-touch">TOQUE PARA VER</span></span></div>
+        <div class="section-heading" data-reveal><h2 id="detalhes-titulo">Feito com <em>cuidado,</em><br>página por página.</h2></div>
+        <div class="ds-grid2 details-grid" data-details>
+          <div class="details-content">
+            <ol class="details-list" aria-label="Diferenciais do caderninho" data-reveal>
+              <li class="detail-item is-active" data-detail="01">
+                <h3><button class="detail-trigger" id="detalhe-01" type="button" aria-expanded="true" aria-controls="detalhe-texto-01"><span class="detail-number meta">01</span><span class="detail-title">Tamanho A5</span><span class="detail-arrow" aria-hidden="true">↗</span></button></h3>
+                <div class="detail-description" id="detalhe-texto-01" role="region" aria-labelledby="detalhe-01"><p>14,8 x 21 cm. Cabe na bolsa e na mochila.</p></div>
+              </li>
+              <li class="detail-item" data-detail="02">
+                <h3><button class="detail-trigger" id="detalhe-02" type="button" aria-expanded="false" aria-controls="detalhe-texto-02"><span class="detail-number meta">02</span><span class="detail-title">Capa com a arte das aulas</span><span class="detail-arrow" aria-hidden="true">↗</span></button></h3>
+                <div class="detail-description" id="detalhe-texto-02" role="region" aria-labelledby="detalhe-02"><p>Colorida, com acetato transparente que protege do dia a dia.</p></div>
+              </li>
+              <li class="detail-item" data-detail="03">
+                <h3><button class="detail-trigger" id="detalhe-03" type="button" aria-expanded="false" aria-controls="detalhe-texto-03"><span class="detail-number meta">03</span><span class="detail-title">Espiral transparente</span><span class="detail-arrow" aria-hidden="true">↗</span></button></h3>
+                <div class="detail-description" id="detalhe-texto-03" role="region" aria-labelledby="detalhe-03"><p>Abre totalmente plano, para escrever com conforto.</p></div>
+              </li>
+              <li class="detail-item" data-detail="04">
+                <h3><button class="detail-trigger" id="detalhe-04" type="button" aria-expanded="false" aria-controls="detalhe-texto-04"><span class="detail-number meta">04</span><span class="detail-title">100 folhas pautadas</span><span class="detail-arrow" aria-hidden="true">↗</span></button></h3>
+                <div class="detail-description" id="detalhe-texto-04" role="region" aria-labelledby="detalhe-04"><p>200 páginas em papel offset 75 g.</p></div>
+              </li>
+              <li class="detail-item" data-detail="05">
+                <h3><button class="detail-trigger" id="detalhe-05" type="button" aria-expanded="false" aria-controls="detalhe-texto-05"><span class="detail-number meta">05</span><span class="detail-title">Ilustrações do Brasil</span><span class="detail-arrow" aria-hidden="true">↗</span></button></h3>
+                <div class="detail-description" id="detalhe-texto-05" role="region" aria-labelledby="detalhe-05"><p>Pão de Açúcar, folhas e coqueiros em tons suaves em cada página.</p></div>
+              </li>
+              <li class="detail-item" data-detail="06">
+                <h3><button class="detail-trigger" id="detalhe-06" type="button" aria-expanded="false" aria-controls="detalhe-texto-06"><span class="detail-number meta">06</span><span class="detail-title">Impresso para você</span><span class="detail-arrow" aria-hidden="true">↗</span></button></h3>
+                <div class="detail-description" id="detalhe-texto-06" role="region" aria-labelledby="detalhe-06"><p>Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega para endereços no Brasil.</p></div>
+              </li>
+            </ol>
+            <div class="details-purchase" data-reveal>
+              <p class="body-lg"><strong data-preco></strong> <span class="caption">+ frete</span></p>
+              <a class="btn btn-gold magnetic" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>Quero o meu caderninho <span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a>
+            </div>
           </div>
-          <button class="btn btn-white magnetic" type="button" data-caderno-replay="caderno-detalhes">Ver o caderno abrir <span class="arrow"><svg class="icon"><use href="#i-arrow"/></svg></span></button>
+          <figure class="details-stage" data-active-detail="01" aria-label="Veja de perto cada detalhe do caderninho">
+            <div class="hero-glow bloom" data-ds-bloom aria-hidden="true"></div>
+            <div class="details-scene" data-reveal="scale">
+              <div class="caderno-3d details-book" id="caderno-detalhes" data-caderno data-caderno-interactive data-caderno-feature="01" role="img" aria-label="Caderninho na Mão! em 3D: Tamanho A5.">
+                <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+              </div>
+              <div class="details-ruler" aria-hidden="true"><span class="meta">14,8 x 21 cm</span></div>
+              <span class="details-active-number" aria-hidden="true">01</span>
+            </div>
+            <figcaption class="meta details-caption"><span class="pulse" aria-hidden="true"></span> <span data-detail-caption>Tamanho A5</span></figcaption>
+          </figure>
         </div>
       </div>
     </section>
