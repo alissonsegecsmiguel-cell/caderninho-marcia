@@ -4,7 +4,7 @@ Design system local para a **Profa. Marcia Macedo**, com o universo “Caderninh
 
 ## Página de vendas
 
-Abra **[../index.html](../index.html)** na raiz. A hero está preenchida com os textos fornecidos e o vídeo do caderno à direita; no celular, o vídeo vem antes do texto. As outras seis seções continuam com títulos provisórios. A página importa `assets/design_system.css` e `assets/design_system.js`; a composição específica fica em `assets/pagina.css`. Fontes, cores, marca, faixas, glow e surgimentos são compartilhados com o catálogo.
+Abra **[../index.html](../index.html)** na raiz. A hero está preenchida com os textos fornecidos e o vídeo do caderno à direita; no celular, o vídeo vem antes do texto. A seção “A frase” reutiliza a grade de identidade do catálogo, com fundo verde, manifesto, aquarela do Pão de Açúcar, coordenadas e selo animado. A capa existente em `images/capa.png` aparece inteira, sem recorte do título. As outras cinco seções continuam com títulos provisórios. A página importa `assets/design_system.css` e `assets/design_system.js`; a composição específica fica em `assets/pagina.css`. Fontes, cores, marca, faixas, glow e surgimentos são compartilhados com o catálogo.
 
 No topo do script ao final de `index.html`, `LINK_COMPRA` já aponta para a página do caderno no Clube de Autores e `PRECO` contém `R$ 65,44`. Todos os links com `data-compra` usam essa configuração e abrem em nova aba. Se a URL editada for inválida, os botões não navegam para um checkout incorreto. A linha de preço da hero usa a variável e o trecho fornecido “endereços no Brasil”, sem adicionar condições de entrega.
 
@@ -67,7 +67,7 @@ Foram aprovados 15 grupos de verificações de estrutura, arquivos, geração de
 
 Não havia navegador disponibilizado pelo ambiente. Renderização visual, fontes realmente pintadas, layout responsivo, comportamento nativo de validação e contenção de foco do `dialog` precisam de revisão em navegador; os testes em DOM usam adaptadores dessas APIs e não substituem essa revisão.
 
-A página de vendas tem 11 grupos adicionais de verificações, incluindo textos da hero, links de compra, estados de reprodução e ausência de carregamento de vídeo com movimento reduzido. Os estados usam APIs de mídia simuladas; autoplay nativo e renderização em navegador não foram verificados. Os quadros extraídos foram conferidos como imagens.
+A página de vendas tem 12 grupos adicionais de verificações, incluindo textos da hero e de “A frase”, arquivos das artes, referências do selo, links de compra, estados de reprodução e ausência de carregamento de vídeo com movimento reduzido. Os estados usam APIs de mídia simuladas; autoplay nativo e renderização em navegador não foram verificados. Os quadros extraídos foram conferidos como imagens.
 
 Para repetir a verificação de DOM, a partir da pasta do projeto:
 

@@ -20,6 +20,20 @@
 .purchase-price{padding-left:16px;border-left:1px solid rgba(255,255,255,.35);font-weight:400}
 .purchase-button[aria-disabled=true]{cursor:default}
 .sales-footer{font-size:12px}
+
+/* A frase: a grade, tipografia, cores e alturas vêm da seção de identidade.
+   Apenas as artes e seus detalhes internos precisam de composição própria. */
+#a-frase{padding-top:56px}
+.phrase-art{box-shadow:var(--shadow)}
+.phrase-art>img{position:absolute;inset:34px 0;width:100%;height:calc(100% - 68px);object-fit:cover;object-position:center;mix-blend-mode:multiply}
+.phrase-coordinates{position:absolute;top:15px;left:16px;right:16px;font:400 7px/1.5 var(--mono);letter-spacing:.02em;color:var(--ink-mute)}
+.phrase-art .postmark{width:86px;height:86px;top:46px;right:14px}
+.phrase-art .postmark>span{inset:20px}
+.phrase-art .postmark .icon{width:22px;height:22px}
+.notebook.phrase-cover{padding:6px}
+.notebook.phrase-cover::before{display:none}
+.phrase-cover>img{width:100%;height:100%;object-fit:contain;object-position:center}
+
 @media(max-width:1100px){.sales-hero-grid{gap:36px}}
 @media(max-width:720px){
   .sales-page .nav-inner{gap:12px}
@@ -36,6 +50,11 @@
   .hero-product{order:-1;width:min(100%,520px);margin-inline:auto}
   .hero-purchase-note{font-size:11px;margin-top:12px}
   .sales-footer{font-size:10px;line-height:1.8}
+  #a-frase{padding-top:32px}
+  .phrase-coordinates{font-size:5px;left:10px;right:10px}
+  .phrase-art .postmark{width:62px;height:62px;top:43px;right:8px}
+  .phrase-art .postmark>span{inset:14px}
+  .phrase-art .postmark .icon{width:18px;height:18px}
 }
 @media(max-width:370px){
   .sales-page .brand{font-size:17px;gap:6px}

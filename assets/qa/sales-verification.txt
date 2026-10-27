@@ -1,4 +1,5 @@
-PASS Seven sections remain in order; the six sections after the hero are still placeholders
+PASS Seven sections remain in order; the five sections after a-frase are still placeholders
+PASS A-frase reuses the green identity layout, exact copy, watercolor details and full cover
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
 PASS Shared CSS, JS, fonts and image paths resolve from the root
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
@@ -10,5 +11,5 @@ PASS Normal playback starts muted/inline with a first-frame poster, no controls 
 PASS Ending holds the open notebook image and never restarts the finished video
 PASS Enabling reduced motion during playback stops and unloads the MP4
 
-11 sales-page checks passed.
+12 sales-page checks passed.
 Media APIs are simulated: native autoplay/rendering and the live checkout destination were not verified in a browser.

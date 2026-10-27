@@ -1,4 +1,4 @@
-/* Sales hero and shared-runtime regression checks. No browser rendering. */
+/* Sales content and shared-runtime regression checks. No browser rendering. */
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
@@ -40,19 +40,44 @@ const page=load();
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('Seven sections remain in order; the six sections after the hero are still placeholders',()=>{
+check('Seven sections remain in order; the five sections after a-frase are still placeholders',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
     const title=page.document.getElementById(section.getAttribute('aria-labelledby'));
     assert.ok(title?.matches('h1,h2'));
-    if(section.id!=='inicio'){
+    if(!['inicio','a-frase'].includes(section.id)){
       assert.equal(section.querySelectorAll('p,a,button,article,form').length,0);
       assert.equal(section.querySelectorAll('[data-reveal]').length,1);
     }
   });
   assert.equal($$('h1').length,1);
   assert.equal(page.document.title,'Caderninho na Mão! · Profa. Marcia Macedo');
+});
+check('A-frase reuses the green identity layout, exact copy, watercolor details and full cover',()=>{
+  assert.ok($('#a-frase.section.ds-group.section-dark.section-forest'));
+  assert.deepEqual($$('#a-frase .sec-rule span').map(el=>el.textContent),['02 / A FRASE','DE ONDE VEM O NOME']);
+  assert.equal($('#a-frase h2').textContent,'Uma frase que virou caderno.');
+  assert.equal($('#a-frase h2 .lettering-transparent').textContent,'frase');
+  assert.equal($('#a-frase h2 em').textContent,'caderno.');
+  assert.equal($('#a-frase .section-heading > p').textContent,'Em toda aula, a Profa. Marcia repete: "caderninho na mão!". É escrevendo que a palavra nova fica com você. Agora, o caderninho das aulas existe de verdade.');
+  assert.equal($('#a-frase .identity-grid').children.length,3);
+  assert.equal($('#a-frase .identity-manifesto .label').textContent,'UMA PALAVRA DA PROFESSORA');
+  assert.equal($('#a-frase .identity-manifesto p').innerHTML,'Quem anota, lembra.<br>Quem lembra, usa.<br><em>E quem usa, aprende de verdade.</em>');
+  assert.equal($('#a-frase .manifesto-foot span').textContent,'Profa. Marcia Macedo');
+  assert.equal($('#a-frase .manifesto-foot use').getAttribute('href'),'#i-book');
+  assert.equal($('#a-frase .flag-art.ds-window[data-reveal="scale"] img').getAttribute('src'),'assets/images/brasil-aquarela.png');
+  assert.equal($('#a-frase .coord').textContent,'RIO DE JANEIRO · 22°57′ S 43°09′ W');
+  assert.equal($('#a-frase .window-caption').textContent,'A FRASE DE TODA AULA.');
+  const ring=$('#a-frase .postmark textPath').getAttribute('href').slice(1);
+  assert.ok(page.document.getElementById(ring));
+  assert.equal($('#a-frase .notebook[data-reveal] img').getAttribute('src'),'assets/images/capa.png');
+  assert.deepEqual($$('#a-frase .principles > div').map(el=>el.textContent),[
+    '01.Nasceu na sala de aula: a frase que a professora repete em toda aula.',
+    '02.Feito para os alunos: com a arte e a identidade das aulas.',
+    '03.Para usar todo dia: na aula, nos estudos, onde você estiver.'
+  ]);
+  assert.equal($$('#a-frase [data-reveal]').length,6);
 });
 check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request',()=>{
   assert.equal($('#inicio .hero-discord-pill').textContent,'O caderno oficial das aulas da Profa. Marcia Macedo');
