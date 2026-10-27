@@ -8,11 +8,11 @@ const project = path.resolve(__dirname, '../..');
 const source = fs.readFileSync(path.join(project, 'index.html'), 'utf8');
 const runtime = fs.readFileSync(path.join(project, 'assets/design_system.js'), 'utf8');
 const notebookRuntime = fs.readFileSync(path.join(project, 'assets/pagina.js'), 'utf8');
-const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','perguntas','chamada-final'];
+const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','chamada-final'];
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
-function load({link, price, reduced=false, precise=false, extraButton=false, withObserver=true, hidden=false}={}) {
+function load({link, contact, price, reduced=false, precise=false, extraButton=false, withObserver=true, hidden=false}={}) {
   const {document, window} = parseHTML(source);
   Object.defineProperty(document,'hidden',{value:hidden,configurable:true});
   const observers=[];
@@ -37,6 +37,7 @@ function load({link, price, reduced=false, precise=false, extraButton=false, wit
   if(extraButton)document.querySelector('footer').insertAdjacentHTML('beforeend','<a data-compra><span data-preco></span></a>');
   let config=[...document.querySelectorAll('script:not([src])')][0].textContent;
   if(link)config=config.replace(/const LINK_COMPRA = "[^"]+";/,`const LINK_COMPRA = ${JSON.stringify(link)};`);
+  if(contact!==undefined)config=config.replace(/const LINK_CONTATO = "[^"]+";/,`const LINK_CONTATO = ${JSON.stringify(contact)};`);
   if(price)config=config.replace('R$ 65,44',price);
   vm.runInContext(config,context,{filename:'index.html:purchase-config'});
   vm.runInContext(notebookRuntime,context,{filename:'pagina.js'});
@@ -46,13 +47,13 @@ const page=load();
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('Seven sections remain in order; three future sections remain placeholders',()=>{
+check('Six sections remain in order; only the final call remains a placeholder',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
     const title=page.document.getElementById(section.getAttribute('aria-labelledby'));
     assert.ok(title?.matches('h1,h2'));
-    if(!['inicio','a-frase','para-que','detalhes'].includes(section.id)){
+    if(section.id==='chamada-final'){
       assert.equal(section.querySelectorAll('p,a,button,article,form').length,0);
       assert.equal(section.querySelectorAll('[data-reveal]').length,1);
     }
@@ -236,8 +237,8 @@ check('Shared glow and magnetic handlers work without catalogue elements, honor 
   assert.ok(!button.style.transform);
 });
 check('Shared runtime boots without catalogue elements and adds every background/reveal',()=>{
-  assert.equal($$('.section-ribbon').length,7);
-  assert.equal($$('.section-leaf').length,6);
+  assert.equal($$('.section-ribbon').length,6);
+  assert.equal($$('.section-leaf').length,5);
   assert.equal($$('.svg-sprite').length,1);
   for(const el of $$('use[href^="#"]'))assert.ok(page.document.getElementById(el.getAttribute('href').slice(1)));
   const observer=page.observers[0];observer.cb(observer.targets.map(target=>({target,isIntersecting:true})));
@@ -408,6 +409,82 @@ check('Hover, focus and keyboard navigate details; coarse touch does not activat
   assert.equal(touch.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'01');
   touch.document.querySelector('#detalhe-02').click();
   assert.equal(touch.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'02');
+});
+check('Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed',()=>{
+  assert.equal($('#perguntas'),null);assert.equal($('a[href="#perguntas"]'),null);
+  assert.ok($('#como-comprar.section.ds-group.section-cream'));
+  assert.deepEqual($$('#como-comprar .sec-rule > span').map(el=>el.textContent),['05 / COMO COMPRAR','TIRE SUAS DÚVIDAS']);
+  assert.equal($('#como-comprar-titulo').textContent,'Do clique até a sua casa.');
+  assert.equal($('#como-comprar-titulo .lettering-transparent').textContent,'casa.');
+  assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
+    'Como eu compro o caderninho?','Por que a compra é feita no Clube de Autores?','Quanto custa?',
+    'Quanto tempo demora para chegar?','Vocês enviam para fora do Brasil?',
+    'O caderno é igual ao que aparece na página?','E se eu tiver algum problema com o pedido?'
+  ]);
+  assert.deepEqual($$('[data-faq] .detail-description p').map(el=>el.textContent),[
+    'É simples: clique em "Quero o meu caderninho" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.',
+    'Porque cada caderninho é impresso sob encomenda e enviado direto para você. O Clube de Autores, a plataforma parceira da professora, cuida da impressão, do pagamento e da entrega.',
+    'R$ 65,44, mais o frete. O frete é calculado pelo seu CEP na hora da compra.',
+    'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende do frete que você escolher.',
+    'Por enquanto, o envio é feito apenas para endereços no Brasil.',
+    'Sim. A capa tem a arte das aulas da professora, e as páginas internas têm pautas e ilustrações suaves em tons de cinza, como você vê aqui.',
+    'Fale com a gente pelo link "Fale com a equipe". Vamos te ajudar a resolver.'
+  ]);
+  assert.equal($('.purchase-portrait img').getAttribute('src'),'assets/images/marcia.png');
+  assert.ok($('.purchase-stamp .mini-flag'));
+  assert.equal($('#compra-card-titulo').textContent,'Pronto para ter o seu caderninho?');
+  assert.equal($('.purchase-total [data-preco]').textContent,'R$ 65,44');
+  assert.ok($('.purchase-postcard [data-compra]').matches('.btn.btn-primary.magnetic'));
+  assert.equal($('.purchase-contact').textContent,'Ficou com dúvida? Fale com a equipe');
+});
+check('Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus',()=>{
+  const active=load({contact:'https://wa.me/5511999999999'});
+  const group=active.document.querySelector('[data-faq]');
+  const buttons=[...group.querySelectorAll('.detail-trigger')];
+  const expanded=()=>buttons.filter(button=>button.getAttribute('aria-expanded')==='true');
+  assert.equal(expanded().length,1);assert.equal(expanded()[0].id,'compra-pergunta-01');
+  buttons.forEach(button=>{
+    assert.equal(button.tagName,'BUTTON');assert.equal(button.type,'button');
+    const panel=active.document.getElementById(button.getAttribute('aria-controls'));
+    assert.equal(panel.getAttribute('aria-labelledby'),button.id);
+    assert.equal(panel.getAttribute('aria-hidden'),String(button!==buttons[0]));
+    assert.equal(panel.hasAttribute('inert'),button!==buttons[0]);
+  });
+  buttons[6].click();assert.equal(expanded().length,1);assert.equal(expanded()[0],buttons[6]);
+  assert.equal(group.querySelector('#compra-resposta-07').hasAttribute('inert'),false);
+  assert.equal(group.querySelector('#compra-resposta-01').hasAttribute('inert'),true);
+  buttons[6].click();assert.equal(expanded().length,0);
+  assert.equal(group.querySelector('#compra-resposta-07').hasAttribute('inert'),true);
+  for(const index of [2,1,0,5]){buttons[index].click();assert.equal(expanded().length,1);assert.equal(expanded()[0],buttons[index]);}
+  assert.equal(active.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'01');
+  for(const options of [{reduced:true},{withObserver:false}]){
+    const fallback=load(options);fallback.document.querySelector('#compra-pergunta-04').click();
+    assert.ok(fallback.document.querySelector('[data-faq]').classList.contains('disclosure-ready'));
+    assert.ok(fallback.document.querySelector('[data-details]').classList.contains('disclosure-ready'));
+    assert.equal(fallback.document.querySelector('#compra-pergunta-04').getAttribute('aria-expanded'),'true');
+    assert.equal(fallback.document.querySelector('#compra-resposta-01').getAttribute('aria-hidden'),'true');
+  }
+});
+check('Editable contact supports WhatsApp and mailto in both locations, blocks placeholder and unsafe URLs, and stays separate from price/checkout',()=>{
+  for(const contact of ['https://wa.me/5511999999999','mailto:equipe@example.com']){
+    const configured=load({contact,price:'R$ 70,00'});
+    for(const link of configured.document.querySelectorAll('[data-contato]')){
+      assert.equal(link.getAttribute('href'),contact);assert.equal(link.target,'_blank');
+      assert.ok(link.rel.includes('noopener')&&link.rel.includes('noreferrer'));
+      assert.equal(link.hasAttribute('aria-disabled'),false);
+    }
+    assert.equal(configured.document.querySelector('#compra-resposta-03 [data-preco]').textContent,'R$ 70,00');
+    assert.equal(configured.document.querySelector('.purchase-total [data-preco]').textContent,'R$ 70,00');
+    assert.equal(configured.document.querySelector('.purchase-postcard [data-compra]').getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo');
+  }
+  for(const options of [{},{contact:'javascript:alert(1)'},{contact:'data:text/html,test'},{contact:'mailto:'}]){
+    const unavailable=load(options);
+    for(const link of unavailable.document.querySelectorAll('[data-contato]')){
+      assert.equal(link.hasAttribute('href'),false);assert.equal(link.getAttribute('aria-disabled'),'true');
+      const event=new unavailable.window.Event('click',{cancelable:true});link.dispatchEvent(event);
+      assert.equal(event.defaultPrevented,true);
+    }
+  }
 });
 const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.\n';
 fs.writeFileSync(path.join(__dirname,'sales-verification.txt'),output);

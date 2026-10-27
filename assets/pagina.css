@@ -146,8 +146,8 @@
 .is-active .detail-arrow{transform:rotate(20deg)}
 .detail-description{display:grid;grid-template-rows:1fr;opacity:1;padding:0 24px 24px 42px;transition:grid-template-rows var(--gesture) var(--ease),opacity var(--gesture) var(--ease),padding-bottom var(--gesture) var(--ease)}
 .detail-description>p{overflow:hidden;min-height:0;color:var(--text-soft);font:400 .875rem/1.7 var(--body)}
-html.js .detail-description{grid-template-rows:0fr;opacity:0;padding-bottom:0}
-html.js .is-active>.detail-description{grid-template-rows:1fr;opacity:1;padding-bottom:24px}
+html.js .detail-description,.disclosure-ready .detail-description{grid-template-rows:0fr;opacity:0;padding-bottom:0}
+html.js .is-active>.detail-description,.disclosure-ready .is-active>.detail-description{grid-template-rows:1fr;opacity:1;padding-bottom:24px}
 .details-purchase{display:flex;align-items:flex-start;flex-direction:column;gap:20px;padding-top:32px}
 .details-purchase strong{font-weight:500}
 .details-purchase .caption{color:var(--text-soft)}
@@ -211,6 +211,46 @@ html.motion-paused :is(.detail-description,.detail-trigger,.detail-arrow,.detail
 @keyframes caderno-float{0%,100%{translate:0 0;rotate:-.4deg}50%{translate:0 -5px;rotate:.4deg}}
 /* 12 s = 3 s fechado + 2,5 s abrindo + 4 s aberto + 2,5 s fechando. */
 @keyframes caderno-cycle{0%,25%{transform:translateZ(3px) rotateY(0deg);animation-timing-function:var(--ease)}45.833333%,79.166667%{transform:translateZ(3px) rotateY(-180deg);animation-timing-function:var(--ease)}100%{transform:translateZ(3px) rotateY(0deg)}}
+
+/* Compra: cartão-postal e a mesma lista expansível dos diferenciais. */
+.purchase-grid{grid-template-areas:"buy faq";grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:80px;align-items:start}
+.purchase-sticky{grid-area:buy;position:sticky;top:40px;width:100%;max-width:440px;align-self:start;justify-self:center}
+.purchase-postcard{rotate:-2deg;text-align:center;box-shadow:var(--shadow);transition-property:transform,box-shadow,border-color,rotate;transition-duration:var(--gesture);transition-timing-function:var(--ease)}
+.purchase-postcard:hover,.purchase-postcard:focus-within{rotate:-.5deg}
+.purchase-postcard::after{content:"";position:absolute;inset:8px;border:1px solid var(--line-soft);border-radius:calc(var(--radius) - 6px);pointer-events:none}
+.purchase-stamp{position:absolute;right:18px;top:18px;z-index:1;display:grid;justify-items:center;gap:7px;padding:10px 8px;background:var(--paper);border:1px dashed var(--accent);border-radius:calc(var(--radius-sm) / 2);rotate:9deg}
+.purchase-stamp .meta{font-size:6px;letter-spacing:.15em;color:var(--ink)}
+.purchase-portrait{position:relative;isolation:isolate;width:54%;aspect-ratio:1;margin:12px auto 28px;border:1px solid var(--accent);border-radius:50%}
+.purchase-portrait>img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.portrait-glow{position:absolute;inset:-24%;z-index:-1;border-radius:50%;background:radial-gradient(circle,rgba(var(--gold-rgb),.23),transparent 70%)}
+.purchase-postcard h3{max-width:300px;margin-inline:auto;font-size:var(--h4);line-height:1.25}
+.purchase-total{display:flex;align-items:baseline;justify-content:center;gap:9px;flex-wrap:wrap;margin:24px 0}
+.purchase-total strong{font:600 var(--h3)/1.18 var(--sans);letter-spacing:-.035em}
+.purchase-total .caption{color:var(--ink-soft)}
+.purchase-postcard>.btn{width:100%}
+.purchase-contact{margin-top:20px;color:var(--ink-soft);font-size:11px}
+[data-contato]{color:var(--primary-hover);text-decoration:underline;text-underline-offset:3px;transition:color var(--micro)}
+[data-contato]:hover,[data-contato]:focus-visible{color:var(--ink)}
+[data-contato][aria-disabled=true]{color:var(--ink-mute);cursor:default}
+.purchase-faq{grid-area:faq;min-width:0;border-top-color:var(--line)}
+.purchase-faq .detail-item{border-color:var(--line)}
+.purchase-faq .detail-item .detail-trigger{grid-template-columns:1fr 24px;color:var(--ink)}
+.purchase-faq .detail-trigger:hover,.purchase-faq .detail-trigger:focus-visible,.purchase-faq .is-active .detail-trigger{color:var(--primary-hover)}
+.purchase-faq .detail-title{font-size:var(--h5);line-height:1.4;letter-spacing:-.015em}
+.purchase-faq .detail-arrow{color:var(--accent);text-align:center}
+.purchase-faq .is-active .detail-arrow{transform:rotate(45deg)}
+.purchase-faq .detail-description{padding-inline:0 40px}
+@media(max-width:960px){.purchase-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}.purchase-postcard{padding:28px}.purchase-stamp{right:12px;top:12px;padding:8px 6px}}
+@media(max-width:720px){
+  .purchase-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"faq" "buy";gap:48px}
+  .purchase-sticky{position:static;max-width:440px;justify-self:center}
+  .purchase-postcard{rotate:-1deg}
+  .purchase-portrait{max-width:200px}
+  .purchase-faq .detail-title{font-size:var(--h6)}
+  .purchase-faq .detail-description{padding-right:24px}
+}
+@media(prefers-reduced-motion:reduce){.purchase-postcard{rotate:0deg;transition:none}.purchase-postcard:hover,.purchase-postcard:focus-within{rotate:0deg;transform:none}}
+html.motion-paused .purchase-postcard{rotate:0deg;transform:none;transition:none}
 
 /* A frase: a grade, tipografia, cores e alturas vêm da seção de identidade.
    Apenas as artes e seus detalhes internos precisam de composição própria. */

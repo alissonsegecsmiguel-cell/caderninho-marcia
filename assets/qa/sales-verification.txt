@@ -1,4 +1,4 @@
-PASS Seven sections remain in order; three future sections remain placeholders
+PASS Six sections remain in order; only the final call remains a placeholder
 PASS Product showcase keeps the requested copy, purchase configuration and five real annotated pages
 PASS Carousel arrows and keyboard update one accessible slide, wrap around and announce position
 PASS Horizontal drag advances pages; vertical scroll, cancellation and small drags do not
@@ -21,6 +21,9 @@ PASS Enabling reduced motion stops the hero loop and preserves the selected disc
 PASS Without IntersectionObserver hero cycles, details responds and content remains revealed
 PASS Details copy, price, gold CTA and all six accessible disclosure regions match the request
 PASS Hover, focus and keyboard navigate details; coarse touch does not activate on pointer entry
+PASS Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed
+PASS Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus
+PASS Editable contact supports WhatsApp and mailto in both locations, blocks placeholder and unsafe URLs, and stays separate from price/checkout
 
-23 sales-page checks passed.
+26 sales-page checks passed.
 DOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.

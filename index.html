@@ -241,12 +241,59 @@
       </div>
     </section>
 
-    <section class="section section-cream sales-section" id="como-comprar" aria-labelledby="como-comprar-titulo">
-      <div class="container"><h2 id="como-comprar-titulo" data-reveal>Como funciona a compra</h2></div>
-    </section>
-
-    <section class="section section-dark section-forest sales-section" id="perguntas" aria-labelledby="perguntas-titulo">
-      <div class="container"><h2 id="perguntas-titulo" data-reveal>Perguntas frequentes</h2></div>
+    <section class="section ds-group section-cream" id="como-comprar" aria-labelledby="como-comprar-titulo">
+      <div class="hero-glow bloom" data-ds-bloom aria-hidden="true"></div>
+      <div class="container">
+        <div class="sec-rule" data-reveal><span>05 / COMO COMPRAR</span><span>TIRE SUAS DÚVIDAS</span></div>
+        <div class="section-heading" data-reveal><h2 id="como-comprar-titulo">Do clique até a sua <span class="lettering-transparent">casa.</span></h2></div>
+        <div class="ds-grid2 purchase-grid">
+          <div class="details-list purchase-faq" data-faq role="group" aria-label="Perguntas frequentes sobre a compra" data-reveal>
+            <article class="detail-item is-active">
+              <h3><button class="detail-trigger" id="compra-pergunta-01" type="button" aria-expanded="true" aria-controls="compra-resposta-01"><span class="detail-title">Como eu compro o caderninho?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-01" role="region" aria-labelledby="compra-pergunta-01"><p>É simples: clique em "Quero o meu caderninho" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.</p></div>
+            </article>
+            <article class="detail-item">
+              <h3><button class="detail-trigger" id="compra-pergunta-02" type="button" aria-expanded="false" aria-controls="compra-resposta-02"><span class="detail-title">Por que a compra é feita no Clube de Autores?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-02" role="region" aria-labelledby="compra-pergunta-02"><p>Porque cada caderninho é impresso sob encomenda e enviado direto para você. O Clube de Autores, a plataforma parceira da professora, cuida da impressão, do pagamento e da entrega.</p></div>
+            </article>
+            <article class="detail-item">
+              <h3><button class="detail-trigger" id="compra-pergunta-03" type="button" aria-expanded="false" aria-controls="compra-resposta-03"><span class="detail-title">Quanto custa?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-03" role="region" aria-labelledby="compra-pergunta-03"><p><span data-preco></span>, mais o frete. O frete é calculado pelo seu CEP na hora da compra.</p></div>
+            </article>
+            <article class="detail-item">
+              <h3><button class="detail-trigger" id="compra-pergunta-04" type="button" aria-expanded="false" aria-controls="compra-resposta-04"><span class="detail-title">Quanto tempo demora para chegar?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-04" role="region" aria-labelledby="compra-pergunta-04"><p>O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende do frete que você escolher.</p></div>
+            </article>
+            <article class="detail-item">
+              <h3><button class="detail-trigger" id="compra-pergunta-05" type="button" aria-expanded="false" aria-controls="compra-resposta-05"><span class="detail-title">Vocês enviam para fora do Brasil?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-05" role="region" aria-labelledby="compra-pergunta-05"><p>Por enquanto, o envio é feito apenas para endereços no Brasil.</p></div>
+            </article>
+            <article class="detail-item">
+              <h3><button class="detail-trigger" id="compra-pergunta-06" type="button" aria-expanded="false" aria-controls="compra-resposta-06"><span class="detail-title">O caderno é igual ao que aparece na página?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-06" role="region" aria-labelledby="compra-pergunta-06"><p>Sim. A capa tem a arte das aulas da professora, e as páginas internas têm pautas e ilustrações suaves em tons de cinza, como você vê aqui.</p></div>
+            </article>
+            <article class="detail-item">
+              <h3><button class="detail-trigger" id="compra-pergunta-07" type="button" aria-expanded="false" aria-controls="compra-resposta-07"><span class="detail-title">E se eu tiver algum problema com o pedido?</span><span class="detail-arrow" aria-hidden="true">+</span></button></h3>
+              <div class="detail-description" id="compra-resposta-07" role="region" aria-labelledby="compra-pergunta-07"><p>Fale com a gente pelo link "<a data-contato target="_blank" rel="noopener noreferrer">Fale com a equipe</a>". Vamos te ajudar a resolver.</p></div>
+            </article>
+          </div>
+          <aside class="purchase-sticky" aria-labelledby="compra-card-titulo">
+            <div data-reveal="scale">
+              <div class="card ds-sheet purchase-postcard">
+                <span class="purchase-stamp" aria-hidden="true"><span class="mini-flag"><i></i></span><span class="meta">BRASIL</span></span>
+                <div class="purchase-portrait">
+                  <div class="bloom portrait-glow" data-ds-bloom aria-hidden="true"></div>
+                  <img src="assets/images/marcia.png" width="1254" height="1254" alt="Retrato em aquarela da Profa. Marcia Macedo." loading="lazy" decoding="async">
+                </div>
+                <h3 id="compra-card-titulo">Pronto para ter o seu caderninho?</h3>
+                <p class="purchase-total"><strong data-preco></strong> <span class="caption">+ frete</span></p>
+                <a class="btn btn-primary magnetic" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>Quero o meu caderninho <span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a>
+                <p class="purchase-contact caption">Ficou com dúvida? <a data-contato target="_blank" rel="noopener noreferrer">Fale com a equipe</a></p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
     </section>
 
     <section class="section section-cream sales-section" id="chamada-final" aria-labelledby="chamada-final-titulo">
@@ -280,6 +327,8 @@
   <script>
     // URL completa de compra do caderno no Clube de Autores; usada em todos os botões.
     const LINK_COMPRA = "https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo";
+    // Link da equipe: use uma URL de WhatsApp (https://wa.me/...) ou e-mail (mailto:...).
+    const LINK_CONTATO = "COLAR_AQUI_O_LINK_DO_WHATSAPP_OU_EMAIL";
     // Preço exibido na ficha de compra e nos botões fora da primeira dobra.
     const PRECO = "R$ 65,44";
 
@@ -306,6 +355,26 @@
         botao.setAttribute('aria-disabled', 'true');
         botao.title = 'Link de compra ainda não configurado';
         botao.addEventListener('click', evento => evento.preventDefault());
+      }
+    });
+
+    let destinoContato = null;
+    try {
+      const url = new URL(LINK_CONTATO);
+      if (url.protocol === 'https:' || url.protocol === 'http:' || (url.protocol === 'mailto:' && url.pathname)) destinoContato = url.href;
+    } catch { /* O contato permanece sem navegação enquanto estiver com o placeholder. */ }
+
+    document.querySelectorAll('[data-contato]').forEach(link => {
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', destinoContato ? 'Fale com a equipe (abre em nova aba)' : 'Fale com a equipe (indisponível no momento)');
+      if (destinoContato) {
+        link.href = destinoContato;
+      } else {
+        link.removeAttribute('href');
+        link.setAttribute('aria-disabled', 'true');
+        link.title = 'Contato indisponível no momento';
+        link.addEventListener('click', evento => evento.preventDefault());
       }
     });
 

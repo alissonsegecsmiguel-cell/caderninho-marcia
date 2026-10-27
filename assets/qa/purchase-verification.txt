@@ -1,0 +1,10 @@
+Purchase section verification: source and simulated DOM.
+PASS 26 sales-page checks: exact copy and price, initial answer, exclusive/toggle disclosure, named regions, inert hidden content, reduced motion, no-observer fallback and editable contact links.
+PASS Hero, a-frase, para-que, detalhes, final placeholder, header and footer markup unchanged; showcase interaction runtime unchanged.
+PASS Six sections remain; obsolete perguntas section removed; all static ids unique and every local anchor resolves.
+PASS Existing watercolor portrait assets/images/marcia.png is 1254 x 1254, displayed with explicit dimensions and loading=lazy; source image unchanged.
+Contact defaults to the requested placeholder. Both contact links stay disabled until a valid HTTP(S) or nonempty mailto URL is configured. Checkout and price configuration are independent.
+CSS intent: white postcard left and seven answers right; postcard sticky on desktop. At 720px or less, questions precede the static postcard.
+CSS intent: shared card, sheet, mini-flag, typography, buttons, reveal, bloom, waves, leaves and disclosure transitions; motion-reduced postcard stays still.
+Disclosure readiness is independent of the catalogue reveal enhancement, so reduced-motion/no-observer modes still collapse inactive answers. With JavaScript disabled, answers remain visible.
+No browser surface is available. Actual rendering, native Enter/Space activation, focus suppression, sticky positioning, mobile composition and visual comparison with the design system were not verified.

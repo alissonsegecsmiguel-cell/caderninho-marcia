@@ -186,6 +186,30 @@
     });
   });
   activate(rows[0]);
+  group.classList.add('disclosure-ready');
+})();
+
+/* Perguntas da compra: disclosure nativo de botão, sem alturas fixas. */
+(() => {
+  'use strict';
+  document.querySelectorAll('[data-faq]').forEach(group => {
+    const rows = [...group.querySelectorAll('.detail-item')];
+    function open(selected) {
+      rows.forEach(row => {
+        const expanded = row === selected;
+        row.classList.toggle('is-active', expanded);
+        row.querySelector('.detail-trigger').setAttribute('aria-expanded', String(expanded));
+        const panel = row.querySelector('.detail-description');
+        panel.setAttribute('aria-hidden', String(!expanded));
+        panel.toggleAttribute('inert', !expanded);
+      });
+    }
+    rows.forEach(row => row.querySelector('.detail-trigger').addEventListener('click', () => {
+      open(row.classList.contains('is-active') ? null : row);
+    }));
+    open(rows[0]);
+    group.classList.add('disclosure-ready');
+  });
 })();
 
 /* Vitrine: navegação manual, gestos e objetos decorativos. Independente do 3D. */
