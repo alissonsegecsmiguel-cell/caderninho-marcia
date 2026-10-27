@@ -1,0 +1,5 @@
+PASS index.html references capa.jpg; every page image and both converted photos returned HTTP 200.
+PASS Both output photos decode as JPEG, quality 85; original dimensions preserved (widths below 2000 px).
+PASS SHA-256 unchanged for postal.png, selo.png, folha.png, lapis.png and marca.svg; miolo.png is absent.
+Photos: 4961021 -> 669485 bytes; 86.51% smaller.
+HTTP paths, JPEG decoding and standalone image appearance verified; browser layout was not checked.

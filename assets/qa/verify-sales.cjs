@@ -71,7 +71,7 @@ check('A-frase reuses the green identity layout, exact copy, watercolor details 
   assert.equal($('#a-frase .window-caption').textContent,'A FRASE DE TODA AULA.');
   const ring=$('#a-frase .postmark textPath').getAttribute('href').slice(1);
   assert.ok(page.document.getElementById(ring));
-  assert.equal($('#a-frase .notebook[data-reveal] img').getAttribute('src'),'assets/images/capa.png');
+  assert.equal($('#a-frase .notebook[data-reveal] img').getAttribute('src'),'assets/images/capa.jpg');
   assert.deepEqual($$('#a-frase .principles > div').map(el=>el.textContent),[
     '01.Nasceu na sala de aula: a frase que a professora repete em toda aula.',
     '02.Feito para os alunos: com a arte e a identidade das aulas.',

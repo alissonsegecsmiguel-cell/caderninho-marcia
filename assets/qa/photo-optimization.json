@@ -1,0 +1,44 @@
+{
+  "photos": [
+    {
+      "source": "mao-caderno.png",
+      "output": "mao-caderno.jpg",
+      "quality": 85,
+      "width": 1254,
+      "height": 1254,
+      "beforeBytes": 2371615,
+      "afterBytes": 306868
+    },
+    {
+      "source": "capa.png",
+      "output": "capa.jpg",
+      "quality": 85,
+      "width": 1054,
+      "height": 1493,
+      "beforeBytes": 2589406,
+      "afterBytes": 362617
+    }
+  ],
+  "protected": [
+    {
+      "name": "postal.png",
+      "sha256": "3ABEDBC382C0C871529638D44DB2DEE04FE661177A70BD48707BA9D79A646AB3"
+    },
+    {
+      "name": "selo.png",
+      "sha256": "391BAFF7D114738817BB189885EA638D574E0346300CF8624CCE955C38224F7D"
+    },
+    {
+      "name": "folha.png",
+      "sha256": "54C7ADC4F42D6C975E82BE42C182601CC28E803E5E95EF27D1BD68771F8589DE"
+    },
+    {
+      "name": "lapis.png",
+      "sha256": "92807E2418A543E2B4A3ED2698405C80C9942CE7B5A69C098D298D78D813CED6"
+    },
+    {
+      "name": "marca.svg",
+      "sha256": "4B7275B6D4F5C4D7D76A8F0104A9397B5BDA84501F11D6369B54632E97E2B08B"
+    }
+  ]
+}
