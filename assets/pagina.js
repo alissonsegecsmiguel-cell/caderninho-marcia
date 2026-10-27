@@ -75,32 +75,28 @@
       enter(item);
     }));
   }
+  const pending = new Set();
+  const nearby = 'IntersectionObserver' in window ? new window.IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      nearby.unobserve(entry.target);
+      pending.delete(entry.target);
+      build(entry.target);
+    });
+  }, {rootMargin:'900px 0px'}) : null;
   function init(scope = document) {
     const elements = [...scope.querySelectorAll('[data-caderno]')];
     if (scope.matches?.('[data-caderno]')) elements.unshift(scope);
     elements.forEach(element => {
-      if (instances.has(element)) return;
-      element.append(template.content.cloneNode(true));
-      const fallback = element.querySelector('.caderno-fallback');
-      if (fallback) fallback.hidden = true;
-      const back = element.querySelector('[data-caderno-back]');
-      if (element.dataset.contracapa) {
-        back.addEventListener('error', () => { back.hidden = true; });
-        back.src = element.dataset.contracapa;
-        back.hidden = false;
-      }
-      const bindings = element.querySelector('.caderno-bindings');
-      for (let ring = 0; ring < 22; ring++) bindings.append(document.createElement('i'));
-      const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop'), interactive:element.hasAttribute('data-caderno-interactive'), closed:element.hasAttribute('data-caderno-closed')};
-      instances.set(element, item);
-      element.dataset.cadernoState = item.interactive ? 'interactive' : 'closed';
-      if (item.loop && loopVisibility) {
-        element.classList.add('is-loop-paused');
-        loopVisibility.observe(element.closest('.section') || element);
-      }
-      if (calm()) settle(item);
-      else if (observer && !item.interactive && !item.closed) observer.observe(element);
-      else enter(item);
+      if (instances.has(element) || pending.has(element)) return;
+      // Fora da hero, a montagem 3D espera o caderno chegar perto da tela. A capa estática
+      // some logo para não ser baixada à toa; o caderno é montado antes de aparecer.
+      if (nearby && !element.closest('#inicio')) {
+        pending.add(element);
+        const fallback = element.querySelector('.caderno-fallback');
+        if (fallback) fallback.hidden = true;
+        nearby.observe(element);
+      } else build(element);
     });
     scope.querySelectorAll('[data-caderno-replay]').forEach(button => {
       if (boundButtons.has(button)) return;
@@ -108,11 +104,42 @@
       button.addEventListener('click', () => replay(button.dataset.cadernoReplay));
     });
   }
+  function build(element) {
+    if (instances.has(element)) return;
+    element.append(template.content.cloneNode(true));
+    const fallback = element.querySelector('.caderno-fallback');
+    if (fallback) fallback.hidden = true;
+    const back = element.querySelector('[data-caderno-back]');
+    if (element.dataset.contracapa) {
+      back.addEventListener('error', () => { back.hidden = true; });
+      back.src = element.dataset.contracapa;
+      back.hidden = false;
+    }
+    const bindings = element.querySelector('.caderno-bindings');
+    for (let ring = 0; ring < 22; ring++) bindings.append(document.createElement('i'));
+    const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop'), interactive:element.hasAttribute('data-caderno-interactive'), closed:element.hasAttribute('data-caderno-closed')};
+    instances.set(element, item);
+    element.dataset.cadernoState = item.interactive ? 'interactive' : 'closed';
+    if (item.loop && loopVisibility) {
+      element.classList.add('is-loop-paused');
+      loopVisibility.observe(element.closest('.section') || element);
+    }
+    if (calm()) settle(item);
+    else if (observer && !item.interactive && !item.closed) observer.observe(element);
+    else enter(item);
+    if (item.interactive && element.dataset.cadernoFeature) showFeature(element, element.dataset.cadernoFeature);
+  }
   // A mesma montagem aceita poses dirigidas por uma lista, sem iniciar o loop.
   function showFeature(target, feature) {
     const element = typeof target === 'string' ? document.getElementById(target) : target;
     const item = instances.get(element);
-    if (!item?.interactive || !/^0[1-6]$/.test(feature)) return false;
+    if (!/^0[1-6]$/.test(feature)) return false;
+    // Ainda não montado: guarda a pose para quando o caderno chegar perto da tela.
+    if (!item && pending.has(element) && element.hasAttribute('data-caderno-interactive')) {
+      element.dataset.cadernoFeature = feature;
+      return true;
+    }
+    if (!item?.interactive) return false;
     element.dataset.cadernoFeature = feature;
     return true;
   }
@@ -743,13 +770,15 @@
     queued = true;
     requestAnimationFrame(draw);
   }
-  measure();
+  // A primeira medição espera a dobra chegar perto, para não forçar layout na carga.
+  let measured = false;
   if ('IntersectionObserver' in window) {
     new window.IntersectionObserver(entries => {
       visible = entries.some(entry => entry.isIntersecting);
+      if (visible && !measured) { measured = true; measure(); }
       if (visible) queue();
     }, {rootMargin:'100px'}).observe(section);
-  } else { visible = true; finish(); }
+  } else { measure(); visible = true; finish(); }
   addEventListener('scroll', queue, {passive:true});
   addEventListener('resize', () => { measure(); queue(); }, {passive:true});
   if ('ResizeObserver' in window) new window.ResizeObserver(() => { measure(); queue(); }).observe(trail);

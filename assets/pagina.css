@@ -1,5 +1,15 @@
 /* As imagens com versões WebP ficam dentro de <picture>; a caixa do <picture> não entra no layout. */
 picture{display:contents}
+
+/* Pausa fora da tela também para as animações em ::before e ::after
+   (o seletor * do design system não alcança pseudo-elementos). */
+.section.is-offscreen::before,.section.is-offscreen::after,.section.is-offscreen *::before,.section.is-offscreen *::after,.wire.is-offscreen *::before,.wire.is-offscreen *::after{animation-play-state:paused!important}
+
+/* .pulse: o anel que crescia animando box-shadow agora é um pseudo-elemento que muda
+   só transform e opacity, com o mesmo tamanho e a mesma transparência. */
+.pulse{position:relative;box-shadow:none;animation:none}
+.pulse::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:radial-gradient(circle closest-side,transparent 33.4%,rgba(var(--green-rgb),.08) 34%);transform:scale(.667);animation:pulso-anel 3s ease-in-out infinite;pointer-events:none}
+@keyframes pulso-anel{0%,100%{transform:scale(.667);opacity:1}50%{transform:scale(1);opacity:.31}}
 /* Caveat, do Google Fonts, servida localmente; licença em fonts/OFL-caveat.txt. */
 @font-face{font-family:Caveat;font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/caveat-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:Caveat;font-style:normal;font-weight:400 700;font-display:swap;src:url("fonts/caveat-latin.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
