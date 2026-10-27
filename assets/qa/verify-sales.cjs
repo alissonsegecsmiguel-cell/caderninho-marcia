@@ -159,7 +159,7 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
   assert.equal($('#inicio-titulo').childNodes[0].textContent,'Caderninho');
   assert.ok($('#inicio-titulo > br'));
   assert.equal($('#inicio-titulo .lettering-transparent').textContent,'na mão!');
-  assert.equal($('#inicio .lead').textContent,'Para anotar cada palavra nova, praticar a escrita e revisar o seu português. Com a arte das aulas, espiral e 100 folhas.');
+  assert.equal($('#inicio .lead').textContent,'Para anotar, praticar e revisar sempre que precisar. Caderno com 100 folhas.');
   assert.equal($('#inicio a[data-compra]').textContent,'Quero o meu caderninho');
   assert.equal($('.hero-purchase-note').textContent,'Envio para o Brasil e para o exterior');
   assert.equal($('#inicio [data-preco]'),null);
