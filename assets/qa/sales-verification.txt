@@ -1,4 +1,4 @@
-PASS All six sections are complete, remain in order and have valid headings
+PASS All eight sections are complete, remain in order and have valid headings
 PASS Product showcase keeps the requested copy, purchase configuration and five real annotated pages
 PASS Carousel arrows and keyboard update one accessible slide, wrap around and announce position
 PASS Horizontal drag advances pages; vertical scroll, cancellation and small drags do not
@@ -10,9 +10,9 @@ PASS Shared CSS, JS, fonts and image paths resolve from the root
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
 PASS Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
-PASS All seven purchase buttons use the configured cart URL in the same tab and allow navigation
+PASS All ten purchase buttons use the configured cart URL in the same tab and allow navigation
 PASS Configured URL and changed price apply to every purchase button, including an extra button, in the same tab
-PASS One shared 3D template mounts in hero, details and closing with the real cover and inner page
+PASS One shared 3D template mounts in hero, phrase, details, offer and closing with the real cover and inner page
 PASS Hero loop stays independent while details waits for interaction without timers
 PASS Loop pauses outside the hero and in hidden tabs without resetting; an initially hidden tab starts paused
 PASS Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent
@@ -24,7 +24,7 @@ PASS Hover, focus and keyboard navigate details; coarse touch does not activate 
 PASS Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed
 PASS Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus
 PASS Editable contact supports WhatsApp and mailto in both locations, blocks placeholder and unsafe URLs, and stays separate from price/checkout
-PASS Closing reuses the catalogue composition, requested copy, green background, heart and a closed shared notebook
+PASS Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it
 PASS Footer keeps the catalogue brand, production credit, external Instagram, return-to-top control and tricolor
 PASS Mobile bar appears only after passing the hero, hides at and after closing, and follows reverse scrolling
 PASS Mobile bar handles restored scrolling, desktop resizing, reduced motion and a no-observer scroll fallback

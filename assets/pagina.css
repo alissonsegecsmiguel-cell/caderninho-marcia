@@ -666,7 +666,7 @@ html.js .oferta .oferta-card .oferta-lista>li{transition-delay:calc(1000ms + var
    sem JS ou com movimento reduzido, a linha já vem cheia e todos os passos aparecem. */
 .passos .handwritten{position:static;inset:auto;transform:none}
 .passos-trilha{position:relative;margin-top:16px}
-.passos-linha{position:absolute;left:50%;top:28px;bottom:28px;width:2px;margin-left:-1px;background:repeating-linear-gradient(180deg,rgba(var(--gold-rgb),.55) 0 7px,transparent 7px 14px)}
+.passos-linha{position:absolute;left:50%;top:28px;bottom:28px;width:2px;margin-left:-1px;background:repeating-linear-gradient(180deg,rgba(var(--green-rgb),.38) 0 7px,transparent 7px 14px)}
 .passos-linha-cheia{position:absolute;inset:0;background:var(--primary);transform:scaleY(var(--passos-progresso,1));transform-origin:50% 0}
 .passos-lapis{position:absolute;z-index:3;left:0;top:0;width:46px;max-width:none;height:auto;transform:translate(-5px,calc(var(--lapis-y,0px) - 100%));pointer-events:none}
 .passos-lapis{animation:lapis-desenha 1.6s ease-in-out infinite alternate;transform-origin:0 100%}
@@ -674,11 +674,12 @@ html:not(.js) .passos-lapis,.passos.is-calmo .passos-lapis{display:none}
 .passos-lista{list-style:none;margin:0;padding:0;display:grid;gap:72px}
 .passo{display:grid;grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr);grid-template-areas:"texto numero imagem";align-items:start;column-gap:28px}
 .passo:nth-child(even){grid-template-areas:"imagem numero texto"}
-.passo-numero{grid-area:numero;position:relative;justify-self:center;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:2px dashed rgba(var(--gold-rgb),.7);background:var(--secondary)}
+.passo-numero{grid-area:numero;position:relative;justify-self:center;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:2px dashed var(--accent-hover);background:var(--paper)}
 .passo-numero::before,.passo-numero::after{content:"";position:absolute;inset:-2px;border-radius:50%;pointer-events:none}
 .passo-numero::before{background:var(--primary);transform:scale(0);transition:transform var(--gesture) var(--ease)}
 .passo-numero::after{border:2px solid var(--accent);opacity:0}
-.passo-numero>.handwritten{position:relative;z-index:1;font-size:34px;line-height:1;color:var(--accent)}
+.passo-numero>.handwritten{position:relative;z-index:1;font-size:34px;line-height:1;color:var(--primary-hover);transition:color var(--gesture) var(--ease)}
+.passo.is-aceso .passo-numero>.handwritten,html:not(.js) .passo-numero>.handwritten{color:var(--paper)}
 .passo.is-aceso .passo-numero::before,html:not(.js) .passo-numero::before{transform:scale(1)}
 .passo.is-aceso .passo-numero::after{animation:passo-pulso 900ms var(--ease) both}
 .passo-texto{grid-area:texto;padding-top:6px}
@@ -686,8 +687,8 @@ html:not(.js) .passos-lapis,.passos.is-calmo .passos-lapis{display:none}
 .passo-texto h3{font:600 22px/1.3 var(--sans);letter-spacing:-.02em;color:var(--text)}
 .passo-texto p{margin-top:10px;font-size:13px;line-height:1.8;color:var(--text-soft)}
 .passo-imagem{grid-area:imagem;position:relative;transition:scale var(--gesture) var(--ease)}
-.passo-imagem::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:14px;box-shadow:0 34px 60px -24px rgba(0,0,0,.6);opacity:0;transition:opacity var(--gesture) var(--ease);pointer-events:none}
-.passo-tela{display:block;width:100%;padding:0;border:1px solid rgba(251,246,234,.22);border-radius:14px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow);cursor:zoom-in;font:inherit;color:inherit;text-align:left}
+.passo-imagem::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:14px;box-shadow:0 34px 60px -26px rgba(var(--navy-rgb),.34);opacity:0;transition:opacity var(--gesture) var(--ease);pointer-events:none}
+.passo-tela{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow);cursor:zoom-in;font:inherit;color:inherit;text-align:left}
 .passo-tela:focus-visible{outline-offset:5px}
 .tela-barra{display:flex;gap:6px;align-items:center;height:24px;padding:0 12px;background:#eef1ec;border-bottom:1px solid var(--line-soft)}
 .tela-barra>i{width:8px;height:8px;border-radius:50%;background:var(--primary)}
@@ -698,7 +699,7 @@ html:not(.js) .passos-lapis,.passos.is-calmo .passos-lapis{display:none}
   .passo-imagem:hover{scale:1.035}
   .passo-imagem:hover::before{opacity:1}
 }
-.passo-pagamento{position:relative;display:grid;justify-items:center;gap:6px;padding:30px 24px 26px;border-radius:14px;background:var(--paper);color:var(--ink);box-shadow:var(--shadow)}
+.passo-pagamento{position:relative;display:grid;justify-items:center;gap:6px;padding:30px 24px 26px;border-radius:14px;border:1px solid var(--line-soft);background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
 .pagamento-cartao{width:58px;height:58px;fill:none;stroke:var(--secondary);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .pagamento-check{position:absolute;top:18px;left:calc(50% + 14px);width:54px;height:54px;fill:none;stroke:var(--primary);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
 .pagamento-check path{stroke-dasharray:1;stroke-dashoffset:0}
@@ -710,7 +711,7 @@ html.js .passo:not(.is-aceso) .pagamento-check path{stroke-dashoffset:1}
 html.js .passo .pagamento-check path{transition:stroke-dashoffset 700ms var(--ease) 500ms}
 
 /* Bilhete colado, com o selo no canto. */
-.passos-bilhete{position:relative;max-width:540px;margin:72px auto 0;padding:28px 32px 26px;border-radius:6px;background:var(--paper);color:var(--ink);rotate:-1.5deg;box-shadow:0 20px 44px -22px rgba(0,0,0,.55)}
+.passos-bilhete{position:relative;max-width:540px;margin:72px auto 0;padding:28px 32px 26px;border-radius:6px;background:#fffdf7;color:var(--ink);rotate:-1.5deg;box-shadow:0 22px 46px -26px rgba(var(--navy-rgb),.34),0 2px 6px -3px rgba(var(--navy-rgb),.12)}
 html.js .passos-bilhete[data-reveal]{transform:translateY(22px) rotate(-7deg)}
 html.js .passos-bilhete[data-revealed=true]{transform:none}
 .passos-bilhete-selo{position:absolute;right:-30px;top:-34px;width:96px;height:auto;rotate:12deg}

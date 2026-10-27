@@ -28,7 +28,7 @@ function load({link, contact, price, reduced=false, precise=false, extraButton=f
   const mobileMedia={matches:mobile,listeners:[],addEventListener(type,listener) { if(type==='change')this.listeners.push(listener); }};
   const matchMedia=q=>q.includes('pointer:fine')?{matches:precise}:q.replace(/\s/g,'').includes('max-width:720px')?mobileMedia:media;
   window.matchMedia=matchMedia;
-  const timers=new Map();let now=0,nextTimer=0;
+  const timers=new Map();let now=0,nextTimer=0,frameClock=0;
   const advance=ms=>{const end=now+ms;for(let steps=0;steps<1000;steps++){
     const next=[...timers.entries()].filter(([,timer])=>timer.time<=end).sort((a,b)=>a[1].time-b[1].time)[0];
     if(!next)break;timers.delete(next[0]);now=next[1].time;next[1].callback();
@@ -38,7 +38,8 @@ function load({link, contact, price, reduced=false, precise=false, extraButton=f
     requestAnimationFrame:cb=>cb(),addEventListener:window.addEventListener.bind(window),
     innerWidth:390,innerHeight:844,scrollY:0,
     setTimeout:(callback,delay=0)=>{const id=++nextTimer;timers.set(id,{callback,time:now+delay});return id;},
-    clearTimeout:id=>timers.delete(id),console});
+    // requestAnimationFrame roda na hora; cada leitura de performance.now avança um quadro (16 ms).
+    clearTimeout:id=>timers.delete(id),performance:{now:()=>(frameClock+=16)},console});
   vm.runInContext(runtime,context,{filename:'design_system.js'});
   if(extraButton)document.querySelector('footer').insertAdjacentHTML('beforeend','<a data-compra><span data-preco></span></a>');
   let config=[...document.querySelectorAll('script:not([src])')][0].textContent;
@@ -49,11 +50,17 @@ function load({link, contact, price, reduced=false, precise=false, extraButton=f
   vm.runInContext(notebookRuntime,context,{filename:'pagina.js'});
   return {document,window,observers,media,mobileMedia,layout,advance,timers};
 }
-const page=load();
+function mountBooks(loaded){
+  const pending=loaded.document.getElementById('caderno-detalhes');
+  const nearby=loaded.observers.find(item=>item.targets.includes(pending));
+  if(nearby)nearby.cb(nearby.targets.filter(el=>el.hasAttribute('data-caderno')).map(target=>({target,isIntersecting:true})));
+  return loaded;
+}
+const page=mountBooks(load());
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('All six sections are complete, remain in order and have valid headings',()=>{
+check('All eight sections are complete, remain in order and have valid headings',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
@@ -62,7 +69,15 @@ check('All six sections are complete, remain in order and have valid headings',(
     assert.ok(section.querySelectorAll('[data-reveal]').length>0);
   });
   assert.equal($$('h1').length,1);
-  assert.equal(page.document.title,'Caderninho na Mão! · Profa. Marcia Macedo');
+  assert.equal(page.document.title,'Caderninho na Mão! | Profa. Marcia Macedo');
+  assert.deepEqual($$('main .sec-rule > span:first-child').map(el=>el.textContent),['02 / A FRASE','03 / O CADERNO POR DENTRO','04 / DETALHES','06 / COMO COMPRAR','07 / PERGUNTAS']);
+  assert.equal($('#oferta .oferta-pilula').textContent,'05 / A OFERTA');
+  for(const property of ['og:title','og:description','og:image','og:url','og:image:alt'])assert.ok($(`meta[property="${property}"]`)?.getAttribute('content'),property);
+  assert.equal($('meta[property="og:image"]').getAttribute('content'),'https://caderninho-marcia.vercel.app/assets/images/og-image.jpg');
+  assert.equal($('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
+  assert.equal($('link[rel="canonical"]').getAttribute('href'),'https://caderninho-marcia.vercel.app/');
+  assert.ok($('meta[name="description"]').getAttribute('content').includes('Envio para o Brasil e para o exterior.'));
+  assert.ok(fs.existsSync(path.join(project,'404.html')));
 });
 check('Product showcase keeps the requested copy, purchase configuration and five real annotated pages',()=>{
   assert.ok($('#para-que.section.ds-group.section-cream'));
@@ -125,21 +140,31 @@ check('Decorative parallax stays bounded, hides missing images and resets with r
 check('A-frase reuses the green identity layout, exact copy, watercolor details and full cover',()=>{
   assert.ok($('#a-frase.section.ds-group.section-dark.section-forest'));
   assert.deepEqual($$('#a-frase .sec-rule span').map(el=>el.textContent),['02 / A FRASE','DE ONDE VEM O NOME']);
-  assert.equal($('#a-frase h2').textContent,'Uma frase que virou caderno.');
+  const visibleText=el=>[...el.childNodes].map(node=>node.nodeType===3?node.textContent:node.getAttribute?.('aria-hidden')==='true'?'':visibleText(node)).join('');
+  assert.equal(visibleText($('#a-frase h2')),'Uma frase que virou caderno.');
   assert.equal($('#a-frase h2 .lettering-transparent').textContent,'frase');
   assert.equal($('#a-frase h2 em').textContent,'caderno.');
   assert.equal($('#a-frase .section-heading > p').textContent,'Em toda aula, a Profa. Marcia repete: "caderninho na mão!". É escrevendo que a palavra nova fica com você. Agora, o caderninho das aulas existe de verdade.');
   assert.equal($('#a-frase .identity-grid').children.length,3);
   assert.equal($('#a-frase .identity-manifesto .label').textContent,'UMA PALAVRA DA PROFESSORA');
-  assert.equal($('#a-frase .identity-manifesto p').innerHTML,'Quem anota, lembra.<br>Quem lembra, usa.<br><em>E quem usa, aprende de verdade.</em>');
+  assert.deepEqual($$('#a-frase .identity-manifesto .frase-linha').map(el=>el.textContent),['Quem anota, lembra.','Quem lembra, usa.','E quem usa, aprende de verdade.']);
+  assert.ok($('#a-frase .frase-destaque .frase-traco path'));
   assert.equal($('#a-frase .manifesto-foot span').textContent,'Profa. Marcia Macedo');
   assert.equal($('#a-frase .manifesto-foot use').getAttribute('href'),'#i-book');
-  assert.equal($('#a-frase .flag-art.ds-window[data-reveal="scale"] img').getAttribute('src'),'assets/images/brasil-aquarela.png');
-  assert.equal($('#a-frase .coord').textContent,'RIO DE JANEIRO · 22°57′ S 43°09′ W');
-  assert.equal($('#a-frase .window-caption').textContent,'A FRASE DE TODA AULA.');
+  assert.equal($('#a-frase img[src*="brasil-aquarela"]'),null);
+  assert.deepEqual($$('#a-frase [data-postal] img').map(img=>img.getAttribute('src')),['assets/images/postal-salvador.jpg','assets/images/postal-amazonia.jpg','assets/images/postal-iguacu.jpg']);
+  assert.deepEqual($$('#a-frase [data-postal] .coord').map(el=>el.textContent),['SALVADOR · 12°58′ S 38°30′ W','AMAZÔNIA · 3°07′ S 60°01′ W','FOZ DO IGUAÇU · 25°41′ S 54°26′ W']);
+  for(const card of $$('#a-frase [data-postal]')){
+    assert.equal(card.tagName,'BUTTON');assert.ok(card.getAttribute('aria-label'));
+    assert.equal(card.querySelector('.window-caption').textContent,'A FRASE DE TODA AULA.');
+    const img=card.querySelector('img');assert.ok(img.getAttribute('alt'));assert.equal(img.getAttribute('loading'),'lazy');
+  }
+  assert.deepEqual($$('#a-frase [data-postal]').map(card=>card.dataset.slot),['0','1','2']);
+  $$('#a-frase [data-postal]')[2].click();
+  assert.deepEqual($$('#a-frase [data-postal]').map(card=>card.dataset.slot),['1','2','0']);
   const ring=$('#a-frase .postmark textPath').getAttribute('href').slice(1);
   assert.ok(page.document.getElementById(ring));
-  assert.equal($('#a-frase .notebook[data-reveal] img').getAttribute('src'),'assets/images/capa.jpg');
+  assert.ok($('#a-frase .frase-book.caderno-3d[data-caderno][data-caderno-closed][data-caderno-hover]'));
   assert.deepEqual($$('#a-frase .principles > div').map(el=>el.textContent),[
     '01.Nasceu na sala de aula: a frase que a professora repete em toda aula.',
     '02.Feito para os alunos: com a arte e a identidade das aulas.',
@@ -167,10 +192,11 @@ check('Hero retains catalogue composition with Rio behind the notebook, decorati
     for(const className of original.classList)assert.ok(actual.classList.contains(className),selector+' '+className);
   }
   assert.equal($('#inicio .hero-art .ds-window'),null);
-  const landscape=$('#inicio > .hero-backdrop > img.hero-landscape');
+  const landscape=$('#inicio > .hero-backdrop img.hero-landscape');
   assert.equal(landscape.getAttribute('src'),'assets/images/brasil-aquarela.png');
   assert.equal(landscape.getAttribute('fetchpriority'),'high');
-  assert.ok($('#inicio > .hero-backdrop > .hero-landscape-vivid'));
+  assert.ok($('#inicio > .hero-backdrop .hero-landscape-vivid'));
+  assert.ok(landscape.closest('picture').querySelector('source[type="image/webp"]').getAttribute('srcset').includes('brasil-aquarela-640.webp'));
   assert.ok($('#inicio .hero-art > .caderno-3d[data-caderno]'));
   assert.ok($('#inicio > .hero-art'));
   assert.equal($$('#inicio .hero-copy .hero-flag[aria-hidden="true"] .flag-wash').length,2);
@@ -194,15 +220,20 @@ check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
   assert.ok($('script[src="assets/pagina.js"]'));
   for(const el of $$('link[href],img[src],script[src]')){
     const ref=el.getAttribute('href')||el.getAttribute('src');
+    if(/^https?:/.test(ref))continue;
     assert.ok(fs.existsSync(path.join(project,decodeURIComponent(ref))),ref);
+  }
+  for(const el of $$('source[srcset],link[imagesrcset]'))for(const candidate of (el.getAttribute('srcset')||el.getAttribute('imagesrcset')).split(',')){
+    const ref=candidate.trim().split(/\s+/)[0];assert.ok(fs.existsSync(path.join(project,ref)),ref);
   }
   for(const stylesheet of $$('link[rel="stylesheet"]')){
     const file=path.join(project,stylesheet.getAttribute('href'));
-    for(const [,ref] of fs.readFileSync(file,'utf8').matchAll(/url\("([^"\n]+)"\)/g)){
+    // Comentários ficam de fora: o CSS guarda, comentado, o fundo futuro da oferta.
+    for(const [,ref] of fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/url\("([^"\n]+)"\)/g)){
       if(!ref.startsWith('data:'))assert.ok(fs.existsSync(path.resolve(path.dirname(file),ref)),ref);
     }
   }
-  assert.equal($$('video, source').length,0);
+  assert.equal($$('video').length,0);assert.equal($$('source:not([type="image/webp"])').length,0);
   assert.equal(source.includes('caderno-abrindo.mp4'),false);
 });
 check('Only brand and purchase action in the header; requested footer and shared tricolor',()=>{
@@ -240,17 +271,17 @@ check('Shared glow and magnetic handlers work without catalogue elements, honor 
   assert.ok(!button.style.transform);
 });
 check('Shared runtime boots without catalogue elements and adds every background/reveal',()=>{
-  assert.equal($$('.section-ribbon').length,6);
-  assert.equal($$('.section-leaf').length,5);
+  assert.equal($$('.section-ribbon').length,8);
+  assert.equal($$('.section-leaf').length,7);
   assert.equal($$('.svg-sprite').length,1);
   for(const el of $$('use[href^="#"]'))assert.ok(page.document.getElementById(el.getAttribute('href').slice(1)));
   const observer=page.observers[0];observer.cb(observer.targets.map(target=>({target,isIntersecting:true})));
   assert.equal($$('[data-reveal]:not([data-revealed])').length,0);
   page.document.dispatchEvent(Object.assign(new page.window.Event('keydown'),{key:'Escape'}));
 });
-check('All seven purchase buttons use the configured cart URL in the same tab and allow navigation',()=>{
+check('All ten purchase buttons use the configured cart URL in the same tab and allow navigation',()=>{
   assert.equal($('[data-preco]').textContent,'R$ 65,44');
-  assert.deepEqual($$('[data-compra]').map(button=>button.closest('section')?.id||(button.closest('header')?'cabecalho':'barra-mobile')),['cabecalho','inicio','para-que','detalhes','como-comprar','chamada-final','barra-mobile']);
+  assert.deepEqual($$('[data-compra]').map(button=>button.closest('section')?.id||(button.closest('header')?'cabecalho':'barra-mobile')),['cabecalho','inicio','para-que','detalhes','oferta','oferta','como-comprar','perguntas','chamada-final','barra-mobile']);
   for(const button of $$('[data-compra]')){
     assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
     assert.equal(new URL(button.getAttribute('href')).searchParams.get('cart'),'true');
@@ -259,9 +290,16 @@ check('All seven purchase buttons use the configured cart URL in the same tab an
     assert.ok(button.rel.includes('noopener')&&button.rel.includes('noreferrer'));
     assert.equal(button.hasAttribute('aria-disabled'),false);
     assert.equal(button.getAttribute('aria-label').includes('R$ 65,44'),!button.closest('header, #inicio'));
+    assert.ok(button.getAttribute('aria-label').startsWith(button.textContent.replace(/\s+/g,' ').trim()));
     const event=new page.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
     assert.equal(event.defaultPrevented,false);
+    page.advance(3100);
   }
+  const guarded=load();const [first,second]=guarded.document.querySelectorAll('[data-compra]');
+  const click=button=>{const event=new guarded.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);return event.defaultPrevented;};
+  assert.equal(click(first),false);assert.equal(click(second),true);assert.ok(first.classList.contains('is-enviando'));
+  guarded.window.dispatchEvent(new guarded.window.Event('pageshow'));assert.equal(first.classList.contains('is-enviando'),false);
+  assert.equal(click(second),false);guarded.advance(3100);assert.equal(click(first),false);
   const unconfigured=load({link:'COLAR_AQUI_O_LINK_DO_CLUBE_DE_AUTORES'});
   const button=unconfigured.document.querySelector('[data-compra]');
   const event=new unconfigured.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
@@ -276,7 +314,9 @@ check('Configured URL and changed price apply to every purchase button, includin
     assert.equal(button.getAttribute('aria-label').includes('R$ 70,00'),!button.closest('header, #inicio'));
     const event=new configured.window.Event('click',{bubbles:true,cancelable:true});button.dispatchEvent(event);
     assert.equal(event.defaultPrevented,false);
+    configured.advance(3100);
   }
+  for(const element of configured.document.querySelectorAll('[data-preco-valor]'))assert.equal(element.textContent,'70,00');
   for(const element of configured.document.querySelectorAll('[data-preco]'))assert.equal(element.textContent,'R$ 70,00');
 });
 function intersectBook(loaded,id){
@@ -284,8 +324,8 @@ function intersectBook(loaded,id){
   const observer=loaded.observers.find(item=>item.targets.includes(element));
   assert.ok(observer);observer.cb([{target:element,isIntersecting:true}]);return element;
 }
-check('One shared 3D template mounts in hero, details and closing with the real cover and inner page',()=>{
-  assert.equal($$('[data-caderno]').length,3);
+check('One shared 3D template mounts in hero, phrase, details, offer and closing with the real cover and inner page',()=>{
+  assert.deepEqual($$('[data-caderno]').map(el=>el.id),['caderno-hero','caderno-frase','caderno-detalhes','caderno-oferta','caderno-final']);
   for(const element of $$('[data-caderno]')){
     assert.equal(element.getAttribute('role'),'img');assert.ok(element.getAttribute('aria-label'));
     assert.equal(element.querySelectorAll('.caderno-model').length,1);
@@ -293,13 +333,15 @@ check('One shared 3D template mounts in hero, details and closing with the real 
     assert.equal(element.querySelector('.caderno-cover-front img').getAttribute('src'),'assets/images/capa.jpg');
     const back=element.querySelector('[data-caderno-back]');
     assert.equal(back.hidden,element.id!=='caderno-detalhes');
-    if(element.id==='caderno-detalhes')assert.equal(back.getAttribute('src'),'assets/images/contra%20capa.png');
+    if(element.id==='caderno-detalhes')assert.equal(back.getAttribute('src'),'assets/images/contra-capa.webp');
     assert.equal(element.querySelector('.caderno-fallback').hidden,true);
   }
 });
 check('Hero loop stays independent while details waits for interaction without timers',()=>{
-  const active=load();const hero=intersectBook(active,'caderno-hero');
+  const active=load();
   const details=active.document.getElementById('caderno-detalhes');
+  assert.equal(details.dataset.cadernoState,undefined);assert.equal(details.querySelector('.caderno-model'),null);
+  mountBooks(active);const hero=intersectBook(active,'caderno-hero');
   assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoState,'interactive');
   assert.equal(active.timers.size,0);assert.equal(hero.hasAttribute('data-caderno-loop'),true);
   assert.equal(details.hasAttribute('data-caderno-loop'),false);
@@ -325,7 +367,7 @@ check('Loop pauses outside the hero and in hidden tabs without resetting; an ini
   const background=load({hidden:true});assert.ok(background.document.documentElement.classList.contains('page-hidden'));
 });
 check('Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent',()=>{
-  const active=load();const hero=intersectBook(active,'caderno-hero');const details=active.document.getElementById('caderno-detalhes');
+  const active=mountBooks(load());const hero=intersectBook(active,'caderno-hero');const details=active.document.getElementById('caderno-detalhes');
   const section=active.document.getElementById('detalhes');
   for(const code of ['05','06','03','03','01']){
     section.querySelector('#detalhe-'+code).click();
@@ -337,14 +379,14 @@ check('Details click selection is exclusive, repeatable and independent from the
   }
   assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(active.timers.size,0);
   active.window.Caderninho3D.init();
-  assert.equal(active.document.querySelectorAll('.caderno-model').length,3);
+  assert.equal(active.document.querySelectorAll('.caderno-model').length,5);
   assert.equal(active.window.Caderninho3D.showFeature(details,'07'),false);
   assert.equal(details.dataset.cadernoFeature,'01');
 });
 check('Reduced motion keeps hero open and details in a static front pose while disclosures remain usable',()=>{
-  const calm=load({reduced:true});
+  const calm=mountBooks(load({reduced:true}));
   for(const element of calm.document.querySelectorAll('[data-caderno]')){
-    assert.equal(element.dataset.cadernoState,element.id==='caderno-hero'?'open':element.id==='caderno-final'?'closed':'interactive');assert.ok(element.classList.contains('is-still'));
+    assert.equal(element.dataset.cadernoState,element.id==='caderno-hero'?'open':element.id==='caderno-detalhes'?'interactive':'closed');assert.ok(element.classList.contains('is-still'));
   }
   assert.equal(calm.timers.size,0);
   calm.document.querySelector('#detalhe-05').click();assert.equal(calm.timers.size,0);
@@ -353,7 +395,7 @@ check('Reduced motion keeps hero open and details in a static front pose while d
   assert.equal(calm.document.querySelector('#inicio .hero-landscape').hidden,false);
 });
 check('Enabling reduced motion stops the hero loop and preserves the selected disclosure in static details',()=>{
-  const active=load();const hero=intersectBook(active,'caderno-hero');active.document.querySelector('#detalhe-06').click();
+  const active=mountBooks(load());const hero=intersectBook(active,'caderno-hero');active.document.querySelector('#detalhe-06').click();
   active.media.matches=true;active.media.listeners.forEach(listener=>listener({matches:true}));
   assert.equal(active.timers.size,0);assert.equal(hero.dataset.cadernoState,'open');
   assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'interactive');
@@ -419,9 +461,10 @@ check('Hover, focus and keyboard navigate details; coarse touch does not activat
   assert.equal(touch.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'02');
 });
 check('Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed',()=>{
-  assert.equal($('#perguntas'),null);assert.equal($('a[href="#perguntas"]'),null);
+  // O antigo FAQ separado foi removido: só existe um grupo de perguntas, dentro de #perguntas.
+  assert.equal($$('[data-faq]').length,1);assert.ok($('#perguntas [data-faq]'));
   assert.ok($('#perguntas.section.ds-group.section-cream'));
-  assert.deepEqual($('#perguntas .sec-rule > span').map(el=>el.textContent),['06 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
+  assert.deepEqual($$('#perguntas .sec-rule > span').map(el=>el.textContent),['07 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
   assert.equal($('#perguntas-titulo').textContent,'Do clique até a sua casa.');
   assert.equal($('#perguntas-titulo .lettering-transparent').textContent,'casa.');
   assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
@@ -494,7 +537,7 @@ check('Editable contact supports WhatsApp and mailto in both locations, blocks p
     }
   }
 });
-check('Closing reuses the catalogue composition, requested copy, green background, heart and a closed shared notebook',()=>{
+check('Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it',()=>{
   assert.ok($('#chamada-final.closing-section.section-dark.section-forest'));
   assert.equal($('#chamada-final .label').textContent,'CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO.');
   assert.equal($('#chamada-final-titulo').textContent,'Tem uma palavra nova esperando por você.');
@@ -503,13 +546,15 @@ check('Closing reuses the catalogue composition, requested copy, green backgroun
   assert.equal($('#chamada-final .lead').textContent,'Leve as aulas da Profa. Marcia para cada página do seu caderninho.');
   assert.equal($('#chamada-final .closing-price').textContent,'R$ 65,44 + frete · Envio para o Brasil e para o exterior');
   assert.ok($('#chamada-final [data-compra]').matches('.btn.btn-gold.magnetic'));
-  assert.equal($('#chamada-final .closing-heart').textContent,'♡');
+  assert.equal($('#chamada-final .closing-heart'),null);
+  assert.equal($$('#chamada-final .closing-stage .closing-objeto img').length,3);
+  assert.ok($('#chamada-final .closing-grid > .closing-copy h2'));assert.ok($('#chamada-final .closing-stage > #caderno-final[data-caderno-hover]'));
   assert.equal($$('#chamada-final .hero-tropical').length,2);
   assert.ok($('#chamada-final .bloom[data-ds-bloom]'));assert.ok($('#chamada-final .section-ribbon'));
   const closed=$('#caderno-final');assert.equal(closed.hasAttribute('data-caderno-closed'),true);
   assert.equal(closed.dataset.cadernoState,'closed');assert.equal(page.timers.size,0);
   page.window.Caderninho3D.replay('caderno-final');assert.equal(closed.dataset.cadernoState,'closed');
-  const calm=load({reduced:true});assert.equal(calm.document.querySelector('#caderno-final').dataset.cadernoState,'closed');
+  const calm=mountBooks(load({reduced:true}));assert.equal(calm.document.querySelector('#caderno-final').dataset.cadernoState,'closed');
   assert.ok(calm.document.querySelector('#caderno-final').classList.contains('is-still'));
 });
 check('Footer keeps the catalogue brand, production credit, external Instagram, return-to-top control and tricolor',()=>{
@@ -527,7 +572,8 @@ check('Footer keeps the catalogue brand, production credit, external Instagram, 
 });
 function mobileBarObserver(active){
   const hero=active.document.getElementById('inicio'),closing=active.document.getElementById('chamada-final');
-  return active.observers.find(observer=>observer.targets.length===2&&observer.targets.includes(hero)&&observer.targets.includes(closing));
+  const offer=active.document.getElementById('oferta');
+  return active.observers.find(observer=>observer.targets.length===3&&[hero,closing,offer].every(el=>observer.targets.includes(el)));
 }
 function moveBarBoundary(active,key,rect,isIntersecting){
   active.layout[key]=rect;
@@ -548,6 +594,11 @@ check('Mobile bar appears only after passing the hero, hides at and after closin
   moveBarBoundary(active,'closing',{top:2000,bottom:3000},false);assert.equal(bar.hidden,false);
   moveBarBoundary(active,'hero',{top:-100,bottom:860},true);assert.equal(bar.hidden,true);
   moveBarBoundary(active,'hero',{top:1000,bottom:1960},false);assert.equal(bar.hidden,true);
+  // A oferta tem os próprios botões: a barra some enquanto ela está na tela.
+  moveBarBoundary(active,'hero',{top:-961,bottom:-1},false);assert.equal(bar.hidden,false);
+  const offer=active.document.getElementById('oferta');
+  mobileBarObserver(active).cb([{target:offer,isIntersecting:true}]);assert.equal(bar.hidden,true);
+  mobileBarObserver(active).cb([{target:offer,isIntersecting:false}]);assert.equal(bar.hidden,false);
 });
 check('Mobile bar handles restored scrolling, desktop resizing, reduced motion and a no-observer scroll fallback',()=>{
   const middle=()=>({hero:{top:-1200,bottom:-240},closing:{top:2500,bottom:3500}});
