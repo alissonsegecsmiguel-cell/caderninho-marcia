@@ -301,12 +301,28 @@ html.motion-paused .purchase-postcard{rotate:0deg;transform:none;transition:none
 .closing-section>.section-ribbon{height:110px;z-index:0}
 .closing-section .hero-glow{top:18%;left:50%;right:auto;transform:translateX(-50%);width:min(700px,100%);height:600px;background:radial-gradient(circle,rgba(var(--gold-rgb),.2),transparent 70%)}
 .closing-section .label{display:block}
-.closing-section h2{max-width:1100px;margin-inline:auto}
-.closing-section .lead{max-width:480px;margin:0 auto 28px;color:var(--text-soft)}
-.closing-book{width:clamp(150px,15vw,210px);aspect-ratio:.92;margin:24px auto 8px}
-.closing-book .caderno-model{left:50%;width:70%;transform-origin:50% 50%;transform:translateX(-50%) rotateX(10deg) rotateY(-9deg) rotateZ(-7deg)}
-.closing-book>.caderno-fallback{width:70%;right:15%}
-.closing-book .caderno-shadow{left:16%;width:72%;mix-blend-mode:multiply}
+.closing-section .lead{max-width:480px;margin:0 0 28px;color:var(--text-soft)}
+/* Chamada final em duas colunas: texto e compra à esquerda, caderno à direita. */
+.closing-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:center;gap:48px;text-align:left}
+.closing-section .closing-grid h2{font-size:clamp(44px,5.4vw,80px);margin:24px 0 28px}
+.closing-section .hero-glow{top:50%;left:auto;right:4%;transform:translateY(-50%);width:min(620px,60vw);height:620px;background:radial-gradient(circle,rgba(var(--gold-rgb),.24),transparent 68%)}
+.closing-stage{position:relative;display:grid;place-items:center;min-height:440px}
+.closing-book{width:auto;height:clamp(320px,30vw,380px);aspect-ratio:.86;perspective:1300px}
+.closing-book .caderno-model{left:50%;top:4%;width:76%;transform-origin:50% 50%;transform:translateX(-50%) rotateX(5deg) rotateY(-20deg)}
+.closing-book>.caderno-fallback{width:76%;right:12%;top:4%}
+.closing-book .caderno-bindings{top:3.5%;bottom:3.5%;transform:translateZ(4px)}
+.closing-book .caderno-shadow{left:14%;width:72%;bottom:0;height:9%;transform:none;filter:blur(8px);background:radial-gradient(ellipse,rgba(0,0,0,.6),rgba(0,0,0,.22) 50%,transparent 72%)}
+.closing-book[data-caderno-closed] .caderno-float{animation:caderno-float calc(var(--entrance) * 10) ease-in-out infinite}
+.closing-book .caderno-shadow{animation:caderno-sombra calc(var(--entrance) * 10) ease-in-out infinite}
+.closing-objeto{position:absolute;pointer-events:none}
+.closing-objeto>img{display:block;width:100%;height:auto;animation:leaf-sway 14s ease-in-out infinite alternate}
+.closing-folha{width:150px;left:-2%;top:6%;rotate:-28deg;opacity:.55}
+.closing-folha>img{animation-delay:-5s}
+.closing-selo{width:118px;right:-2%;top:10%;rotate:12deg}
+.closing-selo>img{animation-delay:-9s}
+.closing-lapis{width:150px;right:2%;bottom:6%;rotate:-14deg}
+.closing-lapis>img{animation-delay:-2s}
+@keyframes caderno-sombra{0%,100%{scale:1;opacity:1}50%{scale:.86;opacity:.7}}
 .closing-price{margin-top:20px;color:var(--text-soft)}
 .closing-price strong{font-weight:600}
 .sales-footer.footer-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"brand credit links";gap:28px}
@@ -326,6 +342,15 @@ html.motion-paused .purchase-postcard{rotate:0deg;transform:none;transition:none
 .mobile-purchase .btn{width:100%;min-height:48px;padding-inline:14px;font-size:11px;white-space:normal}
 @media(max-width:720px){
   .closing-section{padding-bottom:120px}
+  .closing-grid{grid-template-columns:minmax(0,1fr);gap:8px;text-align:center}
+  .closing-stage{order:-1;min-height:300px}
+  .closing-book{height:260px}
+  .closing-section .closing-grid h2{font-size:clamp(39px,10vw,54px)}
+  .closing-section .lead{margin-inline:auto}
+  .closing-section .hero-glow{right:50%;top:22%;transform:translate(50%,-50%);width:420px;height:420px}
+  .closing-folha{width:100px;left:6%}
+  .closing-selo{width:80px;right:6%;top:4%}
+  .closing-lapis{width:100px;right:8%;bottom:2%}
   .closing-section>.section-ribbon{height:90px}
   .sales-footer.footer-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"brand links" "credit credit";gap:20px;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
   .sales-footer>.footer-credit{order:0;text-align:center}
@@ -396,17 +421,21 @@ html.js #a-frase .identity-manifesto[data-revealed=true] .manifesto-foot>.icon{a
 .postais .postal:focus-visible{z-index:4;--sobe:-4%;--zoom:1.04}
 .postais .postal:focus-visible::after{opacity:1}
 
-/* Caderno da frase: o componente 3D fechado, com inclinação e capa entreaberta. */
-.frase-book{--inclina-x:0deg;--inclina-y:0deg;width:auto;height:330px;aspect-ratio:.82;justify-self:center}
+/* Cadernos com hover: inclinam seguindo o mouse, a capa entreabre e um brilho acompanha.
+   No toque, a capa entreabre uma vez quando o caderno entra na tela. */
+.caderno-3d[data-caderno-hover]{--inclina-x:0deg;--inclina-y:0deg}
+.caderno-3d[data-caderno-hover] .caderno-lift{transform:rotateX(var(--inclina-x)) rotateY(var(--inclina-y));transition:transform var(--gesture) var(--ease)}
+.caderno-3d[data-caderno-hover][data-caderno-closed] .caderno-cover{transition:transform calc(var(--entrance) * 1.2) var(--ease)}
+.caderno-3d[data-caderno-hover].is-entreaberto[data-caderno-closed] .caderno-cover{transform:translateZ(3px) rotateY(-28deg)}
+.caderno-3d[data-caderno-hover] .caderno-cover-front{overflow:hidden}
+.caderno-3d[data-caderno-hover] .caderno-cover-front::after{content:"";position:absolute;left:-50%;top:-50%;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.42),rgba(255,255,255,.12) 38%,transparent 65%);opacity:0;transform:translate(var(--brilho-x,50%),var(--brilho-y,50%));transition:opacity var(--gesture) var(--ease);pointer-events:none}
+.caderno-3d[data-caderno-hover].is-hover .caderno-cover-front::after{opacity:1}
+
+/* Caderno da frase: mesma posição e tamanho da antiga capa estática. */
+.frase-book{width:auto;height:330px;aspect-ratio:.82;justify-self:center}
 .frase-book>.caderno-fallback{right:9%;top:2%;width:82%}
 .frase-book .caderno-model{left:50%;top:2%;width:82%;transform-origin:50% 50%;transform:translateX(-50%) rotateX(8deg) rotateY(-10deg) rotateZ(5deg)}
-.frase-book .caderno-lift{transform:rotateX(var(--inclina-x)) rotateY(var(--inclina-y));transition:transform var(--gesture) var(--ease)}
 .frase-book .caderno-shadow{left:12%;width:76%;mix-blend-mode:multiply}
-.frase-book[data-caderno-closed] .caderno-cover{transition:transform calc(var(--entrance) * 1.2) var(--ease)}
-.frase-book.is-entreaberto[data-caderno-closed] .caderno-cover{transform:translateZ(3px) rotateY(-28deg)}
-.frase-book .caderno-cover-front{overflow:hidden}
-.frase-book .caderno-cover-front::after{content:"";position:absolute;left:-50%;top:-50%;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.42),rgba(255,255,255,.12) 38%,transparent 65%);opacity:0;transform:translate(var(--brilho-x,50%),var(--brilho-y,50%));transition:opacity var(--gesture) var(--ease);pointer-events:none}
-.frase-book.is-hover .caderno-cover-front::after{opacity:1}
 
 /* Itens 01, 02, 03: a linha dourada se desenha e os itens entram em cascata. */
 #a-frase .principles{position:relative;border-top-color:transparent}

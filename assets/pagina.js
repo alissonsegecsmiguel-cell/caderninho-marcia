@@ -475,7 +475,7 @@
   }
 })();
 
-/* A frase: leque de postais, caderno com inclinação e ondas com parallax.
+/* A frase: leque de postais e ondas com parallax.
    O estado final fica visível sem JS e com movimento reduzido. */
 (() => {
   'use strict';
@@ -511,44 +511,6 @@
   });
   stack();
 
-  // Caderno: inclinação e brilho seguem o mouse; no toque, a capa entreabre uma vez.
-  const book = section.querySelector('.frase-book');
-  let pointer = null, frame = 0, peeked = false;
-  function paint() {
-    frame = 0;
-    if (!pointer || !book) return;
-    const rect = book.getBoundingClientRect();
-    const x = Math.min(1, Math.max(0, (pointer.x - rect.left) / rect.width));
-    const y = Math.min(1, Math.max(0, (pointer.y - rect.top) / rect.height));
-    book.style.setProperty('--inclina-y', `${((x - .5) * 18).toFixed(2)}deg`);
-    book.style.setProperty('--inclina-x', `${((.5 - y) * 16).toFixed(2)}deg`);
-    book.style.setProperty('--brilho-x', `${(x * 100).toFixed(1)}%`);
-    book.style.setProperty('--brilho-y', `${(y * 100).toFixed(1)}%`);
-  }
-  function rest() {
-    pointer = null;
-    book.classList.remove('is-hover', 'is-entreaberto');
-    ['--inclina-x', '--inclina-y'].forEach(name => book.style.removeProperty(name));
-  }
-  if (book) {
-    book.addEventListener('pointerenter', event => {
-      if (!precise.matches || event.pointerType === 'touch' || calm()) return;
-      book.classList.add('is-hover', 'is-entreaberto');
-    });
-    book.addEventListener('pointermove', event => {
-      if (!book.classList.contains('is-hover')) return;
-      pointer = {x:event.clientX, y:event.clientY};
-      if (!frame) frame = requestAnimationFrame(paint);
-    }, {passive:true});
-    book.addEventListener('pointerleave', rest);
-  }
-  function peek() {
-    if (peeked || !book || precise.matches || calm()) return;
-    peeked = true;
-    book.classList.add('is-entreaberto');
-    setTimeout(() => book.classList.remove('is-entreaberto'), 1600);
-  }
-
   // Ondas: o padrão anda mais devagar que o conteúdo, só com a dobra na tela.
   const waves = section.querySelector('.frase-ondas');
   let queued = false;
@@ -569,10 +531,7 @@
   addEventListener('scroll', queue, {passive:true});
   addEventListener('resize', queue, {passive:true});
 
-  function open() {
-    fan?.classList.add('is-open');
-    setTimeout(peek, calm() ? 0 : 900);
-  }
+  function open() { fan?.classList.add('is-open'); }
   if (io) {
     new window.IntersectionObserver(entries => {
       visible = entries.some(entry => entry.isIntersecting);
@@ -588,11 +547,66 @@
   if (calm()) fan?.classList.add('is-open');
 
   const syncMotion = () => {
-    if (calm()) { fan?.classList.add('is-open'); if (book) rest(); drift(); }
+    if (calm()) { fan?.classList.add('is-open'); drift(); }
     else queue();
   };
   reduced.addEventListener('change', syncMotion);
   if ('MutationObserver' in window) {
     new window.MutationObserver(syncMotion).observe(root, {attributes:true, attributeFilter:['class']});
   }
+})();
+
+/* Cadernos com [data-caderno-hover]: inclinação e brilho seguem o mouse e a capa
+   entreabre; no toque, a capa entreabre uma vez quando o caderno entra na tela. */
+(() => {
+  'use strict';
+  const books = [...document.querySelectorAll('.caderno-3d[data-caderno-hover]')];
+  if (!books.length) return;
+  const root = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const precise = window.matchMedia('(hover:hover) and (pointer:fine)');
+  const calm = () => reduced.matches || root.classList.contains('motion-paused');
+
+  books.forEach(book => {
+    let pointer = null, frame = 0;
+    function paint() {
+      frame = 0;
+      if (!pointer) return;
+      const rect = book.getBoundingClientRect();
+      const x = Math.min(1, Math.max(0, (pointer.x - rect.left) / rect.width));
+      const y = Math.min(1, Math.max(0, (pointer.y - rect.top) / rect.height));
+      book.style.setProperty('--inclina-y', `${((x - .5) * 18).toFixed(2)}deg`);
+      book.style.setProperty('--inclina-x', `${((.5 - y) * 16).toFixed(2)}deg`);
+      book.style.setProperty('--brilho-x', `${(x * 100).toFixed(1)}%`);
+      book.style.setProperty('--brilho-y', `${(y * 100).toFixed(1)}%`);
+    }
+    function rest() {
+      pointer = null;
+      book.classList.remove('is-hover', 'is-entreaberto');
+      ['--inclina-x', '--inclina-y'].forEach(name => book.style.removeProperty(name));
+    }
+    book.addEventListener('pointerenter', event => {
+      if (!precise.matches || event.pointerType === 'touch' || calm()) return;
+      book.classList.add('is-hover', 'is-entreaberto');
+    });
+    book.addEventListener('pointermove', event => {
+      if (!book.classList.contains('is-hover')) return;
+      pointer = {x:event.clientX, y:event.clientY};
+      if (!frame) frame = requestAnimationFrame(paint);
+    }, {passive:true});
+    book.addEventListener('pointerleave', rest);
+    reduced.addEventListener('change', () => { if (calm()) rest(); });
+
+    if (!('IntersectionObserver' in window)) return;
+    const peek = new window.IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      peek.disconnect();
+      if (precise.matches || calm()) return;
+      setTimeout(() => {
+        book.classList.add('is-entreaberto');
+        setTimeout(() => book.classList.remove('is-entreaberto'), 1600);
+      }, 900);
+    }, {threshold:.5});
+    peek.observe(book);
+  });
 })();
