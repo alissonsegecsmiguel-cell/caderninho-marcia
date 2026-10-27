@@ -620,14 +620,36 @@
   });
 })();
 
-/* Oferta: a sequência da encomenda dispara uma vez, quando a dobra entra na tela.
-   Com movimento reduzido ou sem IntersectionObserver, a dobra já começa entregue. */
+/* Oferta: a entrada dispara uma vez, quando a dobra entra na tela, e o preço em destaque
+   conta de 0,00 até o valor de PRECO. Com movimento reduzido, tudo começa no estado final. */
 (() => {
   'use strict';
   const section = document.querySelector('[data-oferta]');
   if (!section) return;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const deliver = () => section.classList.add('is-entregue');
+  const counter = section.querySelector('[data-conta]');
+  // O valor final vem do texto que o script de PRECO já escreveu; o leitor de tela lê a cópia sr-only.
+  function count() {
+    const final = counter?.textContent.trim();
+    const target = parseFloat((final || '').replace(/\./g, '').replace(',', '.'));
+    if (!counter || !Number.isFinite(target) || reduced.matches || document.documentElement.classList.contains('motion-paused')) return;
+    const format = value => value.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+    counter.textContent = format(0);
+    setTimeout(() => {
+      const start = performance.now();
+      const step = now => {
+        const t = Math.min(1, (now - start) / 800);
+        counter.textContent = t < 1 ? format(target * (1 - Math.pow(1 - t, 3))) : final;
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, 650);
+  }
+  const deliver = () => {
+    if (section.classList.contains('is-entregue')) return;
+    section.classList.add('is-entregue');
+    count();
+  };
   if (reduced.matches || !('IntersectionObserver' in window)) { deliver(); return; }
   const observer = new window.IntersectionObserver(entries => {
     if (!entries.some(entry => entry.isIntersecting)) return;

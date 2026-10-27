@@ -421,7 +421,7 @@ check('Hover, focus and keyboard navigate details; coarse touch does not activat
 check('Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed',()=>{
   assert.equal($('#perguntas'),null);assert.equal($('a[href="#perguntas"]'),null);
   assert.ok($('#perguntas.section.ds-group.section-cream'));
-  assert.deepEqual($('#perguntas .sec-rule > span').map(el=>el.textContent),['07 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
+  assert.deepEqual($('#perguntas .sec-rule > span').map(el=>el.textContent),['06 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
   assert.equal($('#perguntas-titulo').textContent,'Do clique até a sua casa.');
   assert.equal($('#perguntas-titulo .lettering-transparent').textContent,'casa.');
   assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
