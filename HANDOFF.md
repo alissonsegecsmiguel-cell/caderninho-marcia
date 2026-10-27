@@ -3,7 +3,7 @@
 ## Última sessão
 - Ferramenta: Codex
 - Data: 27/10/2026
-- Resumo: removidas da página original as dobras "Uma frase que virou caderno" (#a-frase) e "Comprar é simples. São 5 passos" (#como-comprar). Etiquetas renumeradas, chamada da hero redirecionada para #para-que e reservas dos botões para #oferta. A cópia do portfólio não foi alterada.
+- Resumo: chamada final da página atual com o título "Tem uma página em branco esperando por você." ("branco" em lettering transparente e final em itálico dourado). Removido o texto de apoio "Leve as aulas da Profa. Marcia para cada página do seu caderninho.". Design e componentes mantidos; cópia do portfólio não alterada.
 
 ## Estado atual da página
 Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html. A versão publicada sai de `npm run build` (scripts/build.cjs) em dist/: CSS minificado inline no <head> e JS minificado com hash em assets/min/. O vercel.json manda a Vercel rodar o build e publicar dist/, com cache longo para fontes, JS com hash e imagens. dist/ e node_modules/ ficam fora do git.
@@ -18,7 +18,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Dobra 3 (#detalhes): "Feito com carinho, página por página." Cinco diferenciais em disclosure (Tamanho A5, Capa com a arte das aulas, Espiral transparente, 100 folhas pautadas, Impresso para você); o caderno 3D gira para mostrar cada um. "Impresso para você" mantém data-detail="06" (pose da contracapa), mas aparece como 05; o número grande segue a numeração visível.
 - Dobra 4, oferta (#oferta; a pílula "04 / A OFERTA" faz o papel da etiqueta numerada): fundo verde escuro quase preto com bloom do design system e brilho fraco no canto; varal de bandeirinhas em catenária; título "Seu caderninho, pronto para a próxima aula." Três colunas (até 1180 px): 1) produto, sem card: caderno 3D inteiro com glow, sombra, folha e lápis, lista "O QUE VEM NO CADERNO"; 2) card "Moro no Brasil" (ENVIO NACIONAL, marcador de mapa, frete pelo CEP, entrega pelo correio ou retirada, "Desejo receber pelo correio"); 3) card "Moro fora do Brasil" (ENVIO INTERNACIONAL, globo, frete para o país, número fiscal). Os dois cards são idênticos em estilo e altura: borda com brilho cônico girando (fases diferentes), glow, preço em gradiente creme-ouro que conta de 0,00 até PRECO nos dois juntos, botão .btn-gold com brilho a cada 6 s (defasado). Tablet: produto em cima (caderno e lista lado a lado) e cards lado a lado; celular: caderno, lista, Brasil, exterior. Cabe em 1366 x 768 com os botões visíveis.
 - Dobra 5 (#perguntas): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato.
-- Chamada final (#chamada-final): duas colunas (no celular, caderno em cima). Assinatura "CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO." acima do título "Tem uma palavra nova esperando por você.", botão dourado e preço; à direita, caderno 3D grande (320 a 380 px) com rotação real, sombra no chão que acompanha a flutuação, brilho dourado atrás, folha, selo e lápis flutuando em volta, hover com inclinação e capa entreaberta.
+- Chamada final (#chamada-final): duas colunas (no celular, caderno em cima). Assinatura "CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO." acima do título "Tem uma página em branco esperando por você.", sem parágrafo de apoio, botão dourado e preço; à direita, caderno 3D grande (320 a 380 px) com rotação real, sombra no chão que acompanha a flutuação, brilho dourado atrás, folha, selo e lápis flutuando em volta, hover com inclinação e capa entreaberta.
 - Rodapé: crédito do Clube de Autores, Instagram @portugues_marciamacedo e botão de voltar ao topo.
 - Barra de compra no celular: aparece depois da hero, some enquanto a oferta está na tela e some de vez ao chegar na chamada final.
 - Botões de compra ([data-compra]): depois do primeiro clique, todos ignoram novos cliques por 3 s e ficam com opacidade .7 (classe .is-enviando, aria-busy). O evento pageshow libera os botões ao voltar pelo histórico. O aria-label de cada botão começa pelo texto visível dele (fora do topo, com " por PRECO" no fim).
@@ -26,7 +26,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Ajustes locais da dobra de detalhes no celular j? existiam antes desta tarefa em assets/pagina.css, assets/pagina.js, index.html e assets/qa/verify-sales.cjs. Foram preservados fora do commit desta remo??o; seu fechamento continua em separado.
+- Ajustes locais da dobra de detalhes no celular já existiam antes desta tarefa em assets/pagina.css, assets/pagina.js, index.html e assets/qa/verify-sales.cjs. Foram preservados fora do commit desta remoção; seu fechamento continua em separado.
 
 ## Próximas tarefas (em ordem)
 1. Próxima (commit separado): dobra de detalhes no celular com caderno fixo (sticky) e troca dos itens pelo scroll, indicador de progresso, toque que rola até o item, item 03 "Espiral com capa protegida" com a nova descrição. Pedido completo na conversa do Claude Code. Atenção: a lista agora tem 5 itens, não 6 (o pedido fala em 6 pontinhos).
@@ -43,6 +43,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Conferir o primeiro deploy com o build: a página publicada deve ter o CSS inline (procure por <style> no código-fonte) e os scripts em assets/min/. Se o deploy falhar na Vercel, a versão anterior continua no ar.
 
 ## Concluído
+- 27/10/2026: chamada final atualizada para "Tem uma página em branco esperando por você." e texto de apoio removido, conforme a referência enviada. Mantidos lettering transparente, itálico dourado, caderno 3D, decorações, preço e botão. Build gerado, 31 verificações automáticas aprovadas e chamada final conferida no Chrome em 1440 x 900 e 390 x 844, sem erros nem rolagem horizontal. Mudança restrita ao projeto atual; ajustes pendentes dos detalhes preservados fora deste commit.
 - 27/10/2026: removidas somente da página original as seções #a-frase e #como-comprar, incluindo o modal do tutorial. Mantidas seis seções: #inicio, #para-que, #detalhes, #oferta, #perguntas e #chamada-final. Chamada da hero agora leva a #para-que; reservas dos nove botões de compra apontam para #oferta; etiquetas 02, 03, 04 e 05 sem saltos. Build gerado e 31 verificações automáticas aprovadas. A cópia do portfólio permaneceu intacta.
 - 27/10/2026: design system com identidade brasileira, cores creme e paleta verde, ouro e azul-marinho.
 - 27/10/2026: estrutura da página de vendas, hero com caderno 3D em ciclo e aquarela ampliada; preço removido da primeira dobra.

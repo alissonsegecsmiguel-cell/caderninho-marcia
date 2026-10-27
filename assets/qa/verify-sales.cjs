@@ -522,10 +522,10 @@ check('Editable contact supports WhatsApp and mailto in both locations, blocks p
 check('Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it',()=>{
   assert.ok($('#chamada-final.closing-section.section-dark.section-forest'));
   assert.equal($('#chamada-final .label').textContent,'CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO.');
-  assert.equal($('#chamada-final-titulo').textContent,'Tem uma palavra nova esperando por você.');
-  assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'nova');
+  assert.equal($('#chamada-final-titulo').textContent,'Tem uma página em branco esperando por você.');
+  assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'branco');
   assert.equal($('#chamada-final-titulo em').textContent,'esperando por você.');
-  assert.equal($('#chamada-final .lead').textContent,'Leve as aulas da Profa. Marcia para cada página do seu caderninho.');
+  assert.equal($('#chamada-final .lead'),null);
   assert.equal($('#chamada-final .closing-price').textContent,'R$ 65,44 + frete · Envio para o Brasil e para o exterior');
   assert.ok($('#chamada-final [data-compra]').matches('.btn.btn-gold.magnetic'));
   assert.equal($('#chamada-final .closing-heart'),null);
