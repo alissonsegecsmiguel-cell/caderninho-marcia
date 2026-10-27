@@ -6,11 +6,13 @@ Abra **[design_system.html](design_system.html)** diretamente no navegador. Não
 
 ## Conteúdo
 
-- Hero com lettering transparente, aquarela original e selo animado.
+- Hero em creme de papel `#FBF6EA`, com lettering transparente, aquarela original e selo animado.
 - Menu transparente sobre o fundo da hero, sem faixa superior nem molduras laterais; abertura e transição para a próxima seção com espaçamento compacto.
 - Essência da marca, bandeira abstrata em pinceladas e aplicação ilustrativa em caderno.
 - 16 papéis tipográficos, incluindo lettering transparente, famílias, fallback stacks, pesos, tamanhos, entrelinhas, tracking e transformação.
-- 12 cores, valores HEX/RGB/HSL, variações de opacidade, contraste calculado, uso semântico, gradientes e estados.
+- 14 cores, valores HEX/RGB/HSL, variações de opacidade, contraste calculado, uso semântico, gradientes e estados.
+- Dobras alternadas entre creme, verde-floresta `#005E38` e azul-marinho `#17365B`, costuradas por faixas douradas animadas. Textos e lettering creme nos fundos escuros; branco reservado a cards, caixas e campos.
+- Proporção de referência: 45% creme, 20% branco, 30% verde e azul, 5% ouro. É orientação de composição, não medição da área de pixels da página.
 - Oito famílias de componentes com demonstrações e especificações completas em painéis expansíveis.
 - 12 ícones SVG copiáveis, incluindo estudo e símbolos brasileiros.
 - Laboratório de movimento, receitas, duração/easing, pausa e suporte a movimento reduzido.
@@ -36,7 +38,7 @@ Abra **[design_system.html](design_system.html)** diretamente no navegador. Não
 
 Classes e hooks foram reimplementados com tokens desta marca. Os runtimes completos das referências não foram importados porque controlam catálogos e estruturas independentes. Não há dependência de iframes, Framer, GSAP ou Tailwind para abrir esta página.
 
-O `@design-system.html` mencionado no pedido não estava presente na raiz do projeto. Foram usados os três arquivos disponíveis e o overview aninhado do Open Design, além da direção explícita de base branca e lettering transparente. A página pública [da professora](https://marcia.fluenti.com.br/bf4) foi consultada como contexto de marca. Não foram criadas ofertas, depoimentos ou promessas comerciais. Os cards e formulários são demonstrações.
+O `@design-system.html` mencionado no pedido não estava presente na raiz do projeto. Foram usados os três arquivos disponíveis e o overview aninhado do Open Design, preservando o lettering transparente. A revisão de cores adota o creme da capa do caderno como base. A página pública [da professora](https://marcia.fluenti.com.br/bf4) foi consultada como contexto de marca. Não foram criadas ofertas, depoimentos ou promessas comerciais. Os cards e formulários são demonstrações.
 
 ## Fontes
 
@@ -49,7 +51,7 @@ Todas usam `font-display: swap`. Inter Tight e Manrope recebem preload. Os arqui
 
 ## Verificação
 
-Foram aprovados 14 grupos de verificações de estrutura, arquivos, geração de catálogo e interações em DOM. Contrastes medidos: branco/verde **4,71:1**, azul/branco **12,24:1**, azul/ouro **7,53:1**, borda funcional/branco **3,64:1**. Isso descreve os pares de cores, sem certificar a página inteira quanto a WCAG.
+Foram aprovados 15 grupos de verificações de estrutura, arquivos, geração de catálogo, contraste e interações em DOM. Contrastes dos pares sólidos: azul/creme **11,35:1**, creme/verde-floresta **7,33:1**, ouro/verde-floresta **4,86:1**, ouro/azul **7,53:1**, links verde-escuro/creme **6,15:1** e branco/verde de ação **4,71:1**. O verde de ação original sobre creme tem **4,37:1**, por isso fica restrito a títulos grandes e lettering nesse fundo; textos pequenos usam `#006B3C`. Os valores descrevem os pares, sem certificar a página inteira quanto a WCAG.
 
 Não havia navegador disponibilizado pelo ambiente. Renderização visual, fontes realmente pintadas, layout responsivo, comportamento nativo de validação e contenção de foco do `dialog` precisam de revisão em navegador; os testes em DOM usam adaptadores dessas APIs e não substituem essa revisão.
 

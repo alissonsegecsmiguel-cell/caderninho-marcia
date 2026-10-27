@@ -40,6 +40,32 @@ check('Labels and non-submit demo controls have accessible names', () => {
   for (const image of $$('img')) assert.ok(image.hasAttribute('alt'), image.outerHTML);
 });
 
+check('Cream, forest and navy reading pairs meet AA; colored folds alternate with paper', () => {
+  const css=fs.readFileSync(path.join(base,'design_system.css'),'utf8');
+  const tokens=Object.fromEntries([...css.matchAll(/(--[\w-]+):\s*(#[\da-f]{6})\b/gi)].map(m=>[m[1],m[2]]));
+  const luminance=hex=>hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+  const ratio=(a,b)=>(Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
+  for(const [fg,bg] of [
+    [tokens['--ink'],tokens['--paper']],
+    [tokens['--ink-mute'],tokens['--paper']],
+    [tokens['--primary-hover'],tokens['--paper']],
+    [tokens['--paper'],tokens['--forest']],
+    [tokens['--paper'],tokens['--secondary']],
+    [tokens['--accent'],tokens['--forest']],
+    [tokens['--accent'],tokens['--secondary']],
+    ['#E9E3D5',tokens['--forest']],
+    ['#E9E3D5',tokens['--secondary']],
+    ['#FFFFFF',tokens['--primary']]
+  ]) assert.ok(ratio(fg,bg)>=4.5,`${fg} / ${bg}: ${ratio(fg,bg)}`);
+  assert.ok(ratio(tokens['--line-strong'],tokens['--paper'])>=3);
+  const sections=$$('main > section');
+  assert.equal(sections.filter(el=>el.classList.contains('section-dark')).length,4);
+  sections.forEach((el,i)=>assert.ok(el.classList.contains(i%2?'section-dark':'section-cream')));
+  assert.ok($('.section-forest .lettering-transparent'));
+  assert.ok($('.section-navy .lettering-transparent'));
+  assert.ok(!source.includes('60 / 25 / 10 / 5'));
+});
+
 // A DOM-only harness: native focus, dialog, media queries and input validity
 // are represented by minimal adapters. Browser rendering is not simulated.
 const clipboard = [];
@@ -69,9 +95,9 @@ const script = fs.readFileSync(path.join(base,'design_system.js'),'utf8');
 vm.runInContext(script, context, {filename:'design_system.js'});
 const emit = (el, type, props={}) => { const event = new window.Event(type, {bubbles:true,cancelable:true}); Object.assign(event,props); el.dispatchEvent(event); };
 
-check('Catalogue boots: 16 text roles, 12 colors, 8 full component specs, 12 icons', () => {
+check('Catalogue boots: 16 text roles, 14 colors, 8 full component specs, 12 icons', () => {
   assert.equal($$('#type-rows tr').length, 16);
-  assert.equal($$('#color-grid .ds-sw').length, 12);
+  assert.equal($$('#color-grid .ds-sw').length, 14);
   assert.equal($$('.component-spec').length, 8);
   assert.equal($$('#icon-grid button').length, 12);
   assert.equal($$('.section-ribbon').length, $$('.section').length);

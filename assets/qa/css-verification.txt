@@ -1,3 +1,3 @@
-CSS parse verified: 2409 declarations. Non-variable standard property value issues: 0.
+CSS parse verified: 2447 declarations. Non-variable standard property value issues: 0.
 Custom-property expressions and font-face descriptors checked structurally, not as normal properties.
-Header: transparent overlay; top strip and side rails removed; desktop/mobile hero and anchor spacing updated.
+Cream base, forest/navy full-color folds, light reading contexts and gold wave dividers.
