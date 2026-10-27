@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#FBF6EA">
   <meta name="description" content="Caderninho na Mão!, da Profa. Marcia Macedo.">
   <title>Caderninho na Mão! · Profa. Marcia Macedo</title>
@@ -296,17 +296,44 @@
       </div>
     </section>
 
-    <section class="section section-cream sales-section" id="chamada-final" aria-labelledby="chamada-final-titulo">
-      <div class="container"><h2 id="chamada-final-titulo" data-reveal>Chamada final</h2></div>
+    <section class="section closing-section section-dark section-forest" id="chamada-final" aria-labelledby="chamada-final-titulo">
+      <div class="hero-glow bloom" data-ds-bloom aria-hidden="true"></div>
+      <img class="hero-tropical hero-tropical-top" src="assets/images/folha.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <img class="hero-tropical hero-tropical-bottom" src="assets/images/folha.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <div class="container">
+        <span class="label" data-reveal>CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO.</span>
+        <div data-reveal="scale">
+          <div class="caderno-3d closing-book" id="caderno-final" data-caderno data-caderno-closed role="img" aria-label="Caderninho na Mão! em 3D, fechado, com a capa ilustrada das aulas.">
+            <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <h2 id="chamada-final-titulo" data-reveal>Tem uma palavra <span class="lettering-transparent">nova</span><br> <em>esperando por você.</em></h2>
+        <p class="lead" data-reveal>Leve as aulas da Profa. Marcia para cada página do seu caderninho.</p>
+        <div data-reveal><a class="btn btn-gold magnetic" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>Quero o meu caderninho <span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a></div>
+        <p class="caption closing-price" data-reveal><strong data-preco></strong> + frete · Envio para endereços no Brasil</p>
+        <span class="closing-heart" aria-hidden="true">♡</span>
+      </div>
     </section>
   </main>
 
   <footer>
     <div class="container footer-inner sales-footer">
-      <p>Profa. Marcia Macedo · @portugues_marciamacedo</p>
+      <a class="brand" href="#inicio"><span>marcia macedo<small>PORTUGUÊS COM ALMA BRASILEIRA</small></span></a>
+      <p class="meta footer-credit">Caderninho na Mão! · Impresso e enviado pelo Clube de Autores</p>
+      <div class="footer-links">
+        <a class="btn btn-text footer-instagram" href="https://www.instagram.com/portugues_marciamacedo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram @portugues_marciamacedo (abre em nova aba)">@portugues_marciamacedo</a>
+        <a class="icon-btn footer-top magnetic" href="#inicio" aria-label="Voltar ao topo">↑</a>
+      </div>
     </div>
     <div class="footer-tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
   </footer>
+
+  <aside class="mobile-purchase" data-mobile-purchase hidden inert aria-hidden="true" aria-label="Compra rápida do caderninho">
+    <div class="mobile-purchase-inner">
+      <p class="mobile-purchase-price"><strong data-preco></strong><span class="caption">+ frete</span></p>
+      <a class="btn btn-primary magnetic" href="#como-comprar" target="_blank" rel="noopener noreferrer" data-compra>Quero o meu caderninho</a>
+    </div>
+  </aside>
 
   <!-- Uma única estrutura para todas as instâncias. data-contracapa aponta
        para a imagem do verso; sem ela, o componente usa creme liso. -->

@@ -22,11 +22,11 @@
     item.timer = null;
     item.started = true;
     item.element.classList.add('is-still');
-    item.element.dataset.cadernoState = item.interactive ? 'interactive' : 'open';
+    item.element.dataset.cadernoState = item.interactive ? 'interactive' : item.closed ? 'closed' : 'open';
     observer?.unobserve(item.element);
   }
   function enter(item) {
-    if (item.interactive) return;
+    if (item.interactive || item.closed) return;
     if (calm()) { settle(item); return; }
     if (item.started) return;
     item.started = true;
@@ -61,6 +61,7 @@
     const element = typeof target === 'string' ? document.getElementById(target) : target;
     const item = instances.get(element);
     if (!item) return;
+    if (item.closed) return;
     if (item.interactive) { showFeature(element, '05'); return; }
     if (calm()) { settle(item); return; }
     clearTimeout(item.timer);
@@ -90,7 +91,7 @@
       }
       const bindings = element.querySelector('.caderno-bindings');
       for (let ring = 0; ring < 22; ring++) bindings.append(document.createElement('i'));
-      const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop'), interactive:element.hasAttribute('data-caderno-interactive')};
+      const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop'), interactive:element.hasAttribute('data-caderno-interactive'), closed:element.hasAttribute('data-caderno-closed')};
       instances.set(element, item);
       element.dataset.cadernoState = item.interactive ? 'interactive' : 'closed';
       if (item.loop && loopVisibility) {
@@ -98,7 +99,7 @@
         loopVisibility.observe(element.closest('.section') || element);
       }
       if (calm()) settle(item);
-      else if (observer && !item.interactive) observer.observe(element);
+      else if (observer && !item.interactive && !item.closed) observer.observe(element);
       else enter(item);
     });
     scope.querySelectorAll('[data-caderno-replay]').forEach(button => {
@@ -210,6 +211,66 @@
     open(rows[0]);
     group.classList.add('disclosure-ready');
   });
+})();
+
+/* Compra móvel: visibilidade por posição, sem duplicar a chamada final. */
+(() => {
+  'use strict';
+  const bar = document.querySelector('[data-mobile-purchase]');
+  const hero = document.getElementById('inicio');
+  const closing = document.getElementById('chamada-final');
+  if (!bar || !hero || !closing) return;
+  const root = document.documentElement;
+  const mobile = window.matchMedia('(max-width: 720px)');
+  let passedHero = false;
+  let reachedClosing = false;
+  let queued = false;
+
+  function reserveSpace() {
+    const height = bar.hidden ? 0 : bar.offsetHeight;
+    if (height > 0) root.style.setProperty('--mobile-purchase-space', `${height}px`);
+    else root.style.removeProperty('--mobile-purchase-space');
+  }
+  function render() {
+    const visible = mobile.matches && passedHero && !reachedClosing;
+    if (!visible && reachedClosing && bar.contains(document.activeElement)) {
+      closing.querySelector('[data-compra]')?.focus({preventScroll:true});
+    }
+    bar.hidden = !visible;
+    bar.toggleAttribute('inert', !visible);
+    bar.setAttribute('aria-hidden', String(!visible));
+    root.classList.toggle('has-mobile-purchase', visible);
+    reserveSpace();
+  }
+  function readPosition() {
+    passedHero = hero.getBoundingClientRect().bottom <= 0;
+    // Depois de passar pelo encerramento, a barra continua oculta no rodapé.
+    reachedClosing = closing.getBoundingClientRect().top < window.innerHeight;
+    render();
+  }
+  function scheduleRead() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; readPosition(); });
+  }
+  if ('IntersectionObserver' in window) {
+    const visibility = new window.IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.target === hero) passedHero = !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
+        if (entry.target === closing) reachedClosing = entry.isIntersecting || entry.boundingClientRect.top < 0;
+      });
+      render();
+    }, {threshold:0});
+    visibility.observe(hero);
+    visibility.observe(closing);
+  } else {
+    window.addEventListener('scroll', scheduleRead, {passive:true});
+  }
+  window.addEventListener('resize', scheduleRead, {passive:true});
+  window.addEventListener('pageshow', scheduleRead);
+  mobile.addEventListener('change', scheduleRead);
+  if ('ResizeObserver' in window) new window.ResizeObserver(reserveSpace).observe(bar);
+  readPosition();
 })();
 
 /* Vitrine: navegação manual, gestos e objetos decorativos. Independente do 3D. */

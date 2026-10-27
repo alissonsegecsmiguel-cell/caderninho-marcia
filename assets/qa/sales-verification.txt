@@ -1,4 +1,4 @@
-PASS Six sections remain in order; only the final call remains a placeholder
+PASS All six sections are complete, remain in order and have valid headings
 PASS Product showcase keeps the requested copy, purchase configuration and five real annotated pages
 PASS Carousel arrows and keyboard update one accessible slide, wrap around and announce position
 PASS Horizontal drag advances pages; vertical scroll, cancellation and small drags do not
@@ -12,7 +12,7 @@ PASS Shared glow and magnetic handlers work without catalogue elements, honor re
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
 PASS All purchase links use the configured Clube de Autores destination and editable price
 PASS Configured URL and changed price apply to all purchase buttons, in new tabs
-PASS One shared 3D template mounts in hero and details with the real cover and inner page
+PASS One shared 3D template mounts in hero, details and closing with the real cover and inner page
 PASS Hero loop stays independent while details waits for interaction without timers
 PASS Loop pauses outside the hero and in hidden tabs without resetting; an initially hidden tab starts paused
 PASS Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent
@@ -24,6 +24,11 @@ PASS Hover, focus and keyboard navigate details; coarse touch does not activate 
 PASS Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed
 PASS Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus
 PASS Editable contact supports WhatsApp and mailto in both locations, blocks placeholder and unsafe URLs, and stays separate from price/checkout
+PASS Closing reuses the catalogue composition, requested copy, green background, heart and a closed shared notebook
+PASS Footer keeps the catalogue brand, production credit, external Instagram, return-to-top control and tricolor
+PASS Mobile bar appears only after passing the hero, hides at and after closing, and follows reverse scrolling
+PASS Mobile bar handles restored scrolling, desktop resizing, reduced motion and a no-observer scroll fallback
+PASS Mobile bar shares price and checkout, supports iPhone viewport fit and transfers active focus to the final CTA before hiding
 
-26 sales-page checks passed.
+31 sales-page checks passed.
 DOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.

@@ -12,15 +12,21 @@ const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','chamada-fi
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
-function load({link, contact, price, reduced=false, precise=false, extraButton=false, withObserver=true, hidden=false}={}) {
+function load({link, contact, price, reduced=false, precise=false, extraButton=false, withObserver=true, hidden=false, mobile=true, layout={hero:{top:0,bottom:960},closing:{top:6800,bottom:7800}}}={}) {
   const {document, window} = parseHTML(source);
   Object.defineProperty(document,'hidden',{value:hidden,configurable:true});
+  Object.defineProperty(document,'activeElement',{value:document.body,writable:true,configurable:true});
+  Object.defineProperty(window,'innerHeight',{value:844,writable:true,configurable:true});
+  document.getElementById('inicio').getBoundingClientRect=()=>layout.hero;
+  document.getElementById('chamada-final').getBoundingClientRect=()=>layout.closing;
+  Object.defineProperty(document.querySelector('[data-mobile-purchase]'),'offsetHeight',{get(){return this.hidden?0:80;}});
   const observers=[];
   class Observer { constructor(cb) { this.cb=cb;this.targets=[];observers.push(this); } observe(el) { this.targets.push(el); } unobserve() {} disconnect() {} }
   if(withObserver)window.IntersectionObserver=Observer;
   else delete window.IntersectionObserver;
   const media={matches:reduced,listeners:[],addEventListener(type,listener) { if(type==='change')this.listeners.push(listener); }};
-  const matchMedia=q=>q.includes('pointer:fine')?{matches:precise}:media;
+  const mobileMedia={matches:mobile,listeners:[],addEventListener(type,listener) { if(type==='change')this.listeners.push(listener); }};
+  const matchMedia=q=>q.includes('pointer:fine')?{matches:precise}:q.replace(/\s/g,'').includes('max-width:720px')?mobileMedia:media;
   window.matchMedia=matchMedia;
   const timers=new Map();let now=0,nextTimer=0;
   const advance=ms=>{const end=now+ms;for(let steps=0;steps<1000;steps++){
@@ -41,22 +47,19 @@ function load({link, contact, price, reduced=false, precise=false, extraButton=f
   if(price)config=config.replace('R$ 65,44',price);
   vm.runInContext(config,context,{filename:'index.html:purchase-config'});
   vm.runInContext(notebookRuntime,context,{filename:'pagina.js'});
-  return {document,window,observers,media,advance,timers};
+  return {document,window,observers,media,mobileMedia,layout,advance,timers};
 }
 const page=load();
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('Six sections remain in order; only the final call remains a placeholder',()=>{
+check('All six sections are complete, remain in order and have valid headings',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
     const title=page.document.getElementById(section.getAttribute('aria-labelledby'));
     assert.ok(title?.matches('h1,h2'));
-    if(section.id==='chamada-final'){
-      assert.equal(section.querySelectorAll('p,a,button,article,form').length,0);
-      assert.equal(section.querySelectorAll('[data-reveal]').length,1);
-    }
+    assert.ok(section.querySelectorAll('[data-reveal]').length>0);
   });
   assert.equal($$('h1').length,1);
   assert.equal(page.document.title,'Caderninho na Mão! · Profa. Marcia Macedo');
@@ -211,7 +214,7 @@ check('Only brand and purchase action in the header; requested footer and shared
   assert.ok(header.children[1].hasAttribute('data-compra'));
   assert.equal(header.querySelector('[data-preco]'),null);
   assert.equal(header.children[1].textContent.trim(),'Quero o meu caderninho');
-  assert.ok($('footer').textContent.includes('Profa. Marcia Macedo · @portugues_marciamacedo'));
+  assert.ok($('footer').textContent.includes('PORTUGUÊS COM ALMA BRASILEIRA'));
   assert.equal($$('.footer-tricolor > i').length,3);
 });
 check('Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation',()=>{
@@ -276,8 +279,8 @@ function intersectBook(loaded,id){
   const observer=loaded.observers.find(item=>item.targets.includes(element));
   assert.ok(observer);observer.cb([{target:element,isIntersecting:true}]);return element;
 }
-check('One shared 3D template mounts in hero and details with the real cover and inner page',()=>{
-  assert.equal($$('[data-caderno]').length,2);
+check('One shared 3D template mounts in hero, details and closing with the real cover and inner page',()=>{
+  assert.equal($$('[data-caderno]').length,3);
   for(const element of $$('[data-caderno]')){
     assert.equal(element.getAttribute('role'),'img');assert.ok(element.getAttribute('aria-label'));
     assert.equal(element.querySelectorAll('.caderno-model').length,1);
@@ -329,14 +332,14 @@ check('Details click selection is exclusive, repeatable and independent from the
   }
   assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(active.timers.size,0);
   active.window.Caderninho3D.init();
-  assert.equal(active.document.querySelectorAll('.caderno-model').length,2);
+  assert.equal(active.document.querySelectorAll('.caderno-model').length,3);
   assert.equal(active.window.Caderninho3D.showFeature(details,'07'),false);
   assert.equal(details.dataset.cadernoFeature,'01');
 });
 check('Reduced motion keeps hero open and details in a static front pose while disclosures remain usable',()=>{
   const calm=load({reduced:true});
   for(const element of calm.document.querySelectorAll('[data-caderno]')){
-    assert.equal(element.dataset.cadernoState,element.id==='caderno-hero'?'open':'interactive');assert.ok(element.classList.contains('is-still'));
+    assert.equal(element.dataset.cadernoState,element.id==='caderno-hero'?'open':element.id==='caderno-final'?'closed':'interactive');assert.ok(element.classList.contains('is-still'));
   }
   assert.equal(calm.timers.size,0);
   calm.document.querySelector('#detalhe-05').click();assert.equal(calm.timers.size,0);
@@ -485,6 +488,94 @@ check('Editable contact supports WhatsApp and mailto in both locations, blocks p
       assert.equal(event.defaultPrevented,true);
     }
   }
+});
+check('Closing reuses the catalogue composition, requested copy, green background, heart and a closed shared notebook',()=>{
+  assert.ok($('#chamada-final.closing-section.section-dark.section-forest'));
+  assert.equal($('#chamada-final .label').textContent,'CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO.');
+  assert.equal($('#chamada-final-titulo').textContent,'Tem uma palavra nova esperando por você.');
+  assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'nova');
+  assert.equal($('#chamada-final-titulo em').textContent,'esperando por você.');
+  assert.equal($('#chamada-final .lead').textContent,'Leve as aulas da Profa. Marcia para cada página do seu caderninho.');
+  assert.equal($('#chamada-final .closing-price').textContent,'R$ 65,44 + frete · Envio para endereços no Brasil');
+  assert.ok($('#chamada-final [data-compra]').matches('.btn.btn-gold.magnetic'));
+  assert.equal($('#chamada-final .closing-heart').textContent,'♡');
+  assert.equal($$('#chamada-final .hero-tropical').length,2);
+  assert.ok($('#chamada-final .bloom[data-ds-bloom]'));assert.ok($('#chamada-final .section-ribbon'));
+  const closed=$('#caderno-final');assert.equal(closed.hasAttribute('data-caderno-closed'),true);
+  assert.equal(closed.dataset.cadernoState,'closed');assert.equal(page.timers.size,0);
+  page.window.Caderninho3D.replay('caderno-final');assert.equal(closed.dataset.cadernoState,'closed');
+  const calm=load({reduced:true});assert.equal(calm.document.querySelector('#caderno-final').dataset.cadernoState,'closed');
+  assert.ok(calm.document.querySelector('#caderno-final').classList.contains('is-still'));
+});
+check('Footer keeps the catalogue brand, production credit, external Instagram, return-to-top control and tricolor',()=>{
+  const brand=$('footer .brand');
+  assert.equal(brand.querySelector('span').childNodes[0].textContent,'marcia macedo');
+  assert.equal(brand.querySelector('small').textContent,'PORTUGUÊS COM ALMA BRASILEIRA');
+  assert.equal(brand.querySelector('img'),null);
+  assert.equal($('footer .footer-credit').textContent,'Caderninho na Mão! · Impresso e enviado pelo Clube de Autores');
+  const instagram=$('footer .footer-instagram');
+  assert.equal(instagram.textContent,'@portugues_marciamacedo');
+  assert.equal(instagram.getAttribute('href'),'https://www.instagram.com/portugues_marciamacedo/');
+  assert.equal(instagram.target,'_blank');assert.ok(instagram.rel.includes('noopener')&&instagram.rel.includes('noreferrer'));
+  assert.equal($('footer .footer-top').getAttribute('href'),'#inicio');
+  assert.equal($$('.footer-tricolor > i').length,3);
+});
+function mobileBarObserver(active){
+  const hero=active.document.getElementById('inicio'),closing=active.document.getElementById('chamada-final');
+  return active.observers.find(observer=>observer.targets.length===2&&observer.targets.includes(hero)&&observer.targets.includes(closing));
+}
+function moveBarBoundary(active,key,rect,isIntersecting){
+  active.layout[key]=rect;
+  const target=active.document.getElementById(key==='hero'?'inicio':'chamada-final');
+  mobileBarObserver(active).cb([{target,boundingClientRect:rect,isIntersecting}]);
+}
+check('Mobile bar appears only after passing the hero, hides at and after closing, and follows reverse scrolling',()=>{
+  const active=load();const bar=active.document.querySelector('[data-mobile-purchase]');
+  const root=active.document.documentElement;
+  assert.equal(bar.hidden,true);assert.ok(bar.hasAttribute('inert'));
+  moveBarBoundary(active,'hero',{top:-961,bottom:-1},false);
+  assert.equal(bar.hidden,false);assert.equal(bar.getAttribute('aria-hidden'),'false');assert.equal(bar.hasAttribute('inert'),false);
+  assert.ok(root.classList.contains('has-mobile-purchase'));assert.equal(root.style.getPropertyValue('--mobile-purchase-space'),'80px');
+  moveBarBoundary(active,'closing',{top:843,bottom:1843},true);
+  assert.equal(bar.hidden,true);assert.equal(bar.getAttribute('aria-hidden'),'true');assert.ok(bar.hasAttribute('inert'));
+  assert.equal(root.classList.contains('has-mobile-purchase'),false);assert.ok(!root.style.getPropertyValue('--mobile-purchase-space'));
+  moveBarBoundary(active,'closing',{top:-1100,bottom:-100},false);assert.equal(bar.hidden,true);
+  moveBarBoundary(active,'closing',{top:2000,bottom:3000},false);assert.equal(bar.hidden,false);
+  moveBarBoundary(active,'hero',{top:-100,bottom:860},true);assert.equal(bar.hidden,true);
+  moveBarBoundary(active,'hero',{top:1000,bottom:1960},false);assert.equal(bar.hidden,true);
+});
+check('Mobile bar handles restored scrolling, desktop resizing, reduced motion and a no-observer scroll fallback',()=>{
+  const middle=()=>({hero:{top:-1200,bottom:-240},closing:{top:2500,bottom:3500}});
+  const restored=load({layout:middle()});assert.equal(restored.document.querySelector('[data-mobile-purchase]').hidden,false);
+  const desktop=load({mobile:false,layout:middle()});const bar=desktop.document.querySelector('[data-mobile-purchase]');
+  assert.equal(bar.hidden,true);
+  desktop.mobileMedia.matches=true;desktop.mobileMedia.listeners.forEach(listener=>listener());assert.equal(bar.hidden,false);
+  desktop.mobileMedia.matches=false;desktop.mobileMedia.listeners.forEach(listener=>listener());assert.equal(bar.hidden,true);
+  const calm=load({reduced:true,layout:middle()});assert.equal(calm.document.querySelector('[data-mobile-purchase]').hidden,false);
+  const fallback=load({withObserver:false});const fallbackBar=fallback.document.querySelector('[data-mobile-purchase]');
+  assert.equal(fallbackBar.hidden,true);
+  fallback.layout.hero={top:-1100,bottom:-140};fallback.window.dispatchEvent(new fallback.window.Event('scroll'));
+  assert.equal(fallbackBar.hidden,false);
+  fallback.layout.closing={top:800,bottom:1800};fallback.window.dispatchEvent(new fallback.window.Event('scroll'));
+  assert.equal(fallbackBar.hidden,true);
+  fallback.layout.closing={top:3000,bottom:4000};fallback.window.dispatchEvent(new fallback.window.Event('pageshow'));
+  assert.equal(fallbackBar.hidden,false);
+  fallback.layout.hero={top:0,bottom:960};fallback.window.dispatchEvent(new fallback.window.Event('resize'));
+  assert.equal(fallbackBar.hidden,true);
+});
+check('Mobile bar shares price and checkout, supports iPhone viewport fit and transfers active focus to the final CTA before hiding',()=>{
+  const active=load({price:'R$ 70,00',layout:{hero:{top:-1200,bottom:-240},closing:{top:2500,bottom:3500}}});
+  const bar=active.document.querySelector('[data-mobile-purchase]'),button=bar.querySelector('[data-compra]');
+  assert.equal(bar.querySelector('[data-preco]').textContent,'R$ 70,00');
+  assert.equal(button.textContent,'Quero o meu caderninho');
+  assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo');
+  assert.equal(button.target,'_blank');
+  assert.ok(active.document.querySelector('meta[name="viewport"]').getAttribute('content').includes('viewport-fit=cover'));
+  active.document.activeElement=button;
+  const finalButton=active.document.querySelector('#chamada-final [data-compra]');let focused=false;
+  finalButton.focus=options=>{focused=options.preventScroll===true;active.document.activeElement=finalButton;};
+  moveBarBoundary(active,'closing',{top:820,bottom:1820},true);
+  assert.equal(focused,true);assert.equal(bar.hidden,true);assert.equal(active.document.activeElement,finalButton);
 });
 const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.\n';
 fs.writeFileSync(path.join(__dirname,'sales-verification.txt'),output);

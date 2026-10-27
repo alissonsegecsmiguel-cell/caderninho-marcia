@@ -1,0 +1,11 @@
+Closing, footer and mobile purchase verification: source and simulated DOM.
+PASS 31 sales-page checks cover exact closing/footer copy, shared prices and destinations, the third closed notebook, viewport boundaries, reverse scrolling, restored positions, resize, reduced motion, passive fallback and focus transfer.
+PASS Hero, a-frase, para-que, detalhes, como-comprar, header and shared notebook template markup unchanged; showcase runtime unchanged.
+PASS All six sections are filled, every static id is unique, and all local anchors resolve.
+PASS Design-system HTML/CSS/JS remain unchanged. Closing-section, forest, transparent lettering, serif emphasis, gold button, heart, bloom, foliage and waves reuse existing contracts.
+PASS Viewport uses viewport-fit=cover; mobile CSS reserves the iPhone bottom and lateral safe areas. Space below the page follows measured bar height, with an optional ResizeObserver.
+CSS intent: closed cover floats slowly; reduced motion/global pause keeps it closed and still. Shared hero rules also paint the closing waves in full green, gold and navy.
+CSS intent: footer has brand/credit/Instagram and return-to-top areas, then the shared tricolor. The mobile purchase bar is limited to 720px or less and has no display when hidden.
+Behavior: bar starts hidden in the hero, appears only after passing it, and hides at/after the closing section. Hidden state is inert and removed from accessibility navigation. Returning to intermediate content restores it.
+Behavior: initial geometry and pageshow handle restored scrolling; IntersectionObserver uses exact viewport boundaries; unavailable observer falls back to passive scroll scheduled by requestAnimationFrame.
+No browser surface is available. Visual comparison, actual 3D rendering, native focus, real iPhone safe areas, responsive composition and live checkout remain unverified.
