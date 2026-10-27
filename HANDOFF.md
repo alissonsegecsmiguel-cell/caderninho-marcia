@@ -28,7 +28,11 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Fila pedida pelo usuário em 27/10/2026: revisão de desempenho (sempre por último). O pedido completo está na conversa do Claude Code; o resumo está em "Próximas tarefas".
+- Revisão de desempenho (Claude Code, 27/10/2026), parada num ponto estável:
+  - Medição antes (Lighthouse 12.2.1 local com gzip, sem cache): celular 31 (FCP 2,9 s, LCP 47,8 s, TBT 4.060 ms, CLS 0, 12,8 MB, 24 requisições); computador 40 (LCP 7,8 s, TBT 690 ms, CLS 0,002). Os maiores arquivos eram selo.png 2,7 MB, brasil-aquarela.png 2,6 MB, contra capa.png 2,3 MB, folha.png 2,1 MB, miolo.png 550 KB e os postais JPG (390 a 460 KB).
+  - Feito: versões WebP responsivas (sufixos -240 a -1536.webp) em <picture> com srcset e sizes, original mantido no src; contra-capa.webp para o verso do caderno; preload da aquarela da hero (fetchpriority high) e da capa em WebP; picture{display:contents} e seletores ">img" trocados por " img" em pagina.css; arquivos sem uso movidos para assets/extras/ (caderno-abrindo.mp4, postal.png, caderno-aberto.jpg, caderno-primeiro-quadro.jpg). Comparação de capturas de página inteira: mesma altura e mesmo layout no computador e no celular.
+  - Falta: trocar as animações contínuas que não são só transform/opacity (hero-letter-shine usa background-position; .pulse usa box-shadow) ou listar no relatório; conferir a pausa fora da tela; minificar CSS e JS (mantendo os legíveis); vercel.json com cache longo para assets/; medir de novo (celular e computador, e CPU 4x mais lenta); escrever RELATORIO-DESEMPENHO.md.
+- Pedido novo do usuário, recebido cortado: refazer a dobra de oferta no estilo "dois cards com destaque" (fundo escuro, pílula A OFERTA, card de destaque "Moro fora do Brasil" com ENVIO INTERNACIONAL e card secundário). O texto parou em "Caderno A5 com 200"; falta a lista completa, o card da direita e o fechamento. Pedir o restante antes de começar.
 
 ## Próximas tarefas (em ordem)
 1. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.

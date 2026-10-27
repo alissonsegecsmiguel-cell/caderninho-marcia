@@ -742,7 +742,8 @@
   section.querySelectorAll('[data-lightbox]').forEach(button => button.addEventListener('click', () => {
     const image = button.querySelector('img');
     opener = button;
-    big.src = image.currentSrc || image.src;
+    // O src é o arquivo original, em tamanho cheio, para a leitura dos detalhes.
+    big.src = image.src;
     big.alt = image.alt;
     big.width = image.naturalWidth || image.width;
     big.height = image.naturalHeight || image.height;
