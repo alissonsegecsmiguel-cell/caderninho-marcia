@@ -450,13 +450,13 @@ check('Purchase section combines seven exact answers, portrait postcard, shared 
   assert.equal($('#perguntas-titulo').textContent,'Do clique até a sua casa.');
   assert.equal($('#perguntas-titulo .lettering-transparent').textContent,'casa.');
   assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
-    'Como eu compro o caderninho?','Por que a compra é feita no Clube de Autores?','Quanto custa?',
+    'Como eu compro o caderninho?','Preciso de uma nota fiscal.','Quanto custa?',
     'Quanto tempo demora para chegar?','Vocês enviam para fora do Brasil?',
     'O caderno é igual ao que aparece na página?','E se eu tiver algum problema com o pedido?'
   ]);
   assert.deepEqual($$('[data-faq] .detail-description p').map(el=>el.textContent),[
     'É simples: clique em "Quero o meu caderninho" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.',
-    'Porque cada caderninho é impresso sob encomenda e enviado direto para você. O Clube de Autores, a plataforma parceira da professora, cuida da impressão, do pagamento e da entrega.',
+    'Você vai receber a sua nota fiscal que será enviada pelo Clube dos Autores, empresa responsável pela impressão e envio do seu caderninho.',
     'R$ 65,44, mais o frete. O frete é calculado na hora da compra, pelo seu CEP ou, fora do Brasil, pelo seu país.',
     'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende do frete que você escolher.',
     'Sim. No carrinho, em "Informações de envio", escolha "Desejo receber fora do Brasil". Tenha em mãos o seu número fiscal ou documento do seu país (por exemplo, DNI ou CUIT na Argentina e NIF em Portugal): ele é pedido para a entrega internacional. O frete e o prazo são calculados para o seu país antes do pagamento.',
