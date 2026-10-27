@@ -1,18 +1,18 @@
-PASS All eight sections are complete, remain in order and have valid headings
+PASS All six sections are complete, remain in order and have valid headings
 PASS Product showcase keeps the requested copy, purchase configuration and five real annotated pages
 PASS Carousel arrows and keyboard update one accessible slide, wrap around and announce position
 PASS Horizontal drag advances pages; vertical scroll, cancellation and small drags do not
 PASS Decorative parallax stays bounded, hides missing images and resets with reduced motion while carousel remains usable
-PASS A-frase reuses the green identity layout, exact copy, watercolor details and full cover
+PASS Removed folds are absent and all remaining in-page links resolve
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
 PASS Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip
 PASS Shared CSS, JS, fonts and image paths resolve from the root
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
 PASS Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
-PASS All ten purchase buttons use the configured cart URL in the same tab and allow navigation
+PASS All nine purchase buttons use the configured cart URL in the same tab and allow navigation
 PASS Configured URL and changed price apply to every purchase button, including an extra button, in the same tab
-PASS One shared 3D template mounts in hero, phrase, details, offer and closing with the real cover and inner page
+PASS One shared 3D template mounts in hero, details, offer and closing with the real cover and inner page
 PASS Hero loop stays independent while details waits for interaction without timers
 PASS Loop pauses outside the hero and in hidden tabs without resetting; an initially hidden tab starts paused
 PASS Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent

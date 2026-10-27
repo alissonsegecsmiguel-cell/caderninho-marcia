@@ -8,7 +8,7 @@ const project = path.resolve(__dirname, '../..');
 const source = fs.readFileSync(path.join(project, 'index.html'), 'utf8');
 const runtime = fs.readFileSync(path.join(project, 'assets/design_system.js'), 'utf8');
 const notebookRuntime = fs.readFileSync(path.join(project, 'assets/pagina.js'), 'utf8');
-const ids = ['inicio','a-frase','para-que','detalhes','oferta','como-comprar','perguntas','chamada-final'];
+const ids = ['inicio','para-que','detalhes','oferta','perguntas','chamada-final'];
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
@@ -62,7 +62,7 @@ const page=mountBooks(load());
 const $=selector=>page.document.querySelector(selector);
 const $$=selector=>[...page.document.querySelectorAll(selector)];
 
-check('All eight sections are complete, remain in order and have valid headings',()=>{
+check('All six sections are complete, remain in order and have valid headings',()=>{
   const sections=$$('main > section');
   assert.deepEqual(sections.map(el=>el.id),ids);
   sections.forEach(section=>{
@@ -72,8 +72,8 @@ check('All eight sections are complete, remain in order and have valid headings'
   });
   assert.equal($$('h1').length,1);
   assert.equal(page.document.title,'Caderninho na Mão! | Profa. Marcia Macedo');
-  assert.deepEqual($$('main .sec-rule > span:first-child').map(el=>el.textContent),['02 / A FRASE','03 / O CADERNO POR DENTRO','04 / DETALHES','06 / COMO COMPRAR','07 / PERGUNTAS']);
-  assert.equal($('#oferta .oferta-pilula').textContent,'05 / A OFERTA');
+  assert.deepEqual($$('main .sec-rule > span:first-child').map(el=>el.textContent),['02 / O CADERNO POR DENTRO','03 / DETALHES','05 / PERGUNTAS']);
+  assert.equal($('#oferta .oferta-pilula').textContent,'04 / A OFERTA');
   for(const property of ['og:title','og:description','og:image','og:url','og:image:alt'])assert.ok($(`meta[property="${property}"]`)?.getAttribute('content'),property);
   assert.equal($('meta[property="og:image"]').getAttribute('content'),'https://caderninho-marcia.vercel.app/assets/images/og-image.jpg');
   assert.equal($('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
@@ -83,7 +83,7 @@ check('All eight sections are complete, remain in order and have valid headings'
 });
 check('Product showcase keeps the requested copy, purchase configuration and five real annotated pages',()=>{
   assert.ok($('#para-que.section.ds-group.section-cream'));
-  assert.deepEqual($$('#para-que .sec-rule span').map(el=>el.textContent),['03 / O CADERNO POR DENTRO','UM CADERNO, MUITOS USOS']);
+  assert.deepEqual($$('#para-que .sec-rule span').map(el=>el.textContent),['02 / O CADERNO POR DENTRO','UM CADERNO, MUITOS USOS']);
   assert.equal($('#para-que-titulo').textContent,'Tudo o que você aprende, num só lugar.');
   assert.equal($('#para-que-titulo .lettering-transparent').textContent,'num só lugar.');
   assert.equal($('#para-que .vitrine-copy p').textContent,'Use o caderninho nas aulas, nos estudos em casa ou quando ouvir uma palavra nova numa música, num filme ou numa conversa. Anote o vocabulário, pratique a escrita, guarde as dúvidas para a próxima aula e revise tudo quando quiser.');
@@ -139,40 +139,19 @@ check('Decorative parallax stays bounded, hides missing images and resets with r
   for(const object of objects)assert.ok(!object.style.getPropertyValue('--object-y'));
   section.querySelector('[data-note-next]').click();assert.equal(section.querySelector('[data-note-position]').textContent,'02 / 05');
 });
-check('A-frase reuses the green identity layout, exact copy, watercolor details and full cover',()=>{
-  assert.ok($('#a-frase.section.ds-group.section-dark.section-forest'));
-  assert.deepEqual($$('#a-frase .sec-rule span').map(el=>el.textContent),['02 / A FRASE','DE ONDE VEM O NOME']);
-  const visibleText=el=>[...el.childNodes].map(node=>node.nodeType===3?node.textContent:node.getAttribute?.('aria-hidden')==='true'?'':visibleText(node)).join('');
-  assert.equal(visibleText($('#a-frase h2')),'Uma frase que virou caderno.');
-  assert.equal($('#a-frase h2 .lettering-transparent').textContent,'frase');
-  assert.equal($('#a-frase h2 em').textContent,'caderno.');
-  assert.equal($('#a-frase .section-heading > p').textContent,'Em toda aula, a Profa. Marcia repete: "caderninho na mão!". É escrevendo que a palavra nova fica com você. Agora, o caderninho das aulas existe de verdade.');
-  assert.equal($('#a-frase .identity-grid').children.length,3);
-  assert.equal($('#a-frase .identity-manifesto .label').textContent,'UMA PALAVRA DA PROFESSORA');
-  assert.deepEqual($$('#a-frase .identity-manifesto .frase-linha').map(el=>el.textContent),['Quem anota, lembra.','Quem lembra, usa.','E quem usa, aprende de verdade.']);
-  assert.ok($('#a-frase .frase-destaque .frase-traco path'));
-  assert.equal($('#a-frase .manifesto-foot span').textContent,'Profa. Marcia Macedo');
-  assert.equal($('#a-frase .manifesto-foot use').getAttribute('href'),'#i-book');
-  assert.equal($('#a-frase img[src*="brasil-aquarela"]'),null);
-  assert.deepEqual($$('#a-frase [data-postal] img').map(img=>img.getAttribute('src')),['assets/images/postal-salvador.jpg','assets/images/postal-amazonia.jpg','assets/images/postal-iguacu.jpg']);
-  assert.deepEqual($$('#a-frase [data-postal] .coord').map(el=>el.textContent),['SALVADOR · 12°58′ S 38°30′ W','AMAZÔNIA · 3°07′ S 60°01′ W','FOZ DO IGUAÇU · 25°41′ S 54°26′ W']);
-  for(const card of $$('#a-frase [data-postal]')){
-    assert.equal(card.tagName,'BUTTON');assert.ok(card.getAttribute('aria-label'));
-    assert.equal(card.querySelector('.window-caption').textContent,'A FRASE DE TODA AULA.');
-    const img=card.querySelector('img');assert.ok(img.getAttribute('alt'));assert.equal(img.getAttribute('loading'),'lazy');
+check('Removed folds are absent and all remaining in-page links resolve',()=>{
+  assert.equal($('#a-frase'),null);
+  assert.equal($('#como-comprar'),null);
+  assert.equal($('[data-passos]'),null);
+  assert.equal($('[data-postais]'),null);
+  assert.equal($('.hero-bottom .scroll-cue').getAttribute('href'),'#para-que');
+  assert.equal($('.hero-bottom .scroll-cue').textContent,'O caderno por dentro ↓');
+  const {document}=parseHTML(source);
+  for(const link of document.querySelectorAll('a[href^="#"]')){
+    const target=link.getAttribute('href').slice(1);
+    assert.ok(target&&document.getElementById(target),'Missing anchor: '+target);
   }
-  assert.deepEqual($$('#a-frase [data-postal]').map(card=>card.dataset.slot),['0','1','2']);
-  $$('#a-frase [data-postal]')[2].click();
-  assert.deepEqual($$('#a-frase [data-postal]').map(card=>card.dataset.slot),['1','2','0']);
-  const ring=$('#a-frase .postmark textPath').getAttribute('href').slice(1);
-  assert.ok(page.document.getElementById(ring));
-  assert.ok($('#a-frase .frase-book.caderno-3d[data-caderno][data-caderno-closed][data-caderno-hover]'));
-  assert.deepEqual($$('#a-frase .principles > div').map(el=>el.textContent),[
-    '01.Nasceu na sala de aula: a frase que a professora repete em toda aula.',
-    '02.Feito para os alunos: com a arte e a identidade das aulas.',
-    '03.Para usar todo dia: na aula, nos estudos, onde você estiver.'
-  ]);
-  assert.equal($$('#a-frase [data-reveal]').length,6);
+  for(const button of document.querySelectorAll('[data-compra]'))assert.equal(button.getAttribute('href'),'#oferta');
 });
 check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request',()=>{
   assert.equal($('#inicio .hero-discord-pill').textContent,'O caderno oficial das aulas da Profa. Marcia Macedo');
@@ -273,17 +252,17 @@ check('Shared glow and magnetic handlers work without catalogue elements, honor 
   assert.ok(!button.style.transform);
 });
 check('Shared runtime boots without catalogue elements and adds every background/reveal',()=>{
-  assert.equal($$('.section-ribbon').length,8);
-  assert.equal($$('.section-leaf').length,7);
+  assert.equal($$('.section-ribbon').length,6);
+  assert.equal($$('.section-leaf').length,5);
   assert.equal($$('.svg-sprite').length,1);
   for(const el of $$('use[href^="#"]'))assert.ok(page.document.getElementById(el.getAttribute('href').slice(1)));
   const observer=page.observers[0];observer.cb(observer.targets.map(target=>({target,isIntersecting:true})));
   assert.equal($$('[data-reveal]:not([data-revealed])').length,0);
   page.document.dispatchEvent(Object.assign(new page.window.Event('keydown'),{key:'Escape'}));
 });
-check('All ten purchase buttons use the configured cart URL in the same tab and allow navigation',()=>{
+check('All nine purchase buttons use the configured cart URL in the same tab and allow navigation',()=>{
   assert.equal($('[data-preco]').textContent,'R$ 65,44');
-  assert.deepEqual($$('[data-compra]').map(button=>button.closest('section')?.id||(button.closest('header')?'cabecalho':'barra-mobile')),['cabecalho','inicio','para-que','detalhes','oferta','oferta','como-comprar','perguntas','chamada-final','barra-mobile']);
+  assert.deepEqual($$('[data-compra]').map(button=>button.closest('section')?.id||(button.closest('header')?'cabecalho':'barra-mobile')),['cabecalho','inicio','para-que','detalhes','oferta','oferta','perguntas','chamada-final','barra-mobile']);
   for(const button of $$('[data-compra]')){
     assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
     assert.equal(new URL(button.getAttribute('href')).searchParams.get('cart'),'true');
@@ -326,8 +305,8 @@ function intersectBook(loaded,id){
   const observer=loaded.observers.find(item=>item.targets.includes(element));
   assert.ok(observer);observer.cb([{target:element,isIntersecting:true}]);return element;
 }
-check('One shared 3D template mounts in hero, phrase, details, offer and closing with the real cover and inner page',()=>{
-  assert.deepEqual($$('[data-caderno]').map(el=>el.id),['caderno-hero','caderno-frase','caderno-detalhes','caderno-oferta','caderno-final']);
+check('One shared 3D template mounts in hero, details, offer and closing with the real cover and inner page',()=>{
+  assert.deepEqual($$('[data-caderno]').map(el=>el.id),['caderno-hero','caderno-detalhes','caderno-oferta','caderno-final']);
   for(const element of $$('[data-caderno]')){
     assert.equal(element.getAttribute('role'),'img');assert.ok(element.getAttribute('aria-label'));
     assert.equal(element.querySelectorAll('.caderno-model').length,1);
@@ -382,7 +361,7 @@ check('Details click selection is exclusive, repeatable and independent from the
   }
   assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(active.timers.size,0);
   active.window.Caderninho3D.init();
-  assert.equal(active.document.querySelectorAll('.caderno-model').length,5);
+  assert.equal(active.document.querySelectorAll('.caderno-model').length,4);
   assert.equal(active.window.Caderninho3D.showFeature(details,'07'),false);
   assert.equal(details.dataset.cadernoFeature,'01');
 });
@@ -467,7 +446,7 @@ check('Purchase section combines seven exact answers, portrait postcard, shared 
   // O antigo FAQ separado foi removido: só existe um grupo de perguntas, dentro de #perguntas.
   assert.equal($$('[data-faq]').length,1);assert.ok($('#perguntas [data-faq]'));
   assert.ok($('#perguntas.section.ds-group.section-cream'));
-  assert.deepEqual($$('#perguntas .sec-rule > span').map(el=>el.textContent),['07 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
+  assert.deepEqual($$('#perguntas .sec-rule > span').map(el=>el.textContent),['05 / PERGUNTAS','TIRE SUAS DÚVIDAS']);
   assert.equal($('#perguntas-titulo').textContent,'Do clique até a sua casa.');
   assert.equal($('#perguntas-titulo .lettering-transparent').textContent,'casa.');
   assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
