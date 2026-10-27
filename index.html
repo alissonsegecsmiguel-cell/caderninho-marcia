@@ -296,61 +296,63 @@
           <p data-reveal>O mesmo caderno, onde você estiver. Escolha onde quer receber.</p>
         </header>
 
-        <div class="oferta-palco">
-          <div class="oferta-livro">
-            <div class="oferta-livro-glow" aria-hidden="true"></div>
-            <div class="oferta-objeto oferta-folha" aria-hidden="true"><picture><source type="image/webp" srcset="assets/images/folha-360.webp 360w, assets/images/folha-700.webp 700w" sizes="340px"><img src="assets/images/folha.png" width="1312" height="1199" alt="" loading="lazy" decoding="async"></picture></div>
-            <div class="oferta-objeto oferta-lapis" aria-hidden="true"><picture><source type="image/webp" srcset="assets/images/lapis-240.webp 240w, assets/images/lapis-480.webp 480w" sizes="230px"><img src="assets/images/lapis.png" width="1292" height="1218" alt="" loading="lazy" decoding="async"></picture></div>
-            <div class="caderno-3d oferta-book" id="caderno-oferta" data-caderno data-caderno-closed data-caderno-hover role="img" aria-label="Caderninho na Mão! em 3D, fechado, com a capa ilustrada das aulas.">
-              <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+        <div class="oferta-grade">
+          <div class="oferta-produto">
+            <div class="oferta-livro">
+              <div class="oferta-livro-glow" aria-hidden="true"></div>
+              <div class="oferta-objeto oferta-folha" aria-hidden="true"><picture><source type="image/webp" srcset="assets/images/folha-360.webp 360w, assets/images/folha-700.webp 700w" sizes="340px"><img src="assets/images/folha.png" width="1312" height="1199" alt="" loading="lazy" decoding="async"></picture></div>
+              <div class="oferta-objeto oferta-lapis" aria-hidden="true"><picture><source type="image/webp" srcset="assets/images/lapis-240.webp 240w, assets/images/lapis-480.webp 480w" sizes="230px"><img src="assets/images/lapis.png" width="1292" height="1218" alt="" loading="lazy" decoding="async"></picture></div>
+              <div class="caderno-3d oferta-book" id="caderno-oferta" data-caderno data-caderno-closed data-caderno-hover role="img" aria-label="Caderninho na Mão! em 3D, fechado, com a capa ilustrada das aulas.">
+                <img class="caderno-fallback" src="assets/images/capa.jpg" width="1054" height="1493" alt="" loading="lazy" decoding="async">
+              </div>
+            </div>
+            <div class="oferta-produto-info">
+              <h3 class="oferta-produto-titulo">O QUE VEM NO CADERNO</h3>
+              <ul class="oferta-lista">
+                <li>Caderno A5 (14,8 x 21 cm) com 200 páginas pautadas</li>
+                <li>Espiral que abre totalmente plana</li>
+                <li>Capa com a arte das aulas da Profa. Marcia</li>
+                <li>Páginas com ilustrações delicadas em tons de cinza</li>
+              </ul>
+              <p class="handwritten oferta-por-pagina">menos de R$ 0,33 por página</p>
             </div>
           </div>
 
-          <div class="oferta-cards">
-            <article class="oferta-card oferta-card-destaque" aria-labelledby="oferta-exterior-titulo">
-              <span class="oferta-card-etiqueta">ENVIO INTERNACIONAL</span>
-              <div class="oferta-card-borda" aria-hidden="true"></div>
-              <div class="oferta-card-corpo">
-                <span class="oferta-card-icone" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9s-1.3 6.5-3.9 9c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3Z"/></svg></span>
-                <h3 id="oferta-exterior-titulo">Moro fora do Brasil</h3>
-                <p class="oferta-preco"><span class="sr-only" data-preco></span><span aria-hidden="true"><span class="oferta-moeda">R$</span> <span class="oferta-valor" data-preco-valor data-conta>65,44</span></span></p>
-                <p class="oferta-frete">+ frete internacional, calculado no carrinho para o seu país</p>
-                <ul class="oferta-lista">
-                  <li>Caderno A5 com 200 páginas pautadas</li>
-                  <li>Espiral que abre totalmente plana</li>
-                  <li>Capa com a arte das aulas da Profa. Marcia</li>
-                  <li><strong>Entrega no seu país</strong></li>
-                  <li>No carrinho, escolha <strong>"Desejo receber fora do Brasil"</strong></li>
-                  <li>Tenha em mãos o seu <strong>número fiscal</strong> (DNI ou CUIT, NIF...)</li>
-                </ul>
-                <a class="btn btn-gold magnetic oferta-botao" href="#como-comprar" rel="noopener noreferrer" data-compra>Quero receber no meu país <span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a>
-                <p class="oferta-seguro">Compra segura no site do Clube de Autores.</p>
-              </div>
-            </article>
+          <article class="oferta-card oferta-card-brasil" aria-labelledby="oferta-brasil-titulo">
+            <span class="oferta-card-etiqueta">ENVIO NACIONAL</span>
+            <div class="oferta-card-borda" aria-hidden="true"></div>
+            <div class="oferta-card-corpo">
+              <span class="oferta-card-icone" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+              <h3 id="oferta-brasil-titulo">Moro no Brasil</h3>
+              <p class="oferta-preco"><span class="sr-only" data-preco></span><span aria-hidden="true"><span class="oferta-moeda">R$</span> <span class="oferta-valor" data-preco-valor data-conta>65,44</span></span></p>
+              <p class="oferta-frete">+ frete calculado pelo seu CEP</p>
+              <ul class="oferta-lista">
+                <li>Entrega pelo correio ou retirada na gráfica</li>
+                <li>No carrinho, escolha <strong>"Desejo receber pelo correio"</strong></li>
+                <li>Nota fiscal emitida pelo Clube de Autores</li>
+              </ul>
+              <a class="btn btn-gold magnetic oferta-botao" href="#como-comprar" rel="noopener noreferrer" data-compra>Quero receber no Brasil <span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a>
+              <p class="oferta-seguro">Compra segura no site do Clube de Autores.</p>
+            </div>
+          </article>
 
-            <article class="oferta-card oferta-card-brasil" aria-labelledby="oferta-brasil-titulo">
-              <div class="oferta-card-corpo">
-                <span class="oferta-card-icone" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5a7 7 0 0 1 14 0C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
-                <h3 id="oferta-brasil-titulo">Moro no Brasil</h3>
-                <p class="oferta-preco"><span class="sr-only" data-preco></span><span aria-hidden="true"><span class="oferta-moeda">R$</span> <span class="oferta-valor" data-preco-valor>65,44</span></span></p>
-                <p class="oferta-frete">+ frete calculado pelo seu CEP</p>
-                <ul class="oferta-lista">
-                  <li>Caderno A5 com 200 páginas pautadas</li>
-                  <li>Espiral que abre totalmente plana</li>
-                  <li>Capa com a arte das aulas da Profa. Marcia</li>
-                  <li><strong>Entrega pelo correio</strong> ou retirada na gráfica</li>
-                  <li>Nota fiscal emitida pelo Clube de Autores</li>
-                </ul>
-                <a class="btn oferta-botao-contorno magnetic" href="#como-comprar" rel="noopener noreferrer" data-compra>Quero receber no Brasil <span class="arrow"><svg class="icon"><use href="#i-arrow"/></svg></span></a>
-                <p class="oferta-seguro">Compra segura no site do Clube de Autores.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-
-        <div class="oferta-rodape">
-          <p class="handwritten">menos de R$ 0,33 por página</p>
-          <p class="oferta-mesmo">Os dois são o mesmo caderno. Só muda a entrega.</p>
+          <article class="oferta-card oferta-card-exterior" aria-labelledby="oferta-exterior-titulo">
+            <span class="oferta-card-etiqueta">ENVIO INTERNACIONAL</span>
+            <div class="oferta-card-borda" aria-hidden="true"></div>
+            <div class="oferta-card-corpo">
+              <span class="oferta-card-icone" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9s-1.3 6.5-3.9 9c-2.6-2.5-3.9-5.5-3.9-9S9.4 5.5 12 3Z"/></svg></span>
+              <h3 id="oferta-exterior-titulo">Moro fora do Brasil</h3>
+              <p class="oferta-preco"><span class="sr-only" data-preco></span><span aria-hidden="true"><span class="oferta-moeda">R$</span> <span class="oferta-valor" data-preco-valor data-conta>65,44</span></span></p>
+              <p class="oferta-frete">+ frete calculado no carrinho para o seu país</p>
+              <ul class="oferta-lista">
+                <li>Entrega no seu país</li>
+                <li>No carrinho, escolha <strong>"Desejo receber fora do Brasil"</strong></li>
+                <li>Tenha em mãos o seu <strong>número fiscal</strong> (DNI ou CUIT, NIF...)</li>
+              </ul>
+              <a class="btn btn-gold magnetic oferta-botao" href="#como-comprar" rel="noopener noreferrer" data-compra>Quero receber no meu país <span class="arrow"><svg class="icon"><use href="#i-arrow-up"/></svg></span></a>
+              <p class="oferta-seguro">Compra segura no site do Clube de Autores.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
