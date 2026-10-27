@@ -3,7 +3,7 @@
 ## Última sessão
 - Ferramenta: Claude Code
 - Data: 27/10/2026
-- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers; caderno da chamada final integrado em duas colunas
+- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers; caderno da chamada final integrado em duas colunas; nova dobra de oferta "A encomenda"
 
 ## Estado atual da página
 Arquivo único index.html, com estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html.
@@ -14,20 +14,20 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Dobra 2 (#a-frase): "Uma frase que virou caderno."; citação que entra linha a linha com sublinhado dourado; leque de 3 postais clicáveis (Salvador, Amazônia, Foz do Iguaçu) com carimbo girando; caderno 3D fechado que inclina com o mouse e entreabre a capa; fundo com ondas do calçadão (assets/images/ondas-calcadao.svg) em parallax; itens 01, 02, 03 em cascata.
 - Dobra 3 (#para-que): vitrine com foto da mão (zoom e brilho no hover; zoom de entrada no celular), carrossel de páginas anotadas que troca sozinho a cada 5 s com barra dourada de progresso, virada de página, botão de pausar, setas, teclado e arraste; ficha de preço com linhas em cascata; objetos decorativos com parallax (dois selos da bandeira, folha e lápis).
 - Dobra 4 (#detalhes): seis diferenciais em disclosure; o caderno 3D gira para mostrar cada um (A5, acetato, espiral, 100 folhas, miolo, contracapa real).
-- Dobra 5 (#como-comprar): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato.
+- Dobra 5 (#oferta): "Seu caderninho, pronto para a próxima aula." Varal de bandeirinhas no topo; à esquerda, pacote kraft com barbante e laço (SVG) com o caderno 3D saindo de dentro, selo e lápis flutuando; à direita, etiqueta de envio (papel creme sobre kraft, borda tracejada, carimbo BRASIL · ENCOMENDA) com a lista "O QUE VAI NA CAIXA", preço em carimbo (texto real via data-preco), "menos de R$ 0,33 por página", botão de compra e textos de apoio. Sequência de entrada única ao entrar na tela (classe .is-entregue). A linha "Mora fora do Brasil? Fale com a gente." só aparece com LINK_CONTATO preenchido ([data-contato-opcional]).
+- Dobra 6 (#como-comprar): perguntas frequentes em disclosure e cartão de compra fixo com preço e contato.
 - Chamada final (#chamada-final): duas colunas (no celular, caderno em cima). Assinatura "CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO." acima do título "Tem uma palavra nova esperando por você.", botão dourado e preço; à direita, caderno 3D grande (320 a 380 px) com rotação real, sombra no chão que acompanha a flutuação, brilho dourado atrás, folha, selo e lápis flutuando em volta, hover com inclinação e capa entreaberta.
 - Rodapé: crédito do Clube de Autores, Instagram @portugues_marciamacedo e botão de voltar ao topo.
-- Barra de compra no celular: aparece depois da hero e some ao chegar na chamada final.
+- Barra de compra no celular: aparece depois da hero, some enquanto a oferta está na tela e some de vez ao chegar na chamada final.
 - Componente reutilizável Caderninho3D (template #caderno-3d-template) com estados loop, interativo e fechado. O atributo data-caderno-hover liga inclinação pelo mouse, brilho e capa entreaberta (usado na dobra 2 e na chamada final).
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Fila pedida pelo usuário em 27/10/2026, nesta ordem: dobra de oferta "A encomenda", compartilhamento e revisão de desempenho por último. Os pedidos completos estão na conversa do Claude Code; o resumo está em "Próximas tarefas".
+- Fila pedida pelo usuário em 27/10/2026, nesta ordem: compartilhamento e revisão de desempenho por último. Os pedidos completos estão na conversa do Claude Code; o resumo está em "Próximas tarefas".
 
 ## Próximas tarefas (em ordem)
-1. Dobra de oferta "A encomenda" (#oferta), entre detalhes e perguntas: pacote kraft com barbante, caderno 3D saindo, etiqueta de envio com lista e preço em carimbo, varal de bandeirinhas, sequência de entrada, renumerar as etiquetas de seção, esconder a barra de compra do celular enquanto a oferta estiver na tela.
-2. Compartilhamento: title e description novos, og-image.jpg 1200 x 630, Open Graph e Twitter, canonical, favicon (ico, svg, apple-touch-icon), theme-color #00854A e 404.html.
-3. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.
+1. Compartilhamento: title e description novos, og-image.jpg 1200 x 630, Open Graph e Twitter, canonical, favicon (ico, svg, apple-touch-icon), theme-color #00854A e 404.html.
+2. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.
 
 ## Pendências que dependem de pessoas (não implementar sem confirmação)
 - Retrato da Marcia em aquarela (marcia-aquarela.png), aguardando aprovação dela.
@@ -51,6 +51,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - 27/10/2026: Dobra 2 com leque de postais, ondas do calçadão, caderno 3D com hover e citação animada. Conferida no computador (1440 px) e no celular (390 px), também com movimento reduzido.
 - 27/10/2026: Dobra 3 com carrossel automático (5 s, barra de progresso, pausa por mouse, foco, toque por 8 s, aba oculta e botão), virada de página, folha levantada no hover, zoom na foto, cascata na ficha de preço e selo no lugar do postal do Rio. Conferida no computador e no celular.
 - 27/10/2026: caderno da chamada final corrigido: integrado à chamada em duas colunas, sem skew (rotateX 5° e rotateY -20°, sem rotateZ), espiral dentro da altura da capa, sombra no chão, composição com folha, selo e lápis; coração isolado removido. Conferido no computador e no celular.
+- 27/10/2026: dobra de oferta "A encomenda" (#oferta) entre detalhes e perguntas, com etiquetas de seção renumeradas. Conferida no computador e no celular.
 
 ## Decisões registradas
 - Venda pelo Clube de Autores, R$ 65,44, envio só para o Brasil.
@@ -61,4 +62,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Dobra 3: a barra dourada de progresso é o próprio relógio do autoplay (o fim da animação avança a página), então ela pausa junto com as animações da página fora da tela, com a aba oculta ou com o botão de pausa do design system. Com movimento reduzido não há autoplay e as trocas usam só fade.
 - Dobra 3: o postal do Rio da lateral esquerda virou um segundo selo da bandeira (selo.png). postal.png deixou de ser usado na página.
 - Chamada final: foi usada a opção principal (caderno integrado), não a alternativa só com a frase. O caderno ficou bom em duas colunas, com a espiral alinhada e a rotação 3D sem distorção. A faixa com a frase não era uma seção separada, era um rótulo acima do caderno; ele virou a assinatura acima do título.
+- Oferta: a etiqueta da seção ficou "05 / A OFERTA" (o pedido citava "04 / A OFERTA" como exemplo, mas a oferta vem depois de "04 / DETALHES"); "COMO COMPRAR" passou para 06.
+- Oferta: "menos de R$ 0,33 por página" usa o dourado escuro do design system (--warning, #895B00) com sublinhado em ouro #F4C542, porque o ouro puro sobre creme não passa no contraste AA. 65,44 / 200 páginas = R$ 0,327.
+- Oferta: kraft não existia no design system; os tons ficam como variáveis locais em .oferta (--kraft, --kraft-claro, --kraft-medio, --kraft-escuro, --barbante).
 - As pastas assets/qa/npm-cache/ e assets/qa/runtime/ são cache local dos testes e ficam fora do git (.gitignore).

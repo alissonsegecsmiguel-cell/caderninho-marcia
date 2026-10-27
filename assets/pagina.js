@@ -219,11 +219,14 @@
   const bar = document.querySelector('[data-mobile-purchase]');
   const hero = document.getElementById('inicio');
   const closing = document.getElementById('chamada-final');
+  // A oferta já tem o próprio botão; a barra some enquanto ela está na tela.
+  const offer = document.getElementById('oferta');
   if (!bar || !hero || !closing) return;
   const root = document.documentElement;
   const mobile = window.matchMedia('(max-width: 720px)');
   let passedHero = false;
   let reachedClosing = false;
+  let offerVisible = false;
   let queued = false;
 
   function reserveSpace() {
@@ -232,7 +235,7 @@
     else root.style.removeProperty('--mobile-purchase-space');
   }
   function render() {
-    const visible = mobile.matches && passedHero && !reachedClosing;
+    const visible = mobile.matches && passedHero && !reachedClosing && !offerVisible;
     if (!visible && reachedClosing && bar.contains(document.activeElement)) {
       closing.querySelector('[data-compra]')?.focus({preventScroll:true});
     }
@@ -246,6 +249,10 @@
     passedHero = hero.getBoundingClientRect().bottom <= 0;
     // Depois de passar pelo encerramento, a barra continua oculta no rodapé.
     reachedClosing = closing.getBoundingClientRect().top < window.innerHeight;
+    if (offer) {
+      const box = offer.getBoundingClientRect();
+      offerVisible = box.top < window.innerHeight && box.bottom > 0;
+    }
     render();
   }
   function scheduleRead() {
@@ -258,11 +265,13 @@
       entries.forEach(entry => {
         if (entry.target === hero) passedHero = !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
         if (entry.target === closing) reachedClosing = entry.isIntersecting || entry.boundingClientRect.top < 0;
+        if (entry.target === offer) offerVisible = entry.isIntersecting;
       });
       render();
     }, {threshold:0});
     visibility.observe(hero);
     visibility.observe(closing);
+    if (offer) visibility.observe(offer);
   } else {
     window.addEventListener('scroll', scheduleRead, {passive:true});
   }
@@ -609,4 +618,22 @@
     }, {threshold:.5});
     peek.observe(book);
   });
+})();
+
+/* Oferta: a sequência da encomenda dispara uma vez, quando a dobra entra na tela.
+   Com movimento reduzido ou sem IntersectionObserver, a dobra já começa entregue. */
+(() => {
+  'use strict';
+  const section = document.querySelector('[data-oferta]');
+  if (!section) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const deliver = () => section.classList.add('is-entregue');
+  if (reduced.matches || !('IntersectionObserver' in window)) { deliver(); return; }
+  const observer = new window.IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    deliver();
+    observer.disconnect();
+  }, {threshold:.2});
+  observer.observe(section);
+  reduced.addEventListener('change', () => { if (reduced.matches) deliver(); });
 })();
