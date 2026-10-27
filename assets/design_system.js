@@ -400,7 +400,9 @@
   });
   reduced.addEventListener('change', e => { if (e.matches) { setMotion(true); revealAll(); revealObserver?.disconnect(); } });
   setMotion(motionPaused);
-  document.addEventListener('visibilitychange', () => root.classList.toggle('page-hidden', document.hidden));
+  const syncPageVisibility = () => root.classList.toggle('page-hidden', Boolean(document.hidden));
+  document.addEventListener('visibilitychange', syncPageVisibility);
+  syncPageVisibility();
 
   const precisePointer = matchMedia('(hover:hover) and (pointer:fine)');
   let pointerQueued = false;

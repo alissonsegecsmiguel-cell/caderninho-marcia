@@ -6,14 +6,20 @@
    animações são importados de design_system.css e design_system.js. */
 .sales-section{min-height:340px;display:flex;align-items:center;padding-block:84px 108px}
 .sales-section h2{max-width:900px}
-/* A paisagem mantém a escala do catálogo; o caderno abre diante da vista. */
-.hero{padding-bottom:44px}
-.hero-art .hero-landscape{z-index:0}
-.hero .hero-art{mix-blend-mode:normal}
+/* Paisagem de ponta a ponta, com papel creme protegendo a leitura. */
+.hero{--hero-book-rise:9%;min-height:100svh;display:flex;flex-direction:column;padding-bottom:44px}
+.hero>.hero-grid{flex:1}
+.hero-backdrop{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;mask-image:linear-gradient(180deg,transparent,#000 14%,#000 72%,transparent 94%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 72%,transparent 94%)}
+.hero-backdrop>.hero-landscape{inset:0 auto 0 0;width:116%;max-width:none;height:100%;object-fit:cover;object-position:left 34%;mix-blend-mode:normal;mask-image:none;-webkit-mask-image:none}
+.hero-backdrop>.hero-landscape-vivid{filter:saturate(1.16) brightness(1.035);mask-image:radial-gradient(ellipse at 65% 62%,#000 8%,transparent 62%);-webkit-mask-image:radial-gradient(ellipse at 65% 62%,#000 8%,transparent 62%)}
+.hero-backdrop::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--paper),rgba(251,246,234,.99) 36%,rgba(251,246,234,.96) 45%,rgba(251,246,234,.74) 49%,rgba(251,246,234,.12) 59%,transparent 72%)}
+.hero .hero-art{position:absolute;inset:0;width:100%;height:100%;margin:0;mix-blend-mode:normal}
 .hero-art :is(.postmark,.coord,.handwritten,.art-caption){z-index:3}
-.hero-art .handwritten{bottom:8px;left:16%;text-shadow:0 1px 8px var(--paper),0 0 18px var(--paper)}
-.hero-art .art-caption{bottom:-14px}
-.hero-art .hero-book{position:absolute;left:14%;bottom:68px;width:min(68%,540px);z-index:2}
+.hero-art .coord{top:calc(var(--nav-height) + 12px);right:4%;color:var(--ink)}
+.hero-art .postmark{top:calc(var(--nav-height) + 50px);right:5%;border-radius:50%;background:rgba(251,246,234,.84)}
+.hero-art .handwritten{bottom:112px;left:auto;right:8%;text-shadow:0 1px 8px var(--paper),0 0 18px var(--paper)}
+.hero-art .art-caption{top:calc(var(--nav-height) + 12px);bottom:auto;right:23%;color:var(--ink)}
+.hero-art .hero-book{position:absolute;left:56%;bottom:calc(68px + var(--hero-book-rise));width:min(40%,540px);z-index:2}
 .hero>.hero-bottom{z-index:3}
 
 /* Pigmentos suaves atrás do texto; as cores cheias ficam na base. */
@@ -120,10 +126,16 @@
 .caderno-3d[data-caderno-state=entering] .caderno-lift{animation:reveal-rise var(--entrance) var(--ease) both}
 .caderno-3d[data-caderno-state=open] .caderno-cover{transform:translateZ(3px) rotateY(-180deg)}
 .caderno-3d[data-caderno-state=open] .caderno-float{animation:caderno-float calc(var(--entrance) * 16) ease-in-out infinite;animation-delay:calc(var(--entrance) * 2)}
+.caderno-3d[data-caderno-state=cycling] .caderno-lift{animation:reveal-rise var(--entrance) var(--ease) both}
+.caderno-3d[data-caderno-loop][data-caderno-state=cycling] .caderno-cover{animation:caderno-cycle calc(var(--entrance) * 15) linear infinite;transition:none}
+.caderno-3d[data-caderno-loop][data-caderno-state=cycling] .caderno-float{animation:caderno-float calc(var(--entrance) * 16) ease-in-out infinite}
+.caderno-3d.is-loop-paused *{animation-play-state:paused!important}
 .caderno-3d:is(.is-still,.is-resetting) .caderno-cover{transition:none}
 .caderno-3d.is-still :is(.caderno-lift,.caderno-float){animation:none}
 .caderno-details{display:grid;justify-items:center;gap:32px}
 @keyframes caderno-float{0%,100%{translate:0 0;rotate:-.4deg}50%{translate:0 -5px;rotate:.4deg}}
+/* 12 s = 3 s fechado + 2,5 s abrindo + 4 s aberto + 2,5 s fechando. */
+@keyframes caderno-cycle{0%,25%{transform:translateZ(3px) rotateY(0deg);animation-timing-function:var(--ease)}45.833333%,79.166667%{transform:translateZ(3px) rotateY(-180deg);animation-timing-function:var(--ease)}100%{transform:translateZ(3px) rotateY(0deg)}}
 
 /* A frase: a grade, tipografia, cores e alturas vêm da seção de identidade.
    Apenas as artes e seus detalhes internos precisam de composição própria. */
@@ -140,6 +152,21 @@
 
 @media(max-width:1100px){.vitrine-grid{column-gap:32px}.note-paper{max-width:330px}}
 @media(max-width:960px){.side-rail{display:none}}
+@media(max-width:960px){
+  .hero-backdrop>.hero-landscape{top:-8%;width:100%;height:108%;object-position:40% top}
+  .hero-backdrop>.hero-landscape-vivid{mask-image:radial-gradient(ellipse at 62% 30%,#000 8%,transparent 52%);-webkit-mask-image:radial-gradient(ellipse at 62% 30%,#000 8%,transparent 52%)}
+  .hero-backdrop::after{background:linear-gradient(180deg,rgba(251,246,234,.08),transparent 18%,rgba(251,246,234,.22) 34%,rgba(251,246,234,.99) 45%,var(--paper) 57%)}
+  .hero .hero-grid{display:flex;flex:0 0 auto;flex-direction:column;padding-top:360px;min-height:0}
+  .hero .hero-copy{width:100%}
+  .hero-art .hero-book{left:50%;translate:-50% 0;top:calc(var(--nav-height) + var(--hero-gap) + 140px - var(--hero-book-rise));bottom:auto;width:min(70%,300px)}
+  .hero-art .coord{top:calc(var(--nav-height) + 6px);left:16px;right:auto;font-size:6px}
+  .hero-art .postmark{right:4px;top:calc(var(--nav-height) + 22px);width:54px;height:54px}
+  .hero-art .postmark>span{inset:12px}
+  .hero-art .postmark .icon{width:18px;height:18px}
+  .hero-art .handwritten{left:50%;right:auto;top:calc(var(--nav-height) + var(--hero-gap) + 295px);bottom:auto;translate:-50% 0;font-size:25px;white-space:nowrap}
+  .hero-art .art-caption{left:50%;right:auto;top:calc(var(--nav-height) + var(--hero-gap) + 332px);bottom:auto;translate:-50% 0;white-space:nowrap;font-size:6px}
+}
+@media(max-width:480px){.hero-backdrop>.hero-landscape{object-position:47% top}}
 @media(max-width:720px){
   .vitrine-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"photo" "carousel" "copy" "offer";gap:28px}
   .vitrine-photo{aspect-ratio:1;min-height:0}
@@ -153,15 +180,6 @@
   .vitrine-lapis{width:125px;left:-50px;right:auto;bottom:120px;opacity:.6}
   .hero{padding-bottom:36px}
   .hero>.section-ribbon{height:70px}
-  .hero .hero-grid{display:flex;flex-direction:column}
-  .hero .hero-copy{width:100%}
-  .hero .hero-art{order:-1;flex:none;margin-bottom:32px}
-  .hero-art .hero-book{left:14%;bottom:32px;width:72%}
-  .hero-art .handwritten{left:15%;bottom:0;font-size:25px}
-  .hero-art .coord{top:8px;font-size:5px}
-  .hero-art .postmark{right:8px;top:30px;width:62px;height:62px}
-  .hero-art .postmark>span{inset:14px}
-  .hero-art .postmark .icon{width:18px;height:18px}
   .caderno-3d{--caderno-folha:.08px}
   .caderno-bindings{left:-8px;width:18px}
   .caderno-bindings i{width:19px;height:7px;border-width:1.5px}
@@ -186,6 +204,7 @@
   .hero-tropical{animation:none}
   .caderno-3d .caderno-cover{transform:translateZ(3px) rotateY(-180deg);transition:none}
   .caderno-3d :is(.caderno-lift,.caderno-float){animation:none}
+  .caderno-3d[data-caderno-loop] .caderno-cover{animation:none!important;transform:translateZ(3px) rotateY(-180deg)}
   .vitrine-object{translate:0 0}
   .vitrine-object>img{animation:none}
   .notes-track{transition:none}

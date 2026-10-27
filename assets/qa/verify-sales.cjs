@@ -12,8 +12,9 @@ const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','perguntas'
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
-function load({link, price, reduced=false, precise=false, extraButton=false, withObserver=true}={}) {
+function load({link, price, reduced=false, precise=false, extraButton=false, withObserver=true, hidden=false}={}) {
   const {document, window} = parseHTML(source);
+  Object.defineProperty(document,'hidden',{value:hidden,configurable:true});
   const observers=[];
   class Observer { constructor(cb) { this.cb=cb;this.targets=[];observers.push(this); } observe(el) { this.targets.push(el); } unobserve() {} disconnect() {} }
   if(withObserver)window.IntersectionObserver=Observer;
@@ -161,10 +162,12 @@ check('Hero retains catalogue composition with Rio behind the notebook, decorati
     for(const className of original.classList)assert.ok(actual.classList.contains(className),selector+' '+className);
   }
   assert.equal($('#inicio .hero-art .ds-window'),null);
-  const landscape=$('#inicio .hero-art > img.landscape');
+  const landscape=$('#inicio > .hero-backdrop > img.hero-landscape');
   assert.equal(landscape.getAttribute('src'),'assets/images/brasil-aquarela.png');
+  assert.equal(landscape.getAttribute('fetchpriority'),'high');
+  assert.ok($('#inicio > .hero-backdrop > .hero-landscape-vivid'));
   assert.ok($('#inicio .hero-art > .caderno-3d[data-caderno]'));
-  assert.ok(landscape.nextElementSibling.classList.contains('caderno-3d'));
+  assert.ok($('#inicio > .hero-art'));
   assert.equal($$('#inicio .hero-copy .hero-flag[aria-hidden="true"] .flag-wash').length,2);
   assert.ok($('#inicio .hero-flag .flag-orb'));
   assert.equal($$('#inicio img.hero-tropical[aria-hidden="true"][alt=""]').length,2);
@@ -281,19 +284,38 @@ check('One shared 3D template mounts in hero and details with the real cover and
     assert.equal(element.querySelector('.caderno-fallback').hidden,true);
   }
 });
-check('Each notebook opens once after its own viewport entry and approximately one second',()=>{
+check('Hero enters a CSS loop without recurring timers; details keeps its original one-shot opening',()=>{
   const active=load();const hero=intersectBook(active,'caderno-hero');
   const details=active.document.getElementById('caderno-detalhes');
-  assert.equal(hero.dataset.cadernoState,'entering');assert.equal(details.dataset.cadernoState,'closed');
-  active.advance(979);assert.equal(hero.dataset.cadernoState,'entering');
-  active.advance(1);assert.equal(hero.dataset.cadernoState,'open');assert.equal(details.dataset.cadernoState,'closed');
-  intersectBook(active,'caderno-detalhes');active.advance(980);assert.equal(details.dataset.cadernoState,'open');
-  active.advance(30000);assert.equal(hero.dataset.cadernoState,'open');assert.equal(details.dataset.cadernoState,'open');
+  assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoState,'closed');
+  assert.equal(active.timers.size,0);assert.equal(hero.hasAttribute('data-caderno-loop'),true);
+  assert.equal(details.hasAttribute('data-caderno-loop'),false);
+  intersectBook(active,'caderno-detalhes');active.advance(979);assert.equal(details.dataset.cadernoState,'entering');
+  active.advance(1);assert.equal(details.dataset.cadernoState,'open');
+  active.advance(30000);assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(details.dataset.cadernoState,'open');
+});
+check('Loop pauses outside the hero and in hidden tabs without resetting; an initially hidden tab starts paused',()=>{
+  const active=load();const hero=intersectBook(active,'caderno-hero');
+  const section=active.document.getElementById('inicio');
+  const visibility=active.observers.find(item=>item.targets.length===1&&item.targets[0]===section);
+  assert.ok(visibility);visibility.cb([{target:section,isIntersecting:true}]);
+  assert.equal(hero.classList.contains('is-loop-paused'),false);
+  visibility.cb([{target:section,isIntersecting:false}]);assert.ok(hero.classList.contains('is-loop-paused'));
+  assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(active.timers.size,0);
+  Object.defineProperty(active.document,'hidden',{value:true,configurable:true});
+  active.document.dispatchEvent(new active.window.Event('visibilitychange'));
+  assert.ok(active.document.documentElement.classList.contains('page-hidden'));
+  Object.defineProperty(active.document,'hidden',{value:false,configurable:true});
+  active.document.dispatchEvent(new active.window.Event('visibilitychange'));
+  assert.equal(active.document.documentElement.classList.contains('page-hidden'),false);
+  visibility.cb([{target:section,isIntersecting:true}]);assert.equal(hero.classList.contains('is-loop-paused'),false);
+  assert.equal(hero.dataset.cadernoState,'cycling');
+  const background=load({hidden:true});assert.ok(background.document.documentElement.classList.contains('page-hidden'));
 });
 check('Details replay is independent, repeatable and initialization is idempotent',()=>{
   const active=load();const hero=intersectBook(active,'caderno-hero');const details=intersectBook(active,'caderno-detalhes');
   active.advance(980);const button=active.document.querySelector('[data-caderno-replay]');
-  button.click();button.click();assert.equal(details.dataset.cadernoState,'entering');assert.equal(hero.dataset.cadernoState,'open');
+  button.click();button.click();assert.equal(details.dataset.cadernoState,'entering');assert.equal(hero.dataset.cadernoState,'cycling');
   assert.equal(active.timers.size,1);active.advance(980);assert.equal(details.dataset.cadernoState,'open');
   active.window.Caderninho3D.init();
   assert.equal(active.document.querySelectorAll('.caderno-model').length,2);
@@ -308,15 +330,16 @@ check('Reduced motion mounts both notebooks already open, with no pending openin
   assert.equal(calm.document.querySelector('#inicio .hero-landscape').hidden,false);
 });
 check('Enabling reduced motion cancels opening timers and settles every notebook open',()=>{
-  const active=load();const hero=intersectBook(active,'caderno-hero');active.advance(300);
+  const active=load();const hero=intersectBook(active,'caderno-hero');intersectBook(active,'caderno-detalhes');active.advance(300);
   active.media.matches=true;active.media.listeners.forEach(listener=>listener({matches:true}));
   assert.equal(active.timers.size,0);assert.equal(hero.dataset.cadernoState,'open');
   assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'open');
   active.advance(3000);assert.equal(hero.dataset.cadernoState,'open');
 });
-check('Without IntersectionObserver notebooks still open and content remains revealed',()=>{
+check('Without IntersectionObserver hero cycles, details opens and content remains revealed',()=>{
   const active=load({withObserver:false});active.advance(980);
-  for(const element of active.document.querySelectorAll('[data-caderno]'))assert.equal(element.dataset.cadernoState,'open');
+  assert.equal(active.document.getElementById('caderno-hero').dataset.cadernoState,'cycling');
+  assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoState,'open');
   assert.equal(active.document.querySelectorAll('[data-reveal]:not([data-revealed])').length,0);
 });
 const output=report.join('\n')+'\n\n'+report.length+' sales-page checks passed.\nDOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.\n';

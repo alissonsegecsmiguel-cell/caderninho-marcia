@@ -1,0 +1,12 @@
+Hero verification: source, timing and solid-color reading intent.
+PASS Cover cycle: 12s from --entrance (800ms) x 15; closed 3s, opening 2.5s, open 4s, closing 2.5s.
+PASS Phase keyframes: 0%, 25%, 45.833333%, 79.166667%, 100%; cover rotation 0 to -180 degrees; shared --ease.
+PASS All six non-hero sections remain identical to HEAD; showcase interaction runtime unchanged.
+Reading-pair calculation: cream #FBF6EA at 96% opacity over worst-case black; tokens read from design_system.css.
+PASS --ink #17365B: 10.40:1; AA normal text threshold 4.5:1.
+PASS --ink-soft #46596C: 6.14:1; AA normal text threshold 4.5:1.
+PASS --ink-mute #5C6B70: 4.70:1; AA normal text threshold 4.5:1.
+PASS --primary #00854A: 4.01:1; AA large lettering threshold 3:1.
+These ratios describe solid pairs only. They do not certify the entire composition or actual text placement.
+Viewport pause, hidden-tab pause (including initial hidden state), reduced motion and component interactions are covered by verify-sales.cjs (simulated APIs).
+No browser surface is available: native rendering, mobile composition, mountain/cable-car occlusion and a visual comparison with the design system remain unverified.

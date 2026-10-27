@@ -29,6 +29,10 @@
     if (calm()) { settle(item); return; }
     if (item.started) return;
     item.started = true;
+    if (item.loop) {
+      item.element.dataset.cadernoState = 'cycling';
+      return;
+    }
     item.element.dataset.cadernoState = 'entering';
     item.timer = setTimeout(() => {
       item.element.dataset.cadernoState = 'open';
@@ -41,6 +45,16 @@
       if (item && entry.isIntersecting) { enter(item); observer.unobserve(entry.target); }
     });
   }, {threshold:.25}) : null;
+
+  // O loop usa a visibilidade exata da seção, sem a margem de antecipação
+  // dos fundos do catálogo. Pausar CSS preserva o ponto atual do ciclo.
+  const loopVisibility = 'IntersectionObserver' in window ? new window.IntersectionObserver(entries => {
+    entries.forEach(entry => instances.forEach(item => {
+      if (item.loop && (item.element.closest('.section') || item.element) === entry.target) {
+        item.element.classList.toggle('is-loop-paused', !entry.isIntersecting);
+      }
+    }));
+  }, {threshold:0}) : null;
 
   function replay(target) {
     const element = typeof target === 'string' ? document.getElementById(target) : target;
@@ -74,9 +88,13 @@
       }
       const bindings = element.querySelector('.caderno-bindings');
       for (let ring = 0; ring < 22; ring++) bindings.append(document.createElement('i'));
-      const item = {element, timer:null, started:false};
+      const item = {element, timer:null, started:false, loop:element.hasAttribute('data-caderno-loop')};
       instances.set(element, item);
       element.dataset.cadernoState = 'closed';
+      if (item.loop && loopVisibility) {
+        element.classList.add('is-loop-paused');
+        loopVisibility.observe(element.closest('.section') || element);
+      }
       if (calm()) settle(item);
       else if (observer) observer.observe(element);
       else enter(item);
@@ -90,7 +108,12 @@
   function syncMotion() {
     instances.forEach(item => {
       if (calm()) settle(item);
-      else item.element.classList.remove('is-still');
+      else {
+        item.element.classList.remove('is-still');
+        if (item.loop && item.started && item.element.dataset.cadernoState !== 'cycling') {
+          item.element.dataset.cadernoState = 'cycling';
+        }
+      }
     });
   }
   reduced.addEventListener('change', syncMotion);
