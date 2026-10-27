@@ -3,11 +3,14 @@
 ## Última sessão
 - Ferramenta: Claude Code
 - Data: 27/10/2026
-- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers; caderno da chamada final integrado em duas colunas; nova dobra de oferta "A encomenda"; proteção contra clique duplo na compra
+- Resumo: criação do AGENTS.md, CLAUDE.md e HANDOFF.md; Dobra 2 nova (leque de postais, ondas do calçadão, caderno 3D com hover, citação animada); Dobra 3 com carrossel automático e hovers; caderno da chamada final integrado em duas colunas; nova dobra de oferta "A encomenda"; proteção contra clique duplo na compra; metadados de compartilhamento, favicons e 404
 
 ## Estado atual da página
 Arquivo único index.html, com estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html.
 
+- <head>: title "Caderninho na Mão! | Profa. Marcia Macedo", description nova, canonical, Open Graph, Twitter (summary_large_image) e theme-color #00854A. A URL de produção (https://caderninho-marcia.vercel.app/) está num comentário no topo do <head>; ao trocar de domínio, mude canonical, og:url, og:image e twitter:image.
+- Compartilhamento e ícones: assets/images/og-image.jpg (1200 x 630, cerca de 105 KB), favicon.ico (32 x 32), favicon.svg e apple-touch-icon.png (180 x 180) na raiz, com o ícone de caderno do design system em verde sobre creme.
+- 404.html na raiz: "Essa página não está no caderno." com botão "Voltar para a página inicial" (a Vercel usa esse arquivo automaticamente).
 - Menu fixo: marca "marcia macedo" e botão "Quero o meu caderninho".
 - Hero (#inicio): título "Caderninho na mão!", aquarela do Rio ao fundo, caderno 3D em ciclo (abre e fecha), carimbo .postmark, botão de compra e aviso "Envio para endereços no Brasil". Sem preço na primeira dobra.
 - Faixa .wire: "Anote ✳ Pratique ✳ Revise ✳ ...".
@@ -24,11 +27,10 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Fila pedida pelo usuário em 27/10/2026, nesta ordem: compartilhamento e revisão de desempenho por último. Os pedidos completos estão na conversa do Claude Code; o resumo está em "Próximas tarefas".
+- Fila pedida pelo usuário em 27/10/2026: revisão de desempenho (sempre por último). O pedido completo está na conversa do Claude Code; o resumo está em "Próximas tarefas".
 
 ## Próximas tarefas (em ordem)
-1. Compartilhamento: title e description novos, og-image.jpg 1200 x 630, Open Graph e Twitter, canonical, favicon (ico, svg, apple-touch-icon), theme-color #00854A e 404.html.
-2. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.
+1. Revisão final de velocidade e fluidez (sempre por último): Lighthouse antes e depois, WebP/AVIF com srcset, fontes, minificação, vercel.json com cache, mover arquivos sem uso para assets/extras/, RELATORIO-DESEMPENHO.md.
 
 ## Pendências que dependem de pessoas (não implementar sem confirmação)
 - Retrato da Marcia em aquarela (marcia-aquarela.png), aguardando aprovação dela.
@@ -36,6 +38,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Fotos reais do caderno quando a amostra chegar (substituir a foto da mão, que tem o Pão de Açúcar ao fundo).
 - Marcia precisa aprovar as citações atribuídas a ela.
 - Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
+- Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://caderninho-marcia.vercel.app/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
 
 ## Concluído
 - 27/10/2026: design system com identidade brasileira, cores creme e paleta verde, ouro e azul-marinho.
@@ -54,6 +57,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - 27/10/2026: caderno da chamada final corrigido: integrado à chamada em duas colunas, sem skew (rotateX 5° e rotateY -20°, sem rotateZ), espiral dentro da altura da capa, sombra no chão, composição com folha, selo e lápis; coração isolado removido. Conferido no computador e no celular.
 - 27/10/2026: dobra de oferta "A encomenda" (#oferta) entre detalhes e perguntas, com etiquetas de seção renumeradas. Conferida no computador e no celular.
 - 27/10/2026: botões de compra protegidos contra clique duplo (3 s), com liberação no pageshow. Testado no Chrome: o segundo clique é bloqueado, o bloqueio vale para todos os botões e some depois de 3 s ou ao voltar pelo histórico.
+- 27/10/2026: página pronta para compartilhar (title, description, Open Graph, Twitter, canonical, og-image, favicons, theme-color e 404.html).
 
 ## Decisões registradas
 - Venda pelo Clube de Autores, R$ 65,44, envio só para o Brasil.
@@ -68,4 +72,5 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Oferta: "menos de R$ 0,33 por página" usa o dourado escuro do design system (--warning, #895B00) com sublinhado em ouro #F4C542, porque o ouro puro sobre creme não passa no contraste AA. 65,44 / 200 páginas = R$ 0,327.
 - Oferta: kraft não existia no design system; os tons ficam como variáveis locais em .oferta (--kraft, --kraft-claro, --kraft-medio, --kraft-escuro, --barbante).
 - Clique duplo: o estilo de desabilitado do design system (.btn:disabled) troca o botão para cinza e só vale para <button>; como os botões de compra são links e o pedido aceitava opacidade reduzida, foi usada só a opacidade .7, sem mudar cores.
+- og-image: gerada com Playwright a partir de um HTML temporário (já apagado), com as fontes e cores do design system; nenhum texto a menos de 84 px das laterais. O marca.svg antigo continua em assets/images/, mas a página agora usa os favicons da raiz.
 - As pastas assets/qa/npm-cache/ e assets/qa/runtime/ são cache local dos testes e ficam fora do git (.gitignore).

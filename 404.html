@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#00854A">
+  <meta name="robots" content="noindex">
+  <title>Página não encontrada | Caderninho na Mão!</title>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/design_system.css">
+  <style>
+    .nao-encontrada{min-height:100vh;min-height:100svh;display:grid;place-items:center;text-align:center;padding:64px 0}
+    .nao-encontrada .container{display:grid;justify-items:center;gap:24px}
+    .nao-encontrada .numero{font:italic 400 clamp(96px,18vw,180px)/.9 var(--serif);color:var(--accent)}
+    .nao-encontrada h1{max-width:720px;font-size:clamp(38px,6vw,72px);line-height:1.05;letter-spacing:-.045em}
+    .nao-encontrada p{max-width:420px;color:var(--ink-soft)}
+    .nao-encontrada .tricolor{position:absolute;left:0;right:0;bottom:0}
+  </style>
+</head>
+<body>
+  <main class="section section-cream nao-encontrada">
+    <div class="container">
+      <span class="numero" aria-hidden="true">404</span>
+      <h1>Essa página não está no <span class="lettering-transparent">caderno.</span></h1>
+      <p class="body-sm">O endereço pode ter mudado ou ter sido digitado com algum erro.</p>
+      <a class="btn btn-primary" href="/">Voltar para a página inicial <span class="arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    </div>
+    <div class="footer-tricolor tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
+  </main>
+</body>
+</html>
