@@ -190,7 +190,7 @@ check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
   assert.ok($('script[src="assets/pagina.js"]'));
   for(const el of $$('link[href],img[src],script[src]')){
     const ref=el.getAttribute('href')||el.getAttribute('src');
-    assert.ok(fs.existsSync(path.join(project,ref)),ref);
+    assert.ok(fs.existsSync(path.join(project,decodeURIComponent(ref))),ref);
   }
   for(const stylesheet of $$('link[rel="stylesheet"]')){
     const file=path.join(project,stylesheet.getAttribute('href'));
@@ -282,7 +282,9 @@ check('One shared 3D template mounts in hero and details with the real cover and
     assert.equal(element.querySelectorAll('.caderno-model').length,1);
     assert.equal(element.querySelector('.caderno-page img').getAttribute('src'),'assets/images/miolo.png');
     assert.equal(element.querySelector('.caderno-cover-front img').getAttribute('src'),'assets/images/capa.jpg');
-    assert.equal(element.querySelector('[data-caderno-back]').hidden,true);
+    const back=element.querySelector('[data-caderno-back]');
+    assert.equal(back.hidden,element.id!=='caderno-detalhes');
+    if(element.id==='caderno-detalhes')assert.equal(back.getAttribute('src'),'assets/images/contra%20capa.png');
     assert.equal(element.querySelector('.caderno-fallback').hidden,true);
   }
 });

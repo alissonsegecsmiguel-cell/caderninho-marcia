@@ -4,6 +4,6 @@ PASS Hero, a-frase, para-que and all future sections remain unchanged; showcase 
 PASS Every static HTML id is unique; purchase configuration remains shared.
 PASS 23 sales-page DOM groups cover all six disclosures, repeated touch/click selection, mouse hover, focus, keyboard navigation, price updates, reduced motion and hero independence.
 CSS intent: desktop list left / notebook right; below 720px the stage is first and sticky, followed by the list and purchase action.
-CSS intent: six poses include a gold ruler, acetate shine, highlighted spiral, page block edge, open inner page and closed back view. Back is cream because no contracapa image exists.
+CSS intent: six poses include a gold ruler, acetate shine, highlighted spiral, page block edge, open inner page and closed back view. Details uses the real image assets/images/contra capa.png, added during implementation; the URL encodes its space as %20. Other instances keep the cream fallback unless configured.
 CSS intent: reduced motion and global motion pause keep the interactive book facing front and static; disclosures continue to work.
 No browser is available. 3D rendering, realistic occlusion, actual sticky behavior, mobile layout and visual comparison against the design system are not verified.
