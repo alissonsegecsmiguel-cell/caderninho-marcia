@@ -191,7 +191,8 @@
     stage.dataset.activeDetail = feature;
     book.setAttribute('aria-label', `Caderninho na Mão! em 3D: ${title}.`);
     caption.textContent = title;
-    number.textContent = feature;
+    // O número grande segue a numeração visível da lista; data-detail guarda a pose do caderno.
+    number.textContent = row.querySelector('.detail-number')?.textContent.trim() || feature;
     number.classList.remove('is-changing');
     void number.offsetWidth;
     number.classList.add('is-changing');

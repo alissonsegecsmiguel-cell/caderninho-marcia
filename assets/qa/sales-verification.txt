@@ -19,7 +19,7 @@ PASS Details click selection is exclusive, repeatable and independent from the h
 PASS Reduced motion keeps hero open and details in a static front pose while disclosures remain usable
 PASS Enabling reduced motion stops the hero loop and preserves the selected disclosure in static details
 PASS Without IntersectionObserver hero cycles, details responds and content remains revealed
-PASS Details copy, price, gold CTA and all six accessible disclosure regions match the request
+PASS Details copy, price, gold CTA and all five accessible disclosure regions match the request
 PASS Hover, focus and keyboard navigate details; coarse touch does not activate on pointer entry
 PASS Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed
 PASS Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus

@@ -369,12 +369,13 @@ check('Loop pauses outside the hero and in hidden tabs without resetting; an ini
 check('Details click selection is exclusive, repeatable and independent from the hero; initialization stays idempotent',()=>{
   const active=mountBooks(load());const hero=intersectBook(active,'caderno-hero');const details=active.document.getElementById('caderno-detalhes');
   const section=active.document.getElementById('detalhes');
-  for(const code of ['05','06','03','03','01']){
+  // O item "Impresso para você" mantém a pose 06 do caderno, mas aparece como 05 na lista e no número grande.
+  for(const [code,shown] of [['06','05'],['04','04'],['03','03'],['03','03'],['01','01']]){
     section.querySelector('#detalhe-'+code).click();
     assert.equal(details.dataset.cadernoFeature,code);
     assert.equal(section.querySelectorAll('.detail-trigger[aria-expanded="true"]').length,1);
     assert.equal(section.querySelectorAll('.detail-description[aria-hidden="false"]').length,1);
-    assert.equal(section.querySelector('.details-active-number').textContent,code);
+    assert.equal(section.querySelector('.details-active-number').textContent,shown);
     assert.ok(section.querySelector('.detail-item.is-active').contains(section.querySelector('#detalhe-'+code)));
   }
   assert.equal(hero.dataset.cadernoState,'cycling');assert.equal(active.timers.size,0);
@@ -389,8 +390,8 @@ check('Reduced motion keeps hero open and details in a static front pose while d
     assert.equal(element.dataset.cadernoState,element.id==='caderno-hero'?'open':element.id==='caderno-detalhes'?'interactive':'closed');assert.ok(element.classList.contains('is-still'));
   }
   assert.equal(calm.timers.size,0);
-  calm.document.querySelector('#detalhe-05').click();assert.equal(calm.timers.size,0);
-  assert.equal(calm.document.querySelector('#detalhe-05').getAttribute('aria-expanded'),'true');
+  calm.document.querySelector('#detalhe-04').click();assert.equal(calm.timers.size,0);
+  assert.equal(calm.document.querySelector('#detalhe-04').getAttribute('aria-expanded'),'true');
   assert.ok(calm.document.querySelector('#caderno-detalhes').classList.contains('is-still'));
   assert.equal(calm.document.querySelector('#inicio .hero-landscape').hidden,false);
 });
@@ -411,19 +412,19 @@ check('Without IntersectionObserver hero cycles, details responds and content re
   assert.equal(active.document.getElementById('caderno-detalhes').dataset.cadernoFeature,'04');
   assert.equal(active.document.querySelectorAll('[data-reveal]:not([data-revealed])').length,0);
 });
-check('Details copy, price, gold CTA and all six accessible disclosure regions match the request',()=>{
-  assert.equal($('#detalhes h2').textContent,'Feito com cuidado,página por página.');
-  assert.equal($('#detalhes h2 em').textContent,'cuidado,');
+check('Details copy, price, gold CTA and all five accessible disclosure regions match the request',()=>{
+  assert.equal($('#detalhes h2').textContent,'Feito com carinho,página por página.');
+  assert.equal($('#detalhes h2 em').textContent,'carinho,');
   assert.equal($('#detalhes .section-heading > p'),null);
-  assert.deepEqual($$('#detalhes .detail-title').map(el=>el.textContent),['Tamanho A5','Capa com a arte das aulas','Espiral transparente','100 folhas pautadas','Ilustrações do Brasil','Impresso para você']);
+  assert.deepEqual($$('#detalhes .detail-title').map(el=>el.textContent),['Tamanho A5','Capa com a arte das aulas','Espiral transparente','100 folhas pautadas','Impresso para você']);
   assert.deepEqual($$('#detalhes .detail-description p').map(el=>el.textContent),[
     '14,8 x 21 cm. Cabe na bolsa e na mochila.',
     'Colorida, com acetato transparente que protege do dia a dia.',
     'Abre totalmente plano, para escrever com conforto.',
-    '200 páginas em papel offset 75 g.',
-    'Pão de Açúcar, folhas e coqueiros em tons suaves em cada página.',
+    '100 folhas (200 páginas) em papel offset 75 g.',
     'Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega no Brasil e no exterior.'
   ]);
+  assert.deepEqual($$('#detalhes .detail-number').map(el=>el.textContent),['01','02','03','04','05']);
   for(const button of $$('#detalhes .detail-trigger')){
     const region=page.document.getElementById(button.getAttribute('aria-controls'));
     assert.equal(region.getAttribute('aria-labelledby'),button.id);
