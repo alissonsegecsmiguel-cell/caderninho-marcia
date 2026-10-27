@@ -777,3 +777,31 @@ html.js .passos-bilhete[data-revealed=true]{transform:none}
   .passos-bilhete>.handwritten{font-size:28px}
   .passos-lightbox{padding:52px 8px 8px}
 }
+
+/* Detalhes abaixo de 900 px: caderno fixo no topo (até 40% da tela) e lista rolando por baixo.
+   O computador não muda: todas as regras ficam dentro desta media query. */
+.details-progresso{display:none}
+@media(max-width:899px){
+  .details-grid{display:flex;flex-direction:column;gap:0}
+  .details-content{width:100%}
+  .details-stage{position:sticky;order:-1;top:0;z-index:4;width:100%;max-height:40svh;padding-block:6px 26px;background:linear-gradient(180deg,var(--secondary) 80%,rgba(var(--navy-rgb),0))}
+  .details-scene{width:min(100%,340px);margin-inline:auto;padding-block:4px 0}
+  .details-book{width:min(100%,34svh);margin-inline:auto}
+  .details-active-number{right:4%;bottom:6px;font-size:clamp(52px,8svh,80px)}
+  .details-active-number.is-leaving{animation:detalhe-numero-sai var(--gesture) var(--ease) both}
+  .details-progresso{display:block;position:absolute;right:4%;bottom:0;width:56px;height:2px;overflow:hidden;border-radius:2px;background:rgba(var(--gold-rgb),.25)}
+  .details-progresso>i{display:block;height:100%;background:var(--accent);transform:scaleX(var(--detalhe-progresso,.2));transform-origin:0 50%;transition:transform var(--gesture) var(--ease)}
+  .details-caption{min-height:22px}
+  .details-list{border-top:0}
+  /* Cada item ocupa boa parte da tela, para a troca acontecer com calma, um de cada vez. */
+  .details-list .detail-item{min-height:62svh}
+  .details-list .detail-item:last-child{min-height:48svh}
+  .details-purchase{padding-top:12px}
+}
+@media(max-width:899px) and (prefers-reduced-motion:reduce){
+  .details-stage{position:relative;max-height:none}
+  .details-list .detail-item,.details-list .detail-item:last-child{min-height:0}
+  .disclosure-ready .details-list .detail-description{grid-template-rows:1fr;opacity:1;padding-bottom:24px}
+  .details-progresso{display:none}
+}
+@keyframes detalhe-numero-sai{from{opacity:.5;transform:translateY(0)}to{opacity:0;transform:translateY(-24px)}}

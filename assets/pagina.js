@@ -170,48 +170,117 @@ const depoisDaCarga = setup => {
   init();
 })();
 
-/* Diferenciais: botões de disclosure, com foco, toque e hover equivalentes. */
+/* Diferenciais: botões de disclosure, com foco, toque e hover equivalentes.
+   Abaixo de 900 px, o caderno fica fixo no topo e cada item ativa sozinho quando passa
+   pela faixa central da área visível abaixo dele (IntersectionObserver, sem cálculo no scroll). */
 depoisDaCarga(() => {
   'use strict';
   const section = document.getElementById('detalhes');
   const group = section?.querySelector('[data-details]');
   if (!group || !window.Caderninho3D) return;
+  const root = document.documentElement;
   const rows = [...group.querySelectorAll('[data-detail]')];
   const buttons = rows.map(row => row.querySelector('.detail-trigger'));
   const stage = group.querySelector('.details-stage');
   const book = stage.querySelector('[data-caderno]');
   const number = stage.querySelector('.details-active-number');
   const caption = stage.querySelector('[data-detail-caption]');
+  const content = group.querySelector('.details-content');
+  const purchase = group.querySelector('.details-purchase');
   const precise = window.matchMedia('(hover:hover) and (pointer:fine)');
-  let current = null;
+  const narrow = window.matchMedia('(max-width: 899px)');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const calm = () => reduced.matches || root.classList.contains('motion-paused');
+  // No celular com movimento reduzido, todos os itens ficam abertos e o caderno não fica fixo.
+  const allOpen = () => narrow.matches && reduced.matches;
+  const scrolling = () => narrow.matches && !reduced.matches;
+  let current = null, band = null, queued = false;
+
+  function showNumber(text) {
+    if (number.textContent === text) return;
+    // No celular, o número antigo sobe e some enquanto o novo sobe e aparece.
+    if (narrow.matches && !calm() && number.textContent) {
+      const old = number.cloneNode(true);
+      old.classList.remove('is-changing');
+      old.classList.add('is-leaving');
+      old.addEventListener('animationend', () => old.remove(), {once:true});
+      number.after(old);
+    }
+    number.textContent = text;
+    // Reinicia a animação do número em dois quadros, sem forçar layout síncrono.
+    number.classList.remove('is-changing');
+    requestAnimationFrame(() => requestAnimationFrame(() => number.classList.add('is-changing')));
+  }
   function activate(row) {
     if (row === current) return;
     current = row;
     rows.forEach(item => {
       const active = item === row;
+      const open = active || allOpen();
       item.classList.toggle('is-active', active);
-      item.querySelector('.detail-trigger').setAttribute('aria-expanded', String(active));
-      item.querySelector('.detail-description').setAttribute('aria-hidden', String(!active));
+      item.querySelector('.detail-trigger').setAttribute('aria-expanded', String(open));
+      item.querySelector('.detail-description').setAttribute('aria-hidden', String(!open));
     });
     const feature = row.dataset.detail;
     const title = row.querySelector('.detail-title').textContent;
     window.Caderninho3D.showFeature(book, feature);
     stage.dataset.activeDetail = feature;
+    stage.style.setProperty('--detalhe-progresso', ((rows.indexOf(row) + 1) / rows.length).toFixed(3));
     book.setAttribute('aria-label', `Caderninho na Mão! em 3D: ${title}.`);
     caption.textContent = title;
     // O número grande segue a numeração visível da lista; data-detail guarda a pose do caderno.
-    number.textContent = row.querySelector('.detail-number')?.textContent.trim() || feature;
-    // Reinicia a animação do número em dois quadros, sem forçar layout síncrono.
-    number.classList.remove('is-changing');
-    requestAnimationFrame(() => requestAnimationFrame(() => number.classList.add('is-changing')));
+    showNumber(row.querySelector('.detail-number')?.textContent.trim() || feature);
   }
+
+  // A faixa de ativação fica no meio da área visível abaixo do caderno fixo.
+  function watch() {
+    queued = false;
+    band?.disconnect();
+    band = null;
+    if (!scrolling() || !('IntersectionObserver' in window)) return;
+    const fixed = stage.getBoundingClientRect().height;
+    const free = Math.max(1, window.innerHeight - fixed);
+    band = new window.IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) activate(entry.target); });
+    }, {rootMargin:`-${Math.round(fixed + free * .4)}px 0px -${Math.round(free * .4)}px 0px`});
+    rows.forEach(row => band.observe(row));
+  }
+  function queueWatch() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(watch);
+  }
+  // Fora do grid, o preço e o botão não seguram o caderno fixo depois do último item.
+  function placePurchase() {
+    if (!purchase) return;
+    if (scrolling()) group.after(purchase);
+    else content.append(purchase);
+  }
+  function syncLayout() {
+    placePurchase();
+    rows.forEach(item => {
+      const open = item === current || allOpen();
+      item.querySelector('.detail-trigger').setAttribute('aria-expanded', String(open));
+      item.querySelector('.detail-description').setAttribute('aria-hidden', String(!open));
+    });
+    queueWatch();
+  }
+
   rows.forEach((row, index) => {
     const button = buttons[index];
     button.addEventListener('pointerenter', event => {
       if (precise.matches && event.pointerType !== 'touch') activate(row);
     });
     button.addEventListener('focus', () => activate(row));
-    button.addEventListener('click', () => activate(row));
+    button.addEventListener('click', () => {
+      activate(row);
+      if (!scrolling()) return;
+      // Toque no celular: rola até o item ficar na faixa de ativação.
+      const fixed = stage.getBoundingClientRect().height;
+      const free = window.innerHeight - fixed;
+      const top = row.getBoundingClientRect().top + window.scrollY - fixed - free * .3;
+      window.scrollTo({top, behavior:calm() ? 'auto' : 'smooth'});
+    });
     button.addEventListener('keydown', event => {
       const next = event.key === 'ArrowDown' ? (index + 1) % rows.length
         : event.key === 'ArrowUp' ? (index + rows.length - 1) % rows.length
@@ -223,6 +292,10 @@ depoisDaCarga(() => {
     });
   });
   activate(rows[0]);
+  syncLayout();
+  narrow.addEventListener('change', syncLayout);
+  reduced.addEventListener('change', syncLayout);
+  window.addEventListener('resize', queueWatch, {passive:true});
   group.classList.add('disclosure-ready');
 });
 

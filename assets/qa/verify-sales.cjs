@@ -397,15 +397,18 @@ check('Details copy, price, gold CTA and all five accessible disclosure regions 
   assert.equal($('#detalhes h2').textContent,'Feito com carinho,página por página.');
   assert.equal($('#detalhes h2 em').textContent,'carinho,');
   assert.equal($('#detalhes .section-heading > p'),null);
-  assert.deepEqual($$('#detalhes .detail-title').map(el=>el.textContent),['Tamanho A5','Capa com a arte das aulas','Espiral transparente','100 folhas pautadas','Impresso para você']);
+  assert.deepEqual($$('#detalhes .detail-title').map(el=>el.textContent),['Tamanho A5','Capa com a arte das aulas','Espiral com capa protegida','100 folhas pautadas','Impresso para você']);
   assert.deepEqual($$('#detalhes .detail-description p').map(el=>el.textContent),[
     '14,8 x 21 cm. Cabe na bolsa e na mochila.',
     'Colorida, com acetato transparente que protege do dia a dia.',
-    'Abre totalmente plano, para escrever com conforto.',
+    'Espiral que abre totalmente plana. A capa tem uma película de acetato que protege a arte.',
     '100 folhas em papel offset 75 g.',
     'Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega no Brasil e no exterior.'
   ]);
   assert.deepEqual($$('#detalhes .detail-number').map(el=>el.textContent),['01','02','03','04','05']);
+  assert.ok($('#detalhes .details-scene .details-progresso[aria-hidden="true"] > i'));
+  assert.ok($('#detalhes .details-content > .details-purchase'));
+  assert.equal(page.document.body.textContent.includes('spiral transparente'),false);
   for(const button of $$('#detalhes .detail-trigger')){
     const region=page.document.getElementById(button.getAttribute('aria-controls'));
     assert.equal(region.getAttribute('aria-labelledby'),button.id);
@@ -423,7 +426,7 @@ check('Hover, focus and keyboard navigate details; coarse touch does not activat
   doc.querySelector('#detalhe-02').dispatchEvent(pointer);
   assert.equal(doc.querySelector('#caderno-detalhes').dataset.cadernoFeature,'02');
   doc.querySelector('#detalhe-03').dispatchEvent(new active.window.Event('focus'));
-  assert.equal(doc.querySelector('[data-detail-caption]').textContent,'Espiral transparente');
+  assert.equal(doc.querySelector('[data-detail-caption]').textContent,'Espiral com capa protegida');
   let focused=null;
   for(const button of doc.querySelectorAll('.detail-trigger'))button.focus=()=>{focused=button.id;};
   const key=(id,key)=>{
