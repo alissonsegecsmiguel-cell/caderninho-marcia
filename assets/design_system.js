@@ -160,7 +160,10 @@
   $$('.section').forEach((section, i) => {
     section.insertAdjacentHTML('beforeend', ribbons);
     if (i > 0) section.insertAdjacentHTML('beforeend', '<svg class="icon section-leaf" aria-hidden="true"><use href="#i-leaf"/></svg>');
-    $$('[data-reveal]', section).forEach((el, n) => el.style.setProperty('--reveal-delay', `${Math.min(n % 3 * 80, 240)}ms`));
+    $$('[data-reveal]', section).forEach((el, n) => {
+      const delay = section.classList.contains('hero') ? n * 80 : n % 3 * 80;
+      el.style.setProperty('--reveal-delay', `${delay}ms`);
+    });
   });
   $$('.icon').forEach(svg => { svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false'); });
 

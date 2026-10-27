@@ -1,2 +1,2 @@
 PASS assets/design_system.css: 2447 declarations parsed; no syntax/property errors detected.
-PASS assets/pagina.css: 136 declarations parsed; no syntax/property errors detected.
+PASS assets/pagina.css: 99 declarations parsed; no syntax/property errors detected.

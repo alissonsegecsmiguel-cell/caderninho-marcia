@@ -11,13 +11,13 @@ const ids = ['inicio','a-frase','para-que','detalhes','como-comprar','perguntas'
 const report = [];
 const check = (label, action) => { action(); report.push(`PASS ${label}`); };
 
-function load({link, price, reduced=false, extraButton=false}={}) {
+function load({link, price, reduced=false, precise=false, extraButton=false}={}) {
   const {document, window} = parseHTML(source);
   const observers=[];
   class Observer { constructor(cb) { this.cb=cb;this.targets=[];observers.push(this); } observe(el) { this.targets.push(el); } unobserve() {} disconnect() {} }
   window.IntersectionObserver=Observer;
   const media={matches:reduced,listeners:[],addEventListener(type,listener) { if(type==='change')this.listeners.push(listener); }};
-  const matchMedia=q=>q.includes('pointer:fine')?{matches:false}:media;
+  const matchMedia=q=>q.includes('pointer:fine')?{matches:precise}:media;
   window.matchMedia=matchMedia;
   const playback={play:0,pause:0,load:0};
   const video=document.getElementById('caderno-video');
@@ -87,7 +87,29 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
   assert.equal($('#inicio-titulo .lettering-transparent').textContent,'na mão!');
   assert.equal($('#inicio .lead').textContent,'Para anotar cada palavra nova, praticar a escrita e revisar o seu português. Com a arte das aulas, espiral e 100 folhas.');
   assert.equal($('#inicio a[data-compra]').textContent,'Quero o meu caderninho');
-  assert.equal($('.hero-purchase-note').textContent,'R$ 65,44 · endereços no Brasil');
+  assert.equal($('.hero-purchase-note').textContent,'R$ 65,44 + frete · Envio para endereços no Brasil');
+});
+check('Hero retains catalogue composition, decorative layers, side rails and a continuous word strip',()=>{
+  const reference=parseHTML(fs.readFileSync(path.join(project,'assets/design_system.html'),'utf8')).document;
+  for(const selector of ['.hero','.hero-glow.bloom[data-ds-bloom]','.hero-grid','.hero-copy','.hero-discord-pill','.display','.lettering-transparent','.lead','.hero-actions','.hero-art','.postmark','.handwritten','.art-caption','.annot.coord','.hero-bottom']){
+    const original=reference.querySelector('#inicio '+selector)||reference.querySelector(selector);
+    const actual=$('#inicio '+selector)||$(selector);
+    assert.ok(actual,selector);
+    for(const className of original.classList)assert.ok(actual.classList.contains(className),selector+' '+className);
+  }
+  assert.equal($('#inicio .hero-art .ds-window'),null);
+  assert.ok($('#inicio .hero-art > video.landscape'));
+  assert.ok($('#inicio .hero-art > img.landscape'));
+  assert.equal($('#inicio .handwritten').childNodes[0].textContent,'Caderninho na mão!');
+  assert.ok($('#inicio .hero-actions .btn.btn-primary.magnetic .arrow .icon'));
+  assert.equal($$('#inicio .side-rail[aria-hidden="true"]').length,2);
+  assert.equal($('#inicio').nextElementSibling.className,'wire');
+  assert.deepEqual($$('.wire-track > span').map(el=>el.textContent),Array(2).fill('Anote ✳ Pratique ✳ Revise ✳ Caderninho na mão ✳ Feito para os alunos da Profa. Marcia ✳'));
+  assert.equal($('.wire-track > span:last-child').getAttribute('aria-hidden'),'true');
+  const ids=$$('[id]').map(el=>el.id);assert.equal(new Set(ids).size,ids.length);
+  for(const el of $$('textPath[href^="#"]'))assert.ok(page.document.getElementById(el.getAttribute('href').slice(1)));
+  const heroReveal=$$('#inicio [data-reveal]');
+  assert.deepEqual(heroReveal.map(el=>el.style.getPropertyValue('--reveal-delay')),['0ms','80ms','160ms','240ms','320ms','400ms','480ms']);
 });
 check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
   assert.ok($('link[href="assets/design_system.css"]'));
@@ -97,8 +119,12 @@ check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
     const ref=el.getAttribute('href')||el.getAttribute('src');
     assert.ok(fs.existsSync(path.join(project,ref)),ref);
   }
-  const css=fs.readFileSync(path.join(project,'assets/pagina.css'),'utf8');
-  for(const [,ref] of css.matchAll(/url\("([^"\n]+)"\)/g))assert.ok(fs.existsSync(path.join(project,'assets',ref)),ref);
+  for(const stylesheet of $$('link[rel="stylesheet"]')){
+    const file=path.join(project,stylesheet.getAttribute('href'));
+    for(const [,ref] of fs.readFileSync(file,'utf8').matchAll(/url\("([^"\n]+)"\)/g)){
+      if(!ref.startsWith('data:'))assert.ok(fs.existsSync(path.resolve(path.dirname(file),ref)),ref);
+    }
+  }
   assert.ok(fs.existsSync(path.join(project,$('video').getAttribute('poster'))));
   assert.ok(fs.existsSync(path.join(project,$('video source').dataset.src)));
 });
@@ -106,9 +132,34 @@ check('Only brand and purchase action in the header; requested footer and shared
   const header=$('header .nav-inner');
   assert.equal(header.children.length,2);
   assert.ok(header.children[0].classList.contains('brand'));
+  assert.equal(header.children[0].textContent.trim(),'marcia macedo');
+  assert.equal(header.querySelector('.brand img'),null);
   assert.ok(header.children[1].hasAttribute('data-compra'));
+  assert.equal(header.querySelector('[data-preco]').textContent,'R$ 65,44');
   assert.ok($('footer').textContent.includes('Profa. Marcia Macedo · @portugues_marciamacedo'));
   assert.equal($$('.footer-tricolor > i').length,3);
+});
+check('Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation',()=>{
+  const active=load({precise:true});
+  const glow=active.document.querySelector('.hero-glow');
+  const button=active.document.querySelector('#inicio .magnetic');
+  const pointer=(x,y)=>Object.assign(new active.window.Event('pointermove',{bubbles:true}),{clientX:x,clientY:y});
+  button.getBoundingClientRect=()=>({left:20,top:30,width:200,height:50});
+  active.window.dispatchEvent(pointer(390,844));
+  assert.equal(glow.style.getPropertyValue('--bloom-x'),'8.0px');
+  assert.equal(glow.style.getPropertyValue('--bloom-y'),'6.0px');
+  button.dispatchEvent(pointer(200,70));
+  assert.equal(button.style.transform,'translate(3px,-0.8px)');
+  button.dispatchEvent(new active.window.Event('pointerleave'));
+  assert.ok(!button.style.transform);
+  const visibility=active.observers.find(observer=>observer.targets.some(el=>el.classList.contains('wire')));
+  const wire=active.document.querySelector('.wire');
+  visibility.cb([{target:wire,isIntersecting:false}]);assert.ok(wire.classList.contains('is-offscreen'));
+  visibility.cb([{target:wire,isIntersecting:true}]);assert.equal(wire.classList.contains('is-offscreen'),false);
+  active.media.matches=true;active.media.listeners.forEach(listener=>listener({matches:true}));
+  active.window.dispatchEvent(pointer(390,844));button.dispatchEvent(pointer(200,70));
+  assert.ok(!glow.style.getPropertyValue('--bloom-x'));
+  assert.ok(!button.style.transform);
 });
 check('Shared runtime boots without catalogue elements and adds every background/reveal',()=>{
   assert.equal($$('.section-ribbon').length,7);

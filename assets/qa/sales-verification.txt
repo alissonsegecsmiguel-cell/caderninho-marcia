@@ -1,8 +1,10 @@
 PASS Seven sections remain in order; the five sections after a-frase are still placeholders
 PASS A-frase reuses the green identity layout, exact copy, watercolor details and full cover
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
+PASS Hero retains catalogue composition, decorative layers, side rails and a continuous word strip
 PASS Shared CSS, JS, fonts and image paths resolve from the root
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
+PASS Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
 PASS All purchase links use the configured Clube de Autores destination and editable price
 PASS Configured URL and changed price apply to all purchase buttons, in new tabs
@@ -11,5 +13,5 @@ PASS Normal playback starts muted/inline with a first-frame poster, no controls 
 PASS Ending holds the open notebook image and never restarts the finished video
 PASS Enabling reduced motion during playback stops and unloads the MP4
 
-12 sales-page checks passed.
+14 sales-page checks passed.
 Media APIs are simulated: native autoplay/rendering and the live checkout destination were not verified in a browser.
