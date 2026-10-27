@@ -74,7 +74,7 @@ check('Product showcase keeps the requested copy, purchase configuration and fiv
   assert.equal($('#para-que [data-preco]').textContent,'R$ 65,44');
   assert.equal($('#para-que a[href="#detalhes"]').textContent,'Ver todos os detalhes do caderno ↓');
   assert.deepEqual($$('#para-que .vitrine-prices tr').map(el=>[...el.children].map(cell=>cell.textContent)),[
-    ['Caderninho na Mão!','R$ 65,44'],['Frete','Calculado pelo CEP'],['Entrega','Para endereços no Brasil']
+    ['Caderninho na Mão!','R$ 65,44'],['Frete','Calculado no carrinho'],['Entrega','No Brasil e no exterior']
   ]);
   assert.deepEqual($$('[data-note-slide]').map(slide=>[...slide.querySelectorAll('.note-writing p')].map(p=>p.textContent)),[
     ['saudade · /sawˈda.dʒi/ · substantivo','A falta que a gente sente de alguém, de um lugar ou de um momento.','"Que saudade das nossas aulas!"'],
@@ -155,7 +155,7 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
   assert.equal($('#inicio-titulo .lettering-transparent').textContent,'na mão!');
   assert.equal($('#inicio .lead').textContent,'Para anotar cada palavra nova, praticar a escrita e revisar o seu português. Com a arte das aulas, espiral e 100 folhas.');
   assert.equal($('#inicio a[data-compra]').textContent,'Quero o meu caderninho');
-  assert.equal($('.hero-purchase-note').textContent,'Envio para endereços no Brasil');
+  assert.equal($('.hero-purchase-note').textContent,'Envio para o Brasil e para o exterior');
   assert.equal($('#inicio [data-preco]'),null);
 });
 check('Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip',()=>{
@@ -380,7 +380,7 @@ check('Details copy, price, gold CTA and all six accessible disclosure regions m
     'Abre totalmente plano, para escrever com conforto.',
     '200 páginas em papel offset 75 g.',
     'Pão de Açúcar, folhas e coqueiros em tons suaves em cada página.',
-    'Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega para endereços no Brasil.'
+    'Feito sob encomenda em até 4 dias úteis, com nota fiscal. Entrega no Brasil e no exterior.'
   ]);
   for(const button of $$('#detalhes .detail-trigger')){
     const region=page.document.getElementById(button.getAttribute('aria-controls'));
@@ -432,7 +432,7 @@ check('Purchase section combines seven exact answers, portrait postcard, shared 
   assert.deepEqual($$('[data-faq] .detail-description p').map(el=>el.textContent),[
     'É simples: clique em "Quero o meu caderninho" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.',
     'Porque cada caderninho é impresso sob encomenda e enviado direto para você. O Clube de Autores, a plataforma parceira da professora, cuida da impressão, do pagamento e da entrega.',
-    'R$ 65,44, mais o frete. O frete é calculado pelo seu CEP na hora da compra.',
+    'R$ 65,44, mais o frete. O frete é calculado na hora da compra, pelo seu CEP ou, fora do Brasil, pelo seu país.',
     'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende do frete que você escolher.',
     'Sim. No carrinho, em "Informações de envio", escolha "Desejo receber fora do Brasil". Tenha em mãos o seu número fiscal ou documento do seu país (por exemplo, DNI ou CUIT na Argentina e NIF em Portugal): ele é pedido para a entrega internacional. O frete e o prazo são calculados para o seu país antes do pagamento.',
     'Sim. A capa tem a arte das aulas da professora, e as páginas internas têm pautas e ilustrações suaves em tons de cinza, como você vê aqui.',
@@ -501,7 +501,7 @@ check('Closing reuses the catalogue composition, requested copy, green backgroun
   assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'nova');
   assert.equal($('#chamada-final-titulo em').textContent,'esperando por você.');
   assert.equal($('#chamada-final .lead').textContent,'Leve as aulas da Profa. Marcia para cada página do seu caderninho.');
-  assert.equal($('#chamada-final .closing-price').textContent,'R$ 65,44 + frete · Envio para endereços no Brasil');
+  assert.equal($('#chamada-final .closing-price').textContent,'R$ 65,44 + frete · Envio para o Brasil e para o exterior');
   assert.ok($('#chamada-final [data-compra]').matches('.btn.btn-gold.magnetic'));
   assert.equal($('#chamada-final .closing-heart').textContent,'♡');
   assert.equal($$('#chamada-final .hero-tropical').length,2);

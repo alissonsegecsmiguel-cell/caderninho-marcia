@@ -12,7 +12,7 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Compartilhamento e ícones: assets/images/og-image.jpg (1200 x 630, cerca de 105 KB), favicon.ico (32 x 32), favicon.svg e apple-touch-icon.png (180 x 180) na raiz, com o ícone de caderno do design system em verde sobre creme.
 - 404.html na raiz: "Essa página não está no caderno." com botão "Voltar para a página inicial" (a Vercel usa esse arquivo automaticamente).
 - Menu fixo: marca "marcia macedo" e botão "Quero o meu caderninho".
-- Hero (#inicio): título "Caderninho na mão!", aquarela do Rio ao fundo, caderno 3D em ciclo (abre e fecha), carimbo .postmark, botão de compra e aviso "Envio para endereços no Brasil". Sem preço na primeira dobra.
+- Hero (#inicio): título "Caderninho na mão!", aquarela do Rio ao fundo, caderno 3D em ciclo (abre e fecha), carimbo .postmark, botão de compra e aviso "Envio para o Brasil e para o exterior". Sem preço na primeira dobra.
 - Faixa .wire: "Anote ✳ Pratique ✳ Revise ✳ ...".
 - Dobra 2 (#a-frase): "Uma frase que virou caderno."; citação que entra linha a linha com sublinhado dourado; leque de 3 postais clicáveis (Salvador, Amazônia, Foz do Iguaçu) com carimbo girando; caderno 3D fechado que inclina com o mouse e entreabre a capa; fundo com ondas do calçadão (assets/images/ondas-calcadao.svg) em parallax; itens 01, 02, 03 em cascata.
 - Dobra 3 (#para-que): vitrine com foto da mão (zoom e brilho no hover; zoom de entrada no celular), carrossel de páginas anotadas que troca sozinho a cada 5 s com barra dourada de progresso, virada de página, botão de pausar, setas, teclado e arraste; ficha de preço com linhas em cascata; objetos decorativos com parallax (dois selos da bandeira, folha e lápis).
@@ -44,7 +44,6 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - Marcia precisa aprovar as citações atribuídas a ela.
 - Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
 - Trocar o card do passo 5 pela captura passo-5-pagamento.jpg quando ela existir (há um comentário no HTML, dentro do passo 5).
-- Envio internacional: a resposta do FAQ "Vocês enviam para fora do Brasil?" agora diz que sim (pelo carrinho do Clube de Autores, com documento fiscal do país). Outros textos ainda falam só em Brasil e precisam de decisão antes de mudar: hero ("Envio para endereços no Brasil"), ficha da dobra 3 ("Para endereços no Brasil"), detalhe "Impresso para você" ("Entrega para endereços no Brasil"), lista da oferta ("Nota fiscal e entrega em todo o Brasil"), texto de apoio da oferta, chamada final, meta description ("Envio para todo o Brasil") e a decisão registrada "envio só para o Brasil". A linha "Mora fora do Brasil? Fale com a gente." da oferta também pode mudar.
 - Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://caderninho-marcia.vercel.app/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
 
 ## Concluído
@@ -64,12 +63,12 @@ Arquivo único index.html, com estilos em assets/design_system.css + assets/pagi
 - 27/10/2026: caderno da chamada final corrigido: integrado à chamada em duas colunas, sem skew (rotateX 5° e rotateY -20°, sem rotateZ), espiral dentro da altura da capa, sombra no chão, composição com folha, selo e lápis; coração isolado removido. Conferido no computador e no celular.
 - 27/10/2026: dobra de oferta "A encomenda" (#oferta) entre detalhes e perguntas, com etiquetas de seção renumeradas. Conferida no computador e no celular.
 - 27/10/2026: botões de compra protegidos contra clique duplo (3 s), com liberação no pageshow. Testado no Chrome: o segundo clique é bloqueado, o bloqueio vale para todos os botões e some depois de 3 s ou ao voltar pelo histórico.
-- 27/10/2026: resposta do FAQ sobre envio para fora do Brasil atualizada.
+- 27/10/2026: resposta do FAQ sobre envio para fora do Brasil atualizada; depois, todos os textos de envio passaram a dizer Brasil e exterior (hero, ficha da dobra 3, detalhe "Impresso para você", oferta, perguntas, chamada final e meta descriptions), e "Calculado pelo CEP" virou "Calculado no carrinho".
 - 27/10/2026: dobra "Como comprar" com 5 passos, linha do tempo animada pelo scroll e lightbox. Conferida no computador e no celular; lightbox testado com Tab, Esc e volta do foco.
 - 27/10/2026: página pronta para compartilhar (title, description, Open Graph, Twitter, canonical, og-image, favicons, theme-color e 404.html).
 
 ## Decisões registradas
-- Venda pelo Clube de Autores, R$ 65,44, envio só para o Brasil.
+- Venda pelo Clube de Autores, R$ 65,44, com envio para o Brasil e para o exterior (no carrinho, "Desejo receber fora do Brasil", com número fiscal ou documento do país). Textos da página atualizados em 27/10/2026.
 - O Pão de Açúcar já aparece na hero e na capa: não repetir em outras dobras.
 - Sem rastreamento de cliques por enquanto (decisão de manter simples).
 - Dobra 2: brasil-aquarela.png não aparece mais nesta dobra (só na hero). As ondas usam opacidade .2 para ficarem como marca d'água.
