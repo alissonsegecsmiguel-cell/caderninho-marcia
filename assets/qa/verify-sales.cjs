@@ -160,7 +160,7 @@ check('Hero copy, lowercase transparent lettering, Brazilian flag and purchase l
   assert.ok($('#inicio-titulo > br'));
   assert.equal($('#inicio-titulo .lettering-transparent').textContent,'na mão!');
   assert.equal($('#inicio .lead').textContent,'Para anotar, praticar e revisar sempre que precisar. Caderno com 100 folhas.');
-  assert.equal($('#inicio a[data-compra]').textContent,'Quero o meu caderninho');
+  assert.equal($('#inicio a[data-compra]').textContent.trim(),'Compre aqui');
   assert.equal($('.hero-purchase-note').textContent,'Envio para o Brasil e para o exterior');
   assert.equal($('#inicio [data-preco]'),null);
 });
@@ -184,7 +184,7 @@ check('Hero retains catalogue composition with Rio behind the notebook, decorati
   assert.ok($('#inicio .hero-flag .flag-orb'));
   assert.equal($$('#inicio img.hero-tropical[aria-hidden="true"][alt=""]').length,2);
   assert.equal($('#inicio .handwritten').childNodes[0].textContent,'Caderninho na mão!');
-  assert.ok($('#inicio .hero-actions .btn.btn-primary.magnetic .arrow .icon'));
+  assert.ok($('#inicio .hero-actions .btn.btn-gold.btn-compra.magnetic .arrow .icon'));
   assert.equal($$('#inicio .side-rail[aria-hidden="true"]').length,2);
   assert.equal($('#inicio').nextElementSibling.className,'wire');
   assert.deepEqual($$('.wire-track > span').map(el=>el.textContent),Array(2).fill('Anote ✳ Pratique ✳ Revise ✳ Caderninho na mão ✳ Feito para os alunos da Profa. Marcia ✳'));
@@ -225,7 +225,7 @@ check('Only brand and purchase action in the header; requested footer and shared
   assert.equal(header.querySelector('.brand img'),null);
   assert.ok(header.children[1].hasAttribute('data-compra'));
   assert.equal(header.querySelector('[data-preco]'),null);
-  assert.equal(header.children[1].textContent.trim(),'Quero o meu caderninho');
+  assert.equal(header.children[1].textContent.trim(),'Compre aqui');
   assert.ok($('footer').textContent.includes('PORTUGUÊS COM ALMA BRASILEIRA'));
   assert.equal($$('.footer-tricolor > i').length,3);
 });
@@ -455,22 +455,21 @@ check('Purchase section combines seven exact answers, portrait postcard, shared 
   assert.deepEqual($$('[data-faq] .detail-title').map(el=>el.textContent),[
     'Como eu compro o caderninho?','Preciso de uma nota fiscal.','Quanto custa?',
     'Quanto tempo demora para chegar?','Vocês enviam para fora do Brasil?',
-    'O caderno é igual ao que aparece na página?','E se eu tiver algum problema com o pedido?'
+    'E se eu tiver algum problema com o pedido?'
   ]);
   assert.deepEqual($$('[data-faq] .detail-description p').map(el=>el.textContent),[
-    'É simples: clique em "Quero o meu caderninho" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.',
+    'É simples: clique em "Compre aqui" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.',
     'Você vai receber a sua nota fiscal que será enviada pelo Clube dos Autores, empresa responsável pela impressão e envio do seu caderninho.',
     'R$ 65,44, mais o frete. O frete é calculado na hora da compra, pelo seu CEP ou, fora do Brasil, pelo seu país.',
-    'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende do frete que você escolher.',
-    'Sim. No carrinho, em "Informações de envio", escolha "Desejo receber fora do Brasil". Tenha em mãos o seu número fiscal ou documento do seu país (por exemplo, DNI ou CUIT na Argentina e NIF em Portugal): ele é pedido para a entrega internacional. O frete e o prazo são calculados para o seu país antes do pagamento.',
-    'Sim. A capa tem a arte das aulas da professora, e as páginas internas têm pautas e ilustrações suaves em tons de cinza, como você vê aqui.',
+    'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende da cidade ou do país que você escolher.',
+    'Sim. No carrinho, escolha "Desejo receber fora do Brasil" e preencha o seu endereço completo e o país de entrega. Tenha em mãos o seu número fiscal ou documento do seu país (por exemplo, DNI ou CUIT na Argentina e NIF em Portugal), que é pedido para a entrega internacional. Alguns países podem não estar disponíveis: o carrinho mostra se o seu país é atendido.',
     'Fale com a gente pelo link "Fale com a equipe". Vamos te ajudar a resolver.'
   ]);
   assert.equal($('.purchase-portrait img').getAttribute('src'),'assets/images/marcia.png');
   assert.ok($('.purchase-stamp .mini-flag'));
   assert.equal($('#compra-card-titulo').textContent,'Pronto para ter o seu caderninho?');
   assert.equal($('.purchase-total [data-preco]').textContent,'R$ 65,44');
-  assert.ok($('.purchase-postcard [data-compra]').matches('.btn.btn-primary.magnetic'));
+  assert.ok($('.purchase-postcard [data-compra]').matches('.btn.btn-gold.btn-compra.magnetic'));
   assert.equal($('.purchase-contact').textContent,'Ficou com dúvida? Fale com a equipe');
 });
 check('Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus',()=>{
@@ -486,11 +485,11 @@ check('Purchase accordion opens one answer at a time, toggles closed, names regi
     assert.equal(panel.getAttribute('aria-hidden'),String(button!==buttons[0]));
     assert.equal(panel.hasAttribute('inert'),button!==buttons[0]);
   });
-  buttons[6].click();assert.equal(expanded().length,1);assert.equal(expanded()[0],buttons[6]);
-  assert.equal(group.querySelector('#compra-resposta-07').hasAttribute('inert'),false);
+  buttons[5].click();assert.equal(expanded().length,1);assert.equal(expanded()[0],buttons[5]);
+  assert.equal(group.querySelector('#compra-resposta-06').hasAttribute('inert'),false);
   assert.equal(group.querySelector('#compra-resposta-01').hasAttribute('inert'),true);
-  buttons[6].click();assert.equal(expanded().length,0);
-  assert.equal(group.querySelector('#compra-resposta-07').hasAttribute('inert'),true);
+  buttons[5].click();assert.equal(expanded().length,0);
+  assert.equal(group.querySelector('#compra-resposta-06').hasAttribute('inert'),true);
   for(const index of [2,1,0,5]){buttons[index].click();assert.equal(expanded().length,1);assert.equal(expanded()[0],buttons[index]);}
   assert.equal(active.document.querySelector('#caderno-detalhes').dataset.cadernoFeature,'01');
   for(const options of [{reduced:true},{withObserver:false}]){
@@ -536,11 +535,20 @@ check('Support links share the configured WhatsApp number and message, allow edi
     }
   }
 });
+check('Every purchase button reads "Compre aqui" with the arrow and shares the large gold style',()=>{
+  const buttons=$$('[data-compra]');assert.equal(buttons.length,9);
+  assert.ok(buttons.every(a=>a.textContent.replace(/\s+/g,' ').trim()==='Compre aqui'));
+  const content=buttons.filter(a=>!a.classList.contains('purchase-button'));assert.equal(content.length,8);
+  assert.ok(content.every(a=>a.matches('.btn.btn-gold.btn-lg.btn-compra.magnetic')&&a.querySelector('.arrow .icon')));
+  const css=fs.readFileSync(path.join(project,'assets/pagina.css'),'utf8');
+  assert.ok(css.includes('.btn.btn-compra{min-width:min(280px,100%);min-height:64px;padding:18px 32px;gap:16px;font-size:18px;font-weight:700;line-height:1.2;white-space:nowrap;'));
+  assert.ok(css.includes('.btn.btn-compra{width:100%;min-width:0;min-height:56px;padding:14px 20px;font-size:18px}'));
+});
 check('Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it',()=>{
   assert.ok($('#chamada-final.closing-section.section-dark.section-forest'));
   assert.equal($('#chamada-final .label').textContent,'CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO.');
-  assert.equal($('#chamada-final-titulo').textContent,'Tem uma página em branco esperando por você.');
-  assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'branco');
+  assert.equal($('#chamada-final-titulo').textContent,'Tem uma página feita com carinho esperando por você.');
+  assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'carinho');
   assert.equal($('#chamada-final-titulo em').textContent,'esperando por você.');
   assert.equal($('#chamada-final .lead'),null);
   assert.equal($('#chamada-final .closing-price').textContent,'R$ 65,44 + frete · Envio para o Brasil e para o exterior');
@@ -622,7 +630,7 @@ check('Mobile bar shares price and checkout, supports iPhone viewport fit and tr
   const active=load({price:'R$ 70,00',layout:{hero:{top:-1200,bottom:-240},closing:{top:2500,bottom:3500}}});
   const bar=active.document.querySelector('[data-mobile-purchase]'),button=bar.querySelector('[data-compra]');
   assert.equal(bar.querySelector('[data-preco]').textContent,'R$ 70,00');
-  assert.equal(button.textContent,'Quero o meu caderninho');
+  assert.equal(button.textContent.trim(),'Compre aqui');
   assert.equal(button.getAttribute('href'),'https://clubedeautores.com.br/livro/caderninho-na-mao-prof-marcia-macedo?cart=true');
   assert.equal(button.hasAttribute('target'),false);
   assert.ok(active.document.querySelector('meta[name="viewport"]').getAttribute('content').includes('viewport-fit=cover'));

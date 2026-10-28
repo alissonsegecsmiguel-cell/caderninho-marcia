@@ -231,7 +231,7 @@ html.js .is-active>.detail-description,.disclosure-ready .is-active>.detail-desc
 .details-purchase .caption{color:var(--text-soft)}
 
 /* CTA dos detalhes: tamanho grande do catálogo, brilho da oferta e halo em transform/opacity. */
-.details-cta{position:relative;isolation:isolate;display:inline-flex;width:min(100%,440px);max-width:100%}
+.details-cta{position:relative;isolation:isolate;display:inline-flex;min-width:min(280px,100%);max-width:100%}
 .details-cta::before{content:"";position:absolute;z-index:-1;inset:-6px;border:1px solid rgba(var(--gold-rgb),.65);border-radius:var(--radius-pill);box-shadow:0 0 24px rgba(var(--gold-rgb),.18);pointer-events:none;animation:details-cta-halo calc(var(--entrance) * 6) var(--ease) infinite}
 .details-cta .btn{width:100%;min-height:72px;padding:22px 30px;gap:24px;font-size:16px;font-weight:700;box-shadow:0 12px 32px -12px rgba(var(--gold-rgb),.55)}
 .details-cta .btn::before{animation:oferta-brilho calc(var(--entrance) * 7.5) var(--ease) calc(var(--entrance) * 2) infinite}
@@ -819,3 +819,11 @@ html.js .passos-bilhete[data-revealed=true]{transform:none}
 .support-cta:is(:hover,:focus-within)::before,.support-cta.is-offscreen::before,.support-cta.is-offscreen .support-button::before{animation-play-state:paused}
 @media(max-width:720px){.support-footer{grid-template-columns:minmax(0,1fr);gap:24px;padding-block:28px calc(34px + env(safe-area-inset-bottom,0px));text-align:center}.support-cta,.support-button{width:100%}.support-copy .body-lg{font-size:18px}.support-button[data-contato]{font-size:13px;padding-inline:18px}}
 @media(prefers-reduced-motion:reduce){.support-cta::before{animation:none;opacity:.3;transform:none}.support-button::before{animation:none}}
+
+/* Botões de compra: todos iguais, no tamanho grande do catálogo (.btn-gold .btn-lg), sem quebrar o texto. */
+.btn.btn-compra{min-width:min(280px,100%);min-height:64px;padding:18px 32px;gap:16px;font-size:18px;font-weight:700;line-height:1.2;white-space:nowrap;box-shadow:0 12px 32px -12px rgba(var(--gold-rgb),.55)}
+.btn.btn-compra:is(:hover,:focus-visible){box-shadow:0 16px 36px -12px rgba(var(--gold-rgb),.65)}
+@media(max-width:720px){
+  .btn.btn-compra{width:100%;min-width:0;min-height:56px;padding:14px 20px;font-size:18px}
+  .hero-actions,.closing-copy>[data-reveal]:has(>.btn-compra){width:100%}
+}

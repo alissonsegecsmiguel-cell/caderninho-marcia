@@ -24,11 +24,12 @@ PASS Hover, focus and keyboard navigate details; coarse touch does not activate 
 PASS Purchase section combines seven exact answers, portrait postcard, shared price and CTA; obsolete FAQ section is removed
 PASS Purchase accordion opens one answer at a time, toggles closed, names regions and removes closed links from focus
 PASS Support links share the configured WhatsApp number and message, allow edits, and block placeholders and unsafe URLs
+PASS Every purchase button reads "Compre aqui" with the arrow and shares the large gold style
 PASS Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it
 PASS Footer keeps the catalogue brand, production credit, external Instagram, return-to-top control and tricolor
 PASS Mobile bar appears only after passing the hero, hides at and after closing, and follows reverse scrolling
 PASS Mobile bar handles restored scrolling, desktop resizing, reduced motion and a no-observer scroll fallback
 PASS Mobile bar shares price and checkout, supports iPhone viewport fit and transfers active focus to the final CTA before hiding
 
-31 sales-page checks passed.
+32 sales-page checks passed.
 DOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.
