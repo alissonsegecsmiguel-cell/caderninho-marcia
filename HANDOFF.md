@@ -19,7 +19,7 @@
 Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html. A versão publicada sai de `npm run build` (scripts/build.cjs) em dist/: CSS minificado inline no <head> e JS minificado com hash em assets/min/. O vercel.json manda a Vercel rodar o build e publicar dist/, com cache longo para fontes, JS com hash e imagens. dist/ e node_modules/ ficam fora do git.
 
 - URL oficial: https://l.fluenti.com.br/caderninho/. O domínio l.fluenti.com.br está ligado a este projeto na Vercel. O endereço https://caderninho-marcia.vercel.app/ continua servindo a página na raiz.
-- Rotas no vercel.json, somente com has: host l.fluenti.com.br: /caderninho → /caderninho/ permanente (308); /caderninho/:path* → /:path* por rewrite interno; / → https://fluenti.com.br temporário (307). Cache original preservado e repetido para /caderninho/assets/fonts/, /min/ e /images/.
+- Rotas no vercel.json, somente com has: host l.fluenti.com.br: /caderninho → /caderninho/ permanente (308); /caderninho/ → /index.html por rewrite explícito da página inicial, antes do rewrite genérico /caderninho/:path* → /:path*; / → https://fluenti.com.br temporário (307). A regra explícita é necessária: no primeiro deploy, o destino genérico / retornou 404, enquanto /caderninho/index.html e os assets já funcionavam. Cache original preservado e repetido para /caderninho/assets/fonts/, /min/ e /images/.
 - Para novas páginas da Fluenti, adicionar neste projeto rewrites condicionados ao host l.fluenti.com.br, apontando /nova-pagina/:path* para a URL do projeto da nova página. O domínio permanece ligado ao projeto atual, que centraliza esse roteamento. Não criar catch-all que absorva as outras páginas.
 - Todos os caminhos de arquivos da página devem continuar relativos: imagens, srcset, preloads, fontes, favicons, CSS, scripts e caminhos montados por JavaScript. O build mantém esse comportamento ao embutir CSS e gerar assets/min/.
 - <head>: title "Caderninho na Mão! | Profa. Marcia Macedo", description, canonical, Open Graph, Twitter (summary_large_image) e theme-color #00854A. URL de produção no comentário, canonical e og:url: https://l.fluenti.com.br/caderninho/. og:image e twitter:image: https://l.fluenti.com.br/caderninho/assets/images/og-image.jpg.
@@ -40,7 +40,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Implementação das rotas e conferência local concluídas; teste pós-deploy pendente do push. O certificado HTTPS já respondeu normalmente na checagem anterior ao deploy; /caderninho/ ainda retornava 404 na versão anterior.
+- Primeiro deploy concluído com SSL válido, raiz antiga 200, redirects 307/308 e assets com cache correto. Ajuste da página inicial: rewrite explícito para /index.html; nova conferência pública após o próximo push.
 
 ## Próximas tarefas (em ordem)
 1. Conferir o deploy público da main e a prévia de compartilhamento quando disponíveis. Não considerar publicação aprovada só porque o push terminou.

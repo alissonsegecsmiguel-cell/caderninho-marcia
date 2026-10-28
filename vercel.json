@@ -17,6 +17,11 @@
   ],
   "rewrites": [
     {
+      "source": "/caderninho/",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "destination": "/index.html"
+    },
+    {
       "source": "/caderninho/:path*",
       "has": [{"type": "host", "value": "l.fluenti.com.br"}],
       "destination": "/:path*"

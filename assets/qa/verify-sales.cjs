@@ -230,7 +230,10 @@ check('Official metadata and host-scoped Vercel routes preserve the original roo
     {source:'/caderninho',has:host,destination:'/caderninho/',permanent:true},
     {source:'/',has:host,destination:'https://fluenti.com.br',permanent:false}
   ]);
-  assert.deepEqual(config.rewrites,[{source:'/caderninho/:path*',has:host,destination:'/:path*'}]);
+  assert.deepEqual(config.rewrites,[
+    {source:'/caderninho/',has:host,destination:'/index.html'},
+    {source:'/caderninho/:path*',has:host,destination:'/:path*'}
+  ]);
   for(const [folder,cache] of [['fonts','public, max-age=31536000, immutable'],['min','public, max-age=31536000, immutable'],['images','public, max-age=2592000, stale-while-revalidate=86400']]){
     const original=config.headers.find(rule=>rule.source===`/assets/${folder}/(.*)`);
     assert.deepEqual(original.headers,[{key:'Cache-Control',value:cache}]);
