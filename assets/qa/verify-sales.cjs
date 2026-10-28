@@ -337,6 +337,13 @@ check('One shared 3D template mounts in hero, details, offer and closing with th
     assert.equal(element.querySelectorAll('.caderno-model').length,1);
     assert.equal(element.querySelector('.caderno-page img').getAttribute('src'),'assets/images/miolo.png');
     assert.equal(element.querySelector('.caderno-cover-front img').getAttribute('src'),'assets/images/capa.jpg');
+    const cover=element.querySelector('.caderno-cover-front source');
+    const reserve=element.querySelector('.caderno-fallback');
+    const preload=$('link[rel="preload"][as="image"][type="image/webp"][imagesrcset*="capa-"]');
+    assert.equal(reserve.getAttribute('srcset'),cover.getAttribute('srcset'));
+    assert.equal(reserve.getAttribute('sizes'),cover.getAttribute('sizes'));
+    assert.equal(reserve.getAttribute('srcset'),preload.getAttribute('imagesrcset'));
+    assert.equal(reserve.getAttribute('sizes'),preload.getAttribute('imagesizes'));
     const back=element.querySelector('[data-caderno-back]');
     assert.equal(back.hidden,element.id!=='caderno-detalhes');
     if(element.id==='caderno-detalhes')assert.equal(back.getAttribute('src'),'assets/images/contra-capa.webp');
