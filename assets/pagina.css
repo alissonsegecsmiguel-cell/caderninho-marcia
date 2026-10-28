@@ -220,7 +220,8 @@ html.js .vitrine-offer[data-revealed=true] .vitrine-prices tr>*{opacity:1;transf
 .detail-number{padding-top:7px;color:var(--accent)}
 .detail-title{font-family:var(--sans);font-size:var(--h3);font-weight:500;line-height:1.18;letter-spacing:-.035em}
 .detail-arrow{font:400 26px/1.2 var(--sans);transition:transform var(--gesture) var(--ease)}
-.detail-trigger:hover,.detail-trigger:focus-visible,.is-active>h3>.detail-trigger{color:var(--accent)}
+.detail-trigger:focus-visible,.is-active>h3>.detail-trigger{color:var(--accent)}
+@media(hover:hover){.detail-trigger:hover{color:var(--accent)}}
 .is-active .detail-arrow{transform:rotate(20deg)}
 .detail-description{display:grid;grid-template-rows:1fr;opacity:1;padding:0 24px 24px 42px;transition:grid-template-rows var(--gesture) var(--ease),opacity var(--gesture) var(--ease),padding-bottom var(--gesture) var(--ease)}
 .detail-description>p{overflow:hidden;min-height:0;color:var(--text-soft);font:400 .875rem/1.7 var(--body)}
@@ -306,7 +307,9 @@ html.motion-paused :is(.detail-description,.detail-trigger,.detail-arrow,.detail
 .purchase-grid{grid-template-areas:"buy faq";grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:80px;align-items:start}
 .purchase-sticky{grid-area:buy;position:sticky;top:40px;width:100%;max-width:440px;align-self:start;justify-self:center}
 .purchase-postcard{rotate:-2deg;text-align:center;box-shadow:var(--shadow);transition-property:transform,box-shadow,border-color,rotate;transition-duration:var(--gesture);transition-timing-function:var(--ease)}
-.purchase-postcard:hover,.purchase-postcard:focus-within{rotate:-.5deg}
+.purchase-postcard:focus-within{rotate:-.5deg}
+@media(hover:hover){.purchase-postcard:hover{rotate:-.5deg}}
+@media(hover:none){.purchase-postcard:hover{transform:none}}
 .purchase-postcard::after{content:"";position:absolute;inset:8px;border:1px solid var(--line-soft);border-radius:calc(var(--radius) - 6px);pointer-events:none}
 .purchase-stamp{position:absolute;right:18px;top:18px;z-index:1;display:grid;justify-items:center;gap:7px;padding:10px 8px;background:var(--paper);border:1px dashed var(--accent);border-radius:calc(var(--radius-sm) / 2);rotate:9deg}
 .purchase-stamp .meta{font-size:6px;letter-spacing:.15em;color:var(--ink)}
@@ -325,20 +328,25 @@ html.motion-paused :is(.detail-description,.detail-trigger,.detail-arrow,.detail
 .purchase-faq{grid-area:faq;min-width:0;border-top-color:var(--line)}
 .purchase-faq .detail-item{border-color:var(--line)}
 .purchase-faq .faq-observacao{display:block;margin-top:8px;color:var(--text-muted)}
-.purchase-faq .detail-item .detail-trigger{grid-template-columns:1fr 24px;color:var(--ink)}
-.purchase-faq .detail-trigger:hover,.purchase-faq .detail-trigger:focus-visible,.purchase-faq .is-active .detail-trigger{color:var(--primary-hover)}
+.purchase-faq .detail-item .detail-trigger{grid-template-columns:1fr 24px;min-height:48px;color:var(--ink)}
+.purchase-faq .detail-trigger:focus-visible,.purchase-faq .is-active .detail-trigger{color:var(--primary-hover)}
+@media(hover:hover){.purchase-faq .detail-trigger:hover{color:var(--primary-hover)}}
 .purchase-faq .detail-title{font-size:var(--h5);line-height:1.4;letter-spacing:-.015em}
 .purchase-faq .detail-arrow{color:var(--accent);text-align:center}
 .purchase-faq .is-active .detail-arrow{transform:rotate(45deg)}
 .purchase-faq .detail-description{padding-inline:0 40px}
 @media(max-width:960px){.purchase-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px}.purchase-postcard{padding:28px}.purchase-stamp{right:12px;top:12px;padding:8px 6px}}
 @media(max-width:720px){
+  #perguntas{padding-bottom:max(68px,calc(var(--mobile-purchase-space,80px) + 24px))}
   .purchase-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"faq" "buy";gap:48px}
   .purchase-sticky{position:static;max-width:440px;justify-self:center}
   .purchase-postcard{rotate:-1deg}
   .purchase-portrait{max-width:200px}
   .purchase-faq .detail-title{font-size:var(--h6)}
   .purchase-faq .detail-description{padding-right:24px}
+  /* A lista permanece legível se o observer não disparar; o surgimento é só um aprimoramento. */
+  html.js #perguntas .purchase-faq[data-reveal]{opacity:1;transform:none}
+  html.js #perguntas .purchase-faq[data-revealed=true]{animation:reveal-rise var(--entrance) var(--ease) both}
 }
 @media(prefers-reduced-motion:reduce){.purchase-postcard{rotate:0deg;transition:none}.purchase-postcard:hover,.purchase-postcard:focus-within{rotate:0deg;transform:none}}
 html.motion-paused .purchase-postcard{rotate:0deg;transform:none;transition:none}
@@ -793,16 +801,16 @@ html.js .passos-bilhete[data-revealed=true]{transform:none}
   .details-progresso{display:block;position:absolute;right:4%;bottom:0;width:56px;height:2px;overflow:hidden;border-radius:2px;background:rgba(var(--gold-rgb),.25)}
   .details-progresso>i{display:block;height:100%;background:var(--accent);transform:scaleX(var(--detalhe-progresso,.2));transform-origin:0 50%;transition:transform var(--gesture) var(--ease)}
   .details-caption{min-height:22px}
-  .details-list{border-top:0}
+  #detalhes .details-list{border-top:0}
   /* Cada item ocupa boa parte da tela, para a troca acontecer com calma, um de cada vez. */
-  .details-list .detail-item{min-height:62svh}
-  .details-list .detail-item:last-child{min-height:48svh}
+  #detalhes .details-list .detail-item{min-height:62svh}
+  #detalhes .details-list .detail-item:last-child{min-height:48svh}
   .details-purchase{padding-top:12px}
 }
 @media(max-width:899px) and (prefers-reduced-motion:reduce){
   .details-stage{position:relative;max-height:none}
-  .details-list .detail-item,.details-list .detail-item:last-child{min-height:0}
-  .disclosure-ready .details-list .detail-description{grid-template-rows:1fr;opacity:1;padding-bottom:24px}
+  #detalhes .details-list .detail-item,#detalhes .details-list .detail-item:last-child{min-height:0}
+  #detalhes .disclosure-ready .details-list .detail-description{grid-template-rows:1fr;opacity:1;padding-bottom:24px}
   .details-progresso{display:none}
 }
 @keyframes detalhe-numero-sai{from{opacity:.5;transform:translateY(0)}to{opacity:0;transform:translateY(-24px)}}
