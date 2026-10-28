@@ -346,7 +346,7 @@ html.motion-paused :is(.detail-description,.detail-trigger,.detail-arrow,.detail
   .purchase-faq .detail-description{padding-right:24px}
   /* A lista permanece legível se o observer não disparar; o surgimento é só um aprimoramento. */
   html.js #perguntas .purchase-faq[data-reveal]{opacity:1;transform:none}
-  html.js #perguntas .purchase-faq[data-revealed=true]{animation:reveal-rise var(--entrance) var(--ease) both}
+  html.js:not(.motion-paused) #perguntas .purchase-faq[data-revealed=true]{animation:reveal-rise var(--entrance) var(--ease) both}
 }
 @media(prefers-reduced-motion:reduce){.purchase-postcard{rotate:0deg;transition:none}.purchase-postcard:hover,.purchase-postcard:focus-within{rotate:0deg;transform:none}}
 html.motion-paused .purchase-postcard{rotate:0deg;transform:none;transition:none}

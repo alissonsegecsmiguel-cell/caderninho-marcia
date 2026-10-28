@@ -73,8 +73,9 @@ async function evaluate(expression){const r=await rpc('Runtime.evaluate',{expres
      }
      if(width>=720){
        await evaluate("document.querySelector('#compra-pergunta-03').focus()");
+       assert.equal(await evaluate("document.activeElement.id"),'compra-pergunta-03');
        for(const expected of ['true','false']){
-         await rpc('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+         await rpc('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',unmodifiedText:'\r',windowsVirtualKeyCode:13});
          await rpc('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await sleep(400);
          assert.equal(await evaluate("document.querySelector('#compra-pergunta-03').getAttribute('aria-expanded')"),expected,'keyboard disclosure');
        }
@@ -95,6 +96,9 @@ async function evaluate(expression){const r=await rpc('Runtime.evaluate',{expres
        await rpc('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
        await evaluate("document.querySelector('[data-faq]').removeAttribute('data-revealed')");
        assert.equal(await evaluate("getComputedStyle(document.querySelector('[data-faq]')).opacity"),'1','visible when reveal never fires');
+       await evaluate("document.documentElement.classList.add('motion-paused');document.querySelector('[data-faq]').dataset.revealed='true'");
+       assert.equal(await evaluate("getComputedStyle(document.querySelector('[data-faq]')).opacity"),'1','visible when motion is paused');
+       await evaluate("document.documentElement.classList.remove('motion-paused')");
      }
      for(const section of ['para-que','oferta','chamada-final']){
        await evaluate(`document.getElementById('${section}').scrollIntoView({block:'start',behavior:'instant'})`);await sleep(1000);
