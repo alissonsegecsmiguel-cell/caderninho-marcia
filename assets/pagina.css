@@ -324,6 +324,7 @@ html.motion-paused :is(.detail-description,.detail-trigger,.detail-arrow,.detail
 [data-contato][aria-disabled=true]{color:var(--ink-mute);cursor:default}
 .purchase-faq{grid-area:faq;min-width:0;border-top-color:var(--line)}
 .purchase-faq .detail-item{border-color:var(--line)}
+.purchase-faq .faq-observacao{display:block;margin-top:8px;color:var(--text-muted)}
 .purchase-faq .detail-item .detail-trigger{grid-template-columns:1fr 24px;color:var(--ink)}
 .purchase-faq .detail-trigger:hover,.purchase-faq .detail-trigger:focus-visible,.purchase-faq .is-active .detail-trigger{color:var(--primary-hover)}
 .purchase-faq .detail-title{font-size:var(--h5);line-height:1.4;letter-spacing:-.015em}

@@ -461,10 +461,11 @@ check('Purchase section combines seven exact answers, portrait postcard, shared 
     'É simples: clique em "Compre aqui" e finalize o pedido no site do Clube de Autores. O caderno é impresso em até 4 dias úteis, especialmente para você, e enviado para a sua casa.',
     'Você vai receber a sua nota fiscal que será enviada pelo Clube dos Autores, empresa responsável pela impressão e envio do seu caderninho.',
     'R$ 65,44, mais o frete. O frete é calculado na hora da compra, pelo seu CEP ou, fora do Brasil, pelo seu país.',
-    'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende da cidade ou do país que você escolher.',
-    'Sim. No carrinho, escolha "Desejo receber fora do Brasil" e preencha o seu endereço completo e o país de entrega. Tenha em mãos o seu número fiscal ou documento do seu país (por exemplo, DNI ou CUIT na Argentina e NIF em Portugal), que é pedido para a entrega internacional. Alguns países podem não estar disponíveis: o carrinho mostra se o seu país é atendido.',
+    'O caderno é impresso em até 4 dias úteis. Depois, o prazo de entrega depende da cidade/país que você escolher.',
+    'Sim, você só precisa colocar o seu endereço completo e país de entrega.(Exceções: Em regiões em conflito severo ou com colapso econômico (como Síria e Venezuela) ficam de fora da rede de distribuição.)',
     'Fale com a gente pelo link "Fale com a equipe". Vamos te ajudar a resolver.'
   ]);
+  assert.equal($('#compra-resposta-05 .faq-observacao.caption').textContent,"(Exceções: Em regiões em conflito severo ou com colapso econômico (como Síria e Venezuela) ficam de fora da rede de distribuição.)");
   assert.equal($('.purchase-portrait img').getAttribute('src'),'assets/images/marcia.png');
   assert.ok($('.purchase-stamp .mini-flag'));
   assert.equal($('#compra-card-titulo').textContent,'Pronto para ter o seu caderninho?');
@@ -547,7 +548,7 @@ check('Every purchase button reads "Compre aqui" with the arrow and shares the l
 check('Closing keeps the requested copy and green background, with a closed notebook beside the text and leaf, stamp and pencil around it',()=>{
   assert.ok($('#chamada-final.closing-section.section-dark.section-forest'));
   assert.equal($('#chamada-final .label').textContent,'CADERNINHO NA MÃO. PORTUGUÊS NO CORAÇÃO.');
-  assert.equal($('#chamada-final-titulo').textContent,'Tem uma página feita com carinho esperando por você.');
+  assert.equal($('#chamada-final-titulo').textContent,'Tem uma página cheia de carinho esperando por você.');
   assert.equal($('#chamada-final-titulo .lettering-transparent').textContent,'carinho');
   assert.equal($('#chamada-final-titulo em').textContent,'esperando por você.');
   assert.equal($('#chamada-final .lead'),null);
