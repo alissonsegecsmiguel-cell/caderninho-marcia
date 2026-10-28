@@ -78,7 +78,8 @@ check('All six sections are complete, remain in order and have valid headings',(
   assert.equal($('meta[property="og:image"]').getAttribute('content'),'https://l.fluenti.com.br/caderninho/assets/images/og-image.jpg');
   assert.equal($('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
   assert.equal($('link[rel="canonical"]').getAttribute('href'),'https://l.fluenti.com.br/caderninho/');
-  assert.ok($('meta[name="description"]').getAttribute('content').includes('Envio para o Brasil e para o exterior.'));
+  const description='O caderno da Profa. Marcia Macedo para quem está aprendendo português. A5, espiral, 100 folhas pautadas para suas anotações. Envio para o Brasil e para o exterior.';
+  for(const selector of ['meta[name="description"]','meta[property="og:description"]','meta[name="twitter:description"]'])assert.equal($(selector).getAttribute('content'),description,selector);
   assert.ok(fs.existsSync(path.join(project,'404.html')));
 });
 check('Product showcase keeps the requested copy, purchase configuration and five real annotated pages',()=>{
