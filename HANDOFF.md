@@ -1,9 +1,9 @@
 # HANDOFF: diário de passagem
 
 ## Última sessão
-- Ferramenta: Claude Code
+- Ferramenta: Codex
 - Data: 28/10/2026
-- Resumo: novos textos da Profa. Marcia: FAQ de prazo ("cidade/país"), resposta curta sobre envio internacional com observação de exceções em .caption e chamada final "Tem uma página cheia de carinho esperando por você.". Botões "Compre aqui" não foram alterados.
+- Resumo: URL oficial configurada para https://l.fluenti.com.br/caderninho/, com redirects e rewrite condicionados ao host l.fluenti.com.br, metadados atualizados e cache preservado na raiz e no caminho /caderninho/assets/. Visual, textos visíveis e animações preservados.
 
 ## Leia primeiro: feito e não feito
 
@@ -11,14 +11,18 @@
 - As alterações locais dos detalhes, que os registros anteriores citam como "fora do commit", foram revisadas e são consolidadas neste fechamento: CSS, JS, HTML e testes. Esses avisos nas entradas históricas não indicam mais trabalho local por registrar.
 - Feito: remoção de `#a-frase` e `#como-comprar`, links e etiquetas corrigidos; chamada final "Tem uma página cheia de carinho esperando por você." sem texto de apoio; FAQ da nota fiscal; remoção de "200 páginas" do conteúdo e metadados; botão dos detalhes maior, com halo e brilho; detalhes do celular com caderno fixo e troca pela rolagem.
 - Ordem atual: `#inicio`, `#para-que` (02), `#detalhes` (03), `#oferta` (04), `#perguntas` (05), `#chamada-final`. Não restaurar as seções removidas nem a numeração antiga descrita no histórico.
-- Validado neste fechamento (28/10/2026): `npm run build`, `npm test` (32 verificações) e botões de compra medidos no Chrome em 1440 x 900, 1024 x 768, 820 x 1180, 390 x 844 e 360 x 740 (uma linha só, sem rolagem horizontal, sem erros de JavaScript); oferta conferida em 1366 x 768 com os botões visíveis. As rotinas de QA ficam em `assets/qa/runtime/`, ignorado pelo git.
+- Validado neste fechamento (28/10/2026): `npm.cmd run build` e `npm.cmd test` (33 verificações). Marcação visível e script inline idênticos à versão anterior; nenhum CSS ou JS de animação alterado. Chrome local em 1440 e 390 px na raiz e em /caderninho/: imagens e fontes carregadas, surgimentos, selo e faixa animada ativos, sem erros de JavaScript, 404 ou rolagem horizontal. Resultados públicos serão registrados após o push. As rotinas de QA ficam em `assets/qa/runtime/`, ignorado pelo git.
 - Não feito: obter/aprovar novas fotos e arte, definir pagamentos e aplicar as mudanças visuais opcionais do relatório de desempenho. Dependem das decisões listadas em "Pendências".
 - Não validado neste fechamento: checkout real, aparelho físico, novo Lighthouse, compartilhamento em redes sociais e deploy público. Build/testes locais e push não substituem essas verificações. O bloqueio da Vercel do portfólio pertence ao outro projeto e ficou para depois por orientação do usuário.
 
 ## Estado atual da página
 Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pagina.css e scripts em assets/design_system.js + assets/pagina.js. LINK_COMPRA, LINK_CONTATO e PRECO ficam no script inline no fim do index.html. A versão publicada sai de `npm run build` (scripts/build.cjs) em dist/: CSS minificado inline no <head> e JS minificado com hash em assets/min/. O vercel.json manda a Vercel rodar o build e publicar dist/, com cache longo para fontes, JS com hash e imagens. dist/ e node_modules/ ficam fora do git.
 
-- <head>: title "Caderninho na Mão! | Profa. Marcia Macedo", description nova, canonical, Open Graph, Twitter (summary_large_image) e theme-color #00854A. A URL de produção (https://caderninho-marcia.vercel.app/) está num comentário no topo do <head>; ao trocar de domínio, mude canonical, og:url, og:image e twitter:image.
+- URL oficial: https://l.fluenti.com.br/caderninho/. O domínio l.fluenti.com.br está ligado a este projeto na Vercel. O endereço https://caderninho-marcia.vercel.app/ continua servindo a página na raiz.
+- Rotas no vercel.json, somente com has: host l.fluenti.com.br: /caderninho → /caderninho/ permanente (308); /caderninho/:path* → /:path* por rewrite interno; / → https://fluenti.com.br temporário (307). Cache original preservado e repetido para /caderninho/assets/fonts/, /min/ e /images/.
+- Para novas páginas da Fluenti, adicionar neste projeto rewrites condicionados ao host l.fluenti.com.br, apontando /nova-pagina/:path* para a URL do projeto da nova página. O domínio permanece ligado ao projeto atual, que centraliza esse roteamento. Não criar catch-all que absorva as outras páginas.
+- Todos os caminhos de arquivos da página devem continuar relativos: imagens, srcset, preloads, fontes, favicons, CSS, scripts e caminhos montados por JavaScript. O build mantém esse comportamento ao embutir CSS e gerar assets/min/.
+- <head>: title "Caderninho na Mão! | Profa. Marcia Macedo", description, canonical, Open Graph, Twitter (summary_large_image) e theme-color #00854A. URL de produção no comentário, canonical e og:url: https://l.fluenti.com.br/caderninho/. og:image e twitter:image: https://l.fluenti.com.br/caderninho/assets/images/og-image.jpg.
 - Compartilhamento e ícones: assets/images/og-image.jpg (1200 x 630, cerca de 105 KB), favicon.ico (32 x 32), favicon.svg e apple-touch-icon.png (180 x 180) na raiz, com o ícone de caderno do design system em verde sobre creme.
 - 404.html na raiz: "Essa página não está no caderno." com botão "Voltar para a página inicial" (a Vercel usa esse arquivo automaticamente).
 - Menu fixo: marca "marcia macedo" e botão "Compre aqui" (.btn-gold no tamanho compacto do menu, para caber no cabeçalho).
@@ -36,7 +40,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Scripts de verificação em assets/qa/ (verify-sales.cjs e relatórios .txt).
 
 ## Em andamento
-- Nenhuma implementação solicitada em aberto. Legenda da hero simplificada; suporte WhatsApp e ajustes anteriores preservados.
+- Implementação das rotas e conferência local concluídas; teste pós-deploy pendente do push. O certificado HTTPS já respondeu normalmente na checagem anterior ao deploy; /caderninho/ ainda retornava 404 na versão anterior.
 
 ## Próximas tarefas (em ordem)
 1. Conferir o deploy público da main e a prévia de compartilhamento quando disponíveis. Não considerar publicação aprovada só porque o push terminou.
@@ -50,11 +54,12 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Aprovação final dos textos e artes pela Marcia; as citações da antiga seção #a-frase foram removidas junto com a seção.
 - Adicionar formas de pagamento na oferta quando o Clube de Autores confirmar.
 - Adicionar a imagem de fundo oferta-fundo.jpg na dobra de oferta quando ela for gerada (o CSS comentado está no início do bloco da oferta em pagina.css).
-- Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://caderninho-marcia.vercel.app/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
+- Testar a prévia de compartilhamento depois de cada deploy: https://developers.facebook.com/tools/debug/ e https://www.opengraph.xyz/ (cole https://l.fluenti.com.br/caderninho/). No depurador do Facebook, use "Extrair novamente" para limpar o cache da prévia antiga.
 - Decidir os itens da seção 4 do RELATORIO-DESEMPENHO.md (mudam o visual ou as animações; nenhum foi aplicado): textura de papel, filtros e máscaras da hero, caderno 3D em ciclo, quantidade de animações contínuas, animações dentro de SVG, fade do título e hero-letter-shine.
 - Conferir o primeiro deploy com o build: a página publicada deve ter o CSS inline (procure por <style> no código-fonte) e os scripts em assets/min/. Se o deploy falhar na Vercel, a versão anterior continua no ar.
 
 ## Concluído
+- 28/10/2026: rotas e metadados para https://l.fluenti.com.br/caderninho/ configurados, com condição de host nos redirects e rewrite. Sem alterar trailingSlash global ou as regras originais de cache; cache também aplicado aos assets sob /caderninho/. Canonical, og:url, og:image, twitter:image e comentário de produção atualizados. Caminhos da página já eram relativos, inclusive template do caderno, contracapa e imagens expandidas pelo JS; mantidos. Build e 33 verificações aprovados. AGENTS.md registra a URL oficial e o procedimento para futuras páginas da Fluenti.
 - 28/10/2026: textos revisados pela Profa. Marcia. Prazo: "Depois, o prazo de entrega depende da cidade/país que você escolher."; envio para fora: "Sim, você só precisa colocar o seu endereço completo e país de entrega." com a observação "(Exceções: Em regiões em conflito severo ou com colapso econômico (como Síria e Venezuela) ficam de fora da rede de distribuição.)" em linha separada, menor e discreta; chamada final "Tem uma página cheia de carinho esperando por você." com "carinho" vazado e itálico dourado no fim (title e metas não têm a frase). A pergunta "O caderno é igual ao que aparece na página?" já tinha sido removida. Textos aplicados como a cliente enviou. Build e 32 verificações aprovados; conferido no Chrome em 1440 x 900, 390 x 844 e 360 x 740, sem erros nem rolagem horizontal.
 - 28/10/2026: ajustes da Profa. Marcia. FAQ "Quanto tempo demora para chegar?" termina em "Depois, o prazo de entrega depende da cidade ou do país que você escolher."; resposta de "Vocês enviam para fora do Brasil?" substituída pelo texto novo (endereço completo, país, número fiscal e países atendidos); pergunta "O caderno é igual ao que aparece na página?" removida e a última renumerada para 06. Chamada final: "Tem uma página cheia de carinho esperando por você.", mesma formatação (title e metas não continham a frase). Todos os botões de compra com "Compre aqui" e seta, padronizados em .btn-gold .btn-lg .btn-compra; a resposta "Como eu compro" agora cita "Compre aqui". O botão dos detalhes deixou a largura fixa de 440 px para seguir o padrão. Teste verify-sales.cjs atualizado (32 verificações). Conferido no Chrome em 1440, 1024, 820, 390 x 844 e 360 x 740.
 - 27/10/2026: substituídas as coordenadas da hero por "Rio de Janeiro / Brasil" e removida a etiqueta "A ARTE DAS AULAS. NO SEU CADERNO.", deixando apenas a localização solicitada. Mantidas as classes da legenda e os outros elementos da hero. Catálogo do design system e cópia do portfólio preservados. Build e 31 verificações aprovados; conferido visualmente no Chrome em 1440 e 390 px, sem erros ou rolagem horizontal.
@@ -110,7 +115,7 @@ Arquivos legíveis: index.html, estilos em assets/design_system.css + assets/pag
 - Clique duplo: o estilo de desabilitado do design system (.btn:disabled) troca o botão para cinza e só vale para <button>; como os botões de compra são links e o pedido aceitava opacidade reduzida, foi usada só a opacidade .7, sem mudar cores.
 - og-image: gerada com Playwright a partir de um HTML temporário (já apagado), com as fontes e cores do design system; nenhum texto a menos de 84 px das laterais. O marca.svg antigo continua em assets/images/, mas a página agora usa os favicons da raiz.
 - Como comprar: a dobra passou para o fundo creme (como #para-que) para alternar claro e escuro: oferta escura acima, perguntas claras abaixo. Linha do tempo tracejada em verde, números em verde dentro de círculos tracejados em ouro (acesos: verde cheio com número creme), capturas com borda clara e sombra suave, bilhete em papel creme mais claro. A passagem usa a onda do design system no fim da oferta.
-- QA atual: npm test (ou npm.cmd test no PowerShell) executa 32 verificações (inclui o padrão único dos botões "Compre aqui"), com seis seções, quatro cadernos 3D, nove botões de compra, nenhuma âncora para dobras removidas e as etiquetas renumeradas. Os testes dos detalhes locais foram atualizados e incluídos no fechamento; não há mais ajuste dessa tarefa aguardando commit.
+- QA atual: npm test (ou npm.cmd test no PowerShell) executa 33 verificações (inclui botões "Compre aqui", metadados oficiais, rotas por host e cache), com seis seções, quatro cadernos 3D, nove botões de compra, nenhuma âncora para dobras removidas e as etiquetas renumeradas. Os testes dos detalhes locais foram atualizados e incluídos no fechamento; não há mais ajuste dessa tarefa aguardando commit.
 - Desempenho: a entrada da hero começa em 1% de opacidade (imperceptível) para o Chrome contar o título já na primeira pintura; o fade continua igual (0,8 s). Explicado no relatório.
 - Desempenho: as dobras abaixo da primeira usam content-visibility: auto. Capturas de página inteira (fullPage) no Playwright saem em branco nessas dobras; para comparar o visual, role a página e capture tela a tela.
 - As pastas assets/qa/npm-cache/ e assets/qa/runtime/ são cache local dos testes e ficam fora do git (.gitignore).

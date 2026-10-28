@@ -1,6 +1,27 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/caderninho",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "destination": "/caderninho/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "destination": "https://fluenti.com.br",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/caderninho/:path*",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "destination": "/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/assets/fonts/(.*)",
@@ -28,6 +49,21 @@
           "value": "public, max-age=2592000, stale-while-revalidate=86400"
         }
       ]
+    },
+    {
+      "source": "/caderninho/assets/fonts/(.*)",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]
+    },
+    {
+      "source": "/caderninho/assets/min/(.*)",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]
+    },
+    {
+      "source": "/caderninho/assets/images/(.*)",
+      "has": [{"type": "host", "value": "l.fluenti.com.br"}],
+      "headers": [{"key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400"}]
     }
   ]
 }

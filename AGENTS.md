@@ -6,6 +6,9 @@
 3. Consulte o design system: assets/design_system.html, assets/design_system.css e assets/design_system.js.
 
 ## Regras obrigatórias
+- URL oficial: https://l.fluenti.com.br/caderninho/. O domínio l.fluenti.com.br está ligado a este projeto na Vercel; a raiz do endereço vercel.app continua funcionando.
+- Todos os caminhos de arquivos devem continuar relativos, inclusive srcset, preloads, fontes, favicons e URLs montadas por JavaScript, para servir na raiz e em /caderninho/.
+- Para novas páginas da Fluenti, adicionar neste projeto rewrites com has: host l.fluenti.com.br, apontando /nova-pagina/:path* para a URL do projeto da nova página. Manter os redirects e o cache existentes; não associar o mesmo domínio diretamente a outro projeto.
 - Sempre use o design system. Use as classes, cores, fontes, easings e animações que já existem. Nunca crie um visual novo do zero.
 - Estilos novos vão em assets/pagina.css. Scripts novos vão em assets/pagina.js.
 - Os arquivos legíveis (index.html, assets/*.css, assets/*.js) são a fonte. A versão publicada é gerada em dist/ por `npm run build` (CSS minificado inline, JS minificado em assets/min/); a Vercel roda o build sozinha a cada deploy. Nunca edite dist/. Depois de mudar CSS, JS ou HTML, rode `npm run build` e `npm test` para conferir.

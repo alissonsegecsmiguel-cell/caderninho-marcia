@@ -6,7 +6,8 @@ PASS Decorative parallax stays bounded, hides missing images and resets with red
 PASS Removed folds are absent and all remaining in-page links resolve
 PASS Hero copy, lowercase transparent lettering, Brazilian flag and purchase label match the request
 PASS Hero retains catalogue composition with Rio behind the notebook, decorative flag, leaves and a continuous word strip
-PASS Shared CSS, JS, fonts and image paths resolve from the root
+PASS Shared CSS, JS, fonts and images use relative paths at the root and under /caderninho/
+PASS Official metadata and host-scoped Vercel routes preserve the original root and cache rules
 PASS Only brand and purchase action in the header; requested footer and shared tricolor
 PASS Shared glow and magnetic handlers work without catalogue elements, honor reduced motion and pause offscreen animation
 PASS Shared runtime boots without catalogue elements and adds every background/reveal
@@ -31,5 +32,5 @@ PASS Mobile bar appears only after passing the hero, hides at and after closing,
 PASS Mobile bar handles restored scrolling, desktop resizing, reduced motion and a no-observer scroll fallback
 PASS Mobile bar shares price and checkout, supports iPhone viewport fit and transfers active focus to the final CTA before hiding
 
-32 sales-page checks passed.
+33 sales-page checks passed.
 DOM, pointer, timer and viewport APIs are simulated: 3D rendering, page typography, native gestures, mobile composition and live checkout were not verified in a browser.

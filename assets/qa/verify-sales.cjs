@@ -75,9 +75,9 @@ check('All six sections are complete, remain in order and have valid headings',(
   assert.deepEqual($$('main .sec-rule > span:first-child').map(el=>el.textContent),['02 / O CADERNO POR DENTRO','03 / DETALHES','05 / PERGUNTAS']);
   assert.equal($('#oferta .oferta-pilula').textContent,'04 / A OFERTA');
   for(const property of ['og:title','og:description','og:image','og:url','og:image:alt'])assert.ok($(`meta[property="${property}"]`)?.getAttribute('content'),property);
-  assert.equal($('meta[property="og:image"]').getAttribute('content'),'https://caderninho-marcia.vercel.app/assets/images/og-image.jpg');
+  assert.equal($('meta[property="og:image"]').getAttribute('content'),'https://l.fluenti.com.br/caderninho/assets/images/og-image.jpg');
   assert.equal($('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
-  assert.equal($('link[rel="canonical"]').getAttribute('href'),'https://caderninho-marcia.vercel.app/');
+  assert.equal($('link[rel="canonical"]').getAttribute('href'),'https://l.fluenti.com.br/caderninho/');
   assert.ok($('meta[name="description"]').getAttribute('content').includes('Envio para o Brasil e para o exterior.'));
   assert.ok(fs.existsSync(path.join(project,'404.html')));
 });
@@ -194,7 +194,7 @@ check('Hero retains catalogue composition with Rio behind the notebook, decorati
   const heroReveal=$$('#inicio [data-reveal]');
   assert.deepEqual(heroReveal.map(el=>el.style.getPropertyValue('--reveal-delay')),['0ms','80ms','160ms','240ms','320ms','400ms','480ms']);
 });
-check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
+check('Shared CSS, JS, fonts and images use relative paths at the root and under /caderninho/',()=>{
   assert.ok($('link[href="assets/design_system.css"]'));
   assert.ok($('link[href="assets/pagina.css"]'));
   assert.ok($('script[src="assets/design_system.js"]'));
@@ -202,20 +202,41 @@ check('Shared CSS, JS, fonts and image paths resolve from the root',()=>{
   for(const el of $$('link[href],img[src],script[src]')){
     const ref=el.getAttribute('href')||el.getAttribute('src');
     if(/^https?:/.test(ref))continue;
+    assert.ok(!ref.startsWith('/'),ref);
     assert.ok(fs.existsSync(path.join(project,decodeURIComponent(ref))),ref);
   }
   for(const el of $$('source[srcset],link[imagesrcset]'))for(const candidate of (el.getAttribute('srcset')||el.getAttribute('imagesrcset')).split(',')){
-    const ref=candidate.trim().split(/\s+/)[0];assert.ok(fs.existsSync(path.join(project,ref)),ref);
+    const ref=candidate.trim().split(/\s+/)[0];assert.ok(!ref.startsWith('/'),ref);assert.ok(fs.existsSync(path.join(project,ref)),ref);
   }
   for(const stylesheet of $$('link[rel="stylesheet"]')){
     const file=path.join(project,stylesheet.getAttribute('href'));
     // Comentários ficam de fora: o CSS guarda, comentado, o fundo futuro da oferta.
     for(const [,ref] of fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/url\("([^"\n]+)"\)/g)){
-      if(!ref.startsWith('data:'))assert.ok(fs.existsSync(path.resolve(path.dirname(file),ref)),ref);
+      if(!ref.startsWith('data:')){assert.ok(!ref.startsWith('/'),ref);assert.ok(fs.existsSync(path.resolve(path.dirname(file),ref)),ref);}
     }
   }
   assert.equal($$('video').length,0);assert.equal($$('source:not([type="image/webp"])').length,0);
   assert.equal(source.includes('caderno-abrindo.mp4'),false);
+});
+check('Official metadata and host-scoped Vercel routes preserve the original root and cache rules',()=>{
+  const official='https://l.fluenti.com.br/caderninho/';
+  assert.equal($('meta[property="og:url"]').getAttribute('content'),official);
+  assert.equal($('meta[name="twitter:image"]').getAttribute('content'),official+'assets/images/og-image.jpg');
+  const config=JSON.parse(fs.readFileSync(path.join(project,'vercel.json'),'utf8'));
+  assert.equal(config.buildCommand,'npm run build');assert.equal(config.outputDirectory,'dist');
+  assert.equal(config.trailingSlash,undefined);
+  const host=[{type:'host',value:'l.fluenti.com.br'}];
+  assert.deepEqual(config.redirects,[
+    {source:'/caderninho',has:host,destination:'/caderninho/',permanent:true},
+    {source:'/',has:host,destination:'https://fluenti.com.br',permanent:false}
+  ]);
+  assert.deepEqual(config.rewrites,[{source:'/caderninho/:path*',has:host,destination:'/:path*'}]);
+  for(const [folder,cache] of [['fonts','public, max-age=31536000, immutable'],['min','public, max-age=31536000, immutable'],['images','public, max-age=2592000, stale-while-revalidate=86400']]){
+    const original=config.headers.find(rule=>rule.source===`/assets/${folder}/(.*)`);
+    assert.deepEqual(original.headers,[{key:'Cache-Control',value:cache}]);
+    const nested=config.headers.find(rule=>rule.source===`/caderninho/assets/${folder}/(.*)`);
+    assert.deepEqual(nested.has,host);assert.deepEqual(nested.headers,original.headers);
+  }
 });
 check('Only brand and purchase action in the header; requested footer and shared tricolor',()=>{
   const header=$('header .nav-inner');
