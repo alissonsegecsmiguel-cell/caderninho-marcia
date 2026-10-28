@@ -1,0 +1,1597 @@
+{
+  "date": "2026-10-28",
+  "official": "https://l.fluenti.com.br/caderninho/",
+  "old": "https://caderninho-marcia.vercel.app/",
+  "conclusion": "No address-specific regression demonstrated; overlapping run ranges and equivalent content, cache, compression and request graph. No application changes applied.",
+  "lighthouse": {
+    "version": "13.6.0",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+    "method": "Lighthouse 13.6.0 mobile simulated; clean Chrome per run; order new/old/old/new/new/old; medians calculated independently per metric",
+    "settings": {
+      "output": "json",
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance"
+      ],
+      "skipAudits": null
+    },
+    "medians": {
+      "new": {
+        "performance": 67,
+        "lcp": 1145.916,
+        "fcp": 1145.916,
+        "tbt": 2615.5000000000005,
+        "cls": 0,
+        "speedIndex": 4939.681358783384,
+        "bytes": 1155283,
+        "requests": 17
+      },
+      "old": {
+        "performance": 67,
+        "lcp": 1124.6,
+        "fcp": 1124.6,
+        "tbt": 2768.5,
+        "cls": 0,
+        "speedIndex": 4658.05407067032,
+        "bytes": 1155343,
+        "requests": 17
+      }
+    },
+    "ranges": {
+      "new": {
+        "performance": [
+          65,
+          68
+        ],
+        "lcp": [
+          1088.1799999999998,
+          2001.627
+        ],
+        "fcp": [
+          1088.1799999999998,
+          2001.627
+        ],
+        "tbt": [
+          2611,
+          3184.5
+        ],
+        "cls": [
+          0,
+          0
+        ],
+        "speedIndex": [
+          4488.9389877476015,
+          4988.124328720107
+        ],
+        "bytes": [
+          1155217,
+          1155296
+        ]
+      },
+      "old": {
+        "performance": [
+          66,
+          69
+        ],
+        "lcp": [
+          1059.7359999999999,
+          1889.617
+        ],
+        "fcp": [
+          1059.7359999999999,
+          1889.617
+        ],
+        "tbt": [
+          2160.5,
+          3192.0000000000005
+        ],
+        "cls": [
+          0,
+          0.00055059216250146
+        ],
+        "speedIndex": [
+          4393.825515441288,
+          4990.827110320346
+        ],
+        "bytes": [
+          1155303,
+          1155354
+        ]
+      }
+    },
+    "runs": [
+      {
+        "label": "new",
+        "number": 1,
+        "url": "https://l.fluenti.com.br/caderninho/",
+        "fetchedAt": "2026-10-28T17:47:59.815Z",
+        "benchmarkIndex": 1178,
+        "metrics": {
+          "performance": 65,
+          "lcp": 2001.627,
+          "fcp": 2001.627,
+          "tbt": 2615.5000000000005,
+          "cls": 0,
+          "speedIndex": 4988.124328720107,
+          "bytes": 1155217
+        },
+        "requests": 17,
+        "traceEntries": 19,
+        "errors": [],
+        "warnings": [],
+        "mainThread": [
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 3726.5399999999836
+          },
+          {
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout",
+            "duration": 3152.936000000001
+          },
+          {
+            "group": "paintCompositeRender",
+            "groupLabel": "Rendering",
+            "duration": 415.8119999999985
+          },
+          {
+            "group": "scriptEvaluation",
+            "groupLabel": "Script Evaluation",
+            "duration": 170.112
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 141.432
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 16.955999999999996
+          }
+        ]
+      },
+      {
+        "label": "old",
+        "number": 1,
+        "url": "https://caderninho-marcia.vercel.app/",
+        "fetchedAt": "2026-10-28T17:48:17.058Z",
+        "benchmarkIndex": 754.5,
+        "metrics": {
+          "performance": 67,
+          "lcp": 1124.6,
+          "fcp": 1124.6,
+          "tbt": 3192.0000000000005,
+          "cls": 0,
+          "speedIndex": 4990.827110320346,
+          "bytes": 1155343
+        },
+        "requests": 17,
+        "traceEntries": 19,
+        "errors": [],
+        "warnings": [],
+        "mainThread": [
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 3737.575999999996
+          },
+          {
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout",
+            "duration": 2413.367999999999
+          },
+          {
+            "group": "paintCompositeRender",
+            "groupLabel": "Rendering",
+            "duration": 315.71200000000084
+          },
+          {
+            "group": "scriptEvaluation",
+            "groupLabel": "Script Evaluation",
+            "duration": 168.14800000000005
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 134.54400000000004
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 17.148
+          }
+        ]
+      },
+      {
+        "label": "old",
+        "number": 2,
+        "url": "https://caderninho-marcia.vercel.app/",
+        "fetchedAt": "2026-10-28T17:48:34.333Z",
+        "benchmarkIndex": 872.5,
+        "metrics": {
+          "performance": 66,
+          "lcp": 1889.617,
+          "fcp": 1889.617,
+          "tbt": 2768.5,
+          "cls": 0.00055059216250146,
+          "speedIndex": 4658.05407067032,
+          "bytes": 1155354
+        },
+        "requests": 17,
+        "traceEntries": 19,
+        "errors": [],
+        "warnings": [],
+        "mainThread": [
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 3790.147999999989
+          },
+          {
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout",
+            "duration": 2836.147999999997
+          },
+          {
+            "group": "paintCompositeRender",
+            "groupLabel": "Rendering",
+            "duration": 347.6200000000013
+          },
+          {
+            "group": "scriptEvaluation",
+            "groupLabel": "Script Evaluation",
+            "duration": 153.19600000000008
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 109.07199999999997
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 37.284
+          }
+        ]
+      },
+      {
+        "label": "new",
+        "number": 2,
+        "url": "https://l.fluenti.com.br/caderninho/",
+        "fetchedAt": "2026-10-28T17:48:50.710Z",
+        "benchmarkIndex": 749.5,
+        "metrics": {
+          "performance": 67,
+          "lcp": 1145.916,
+          "fcp": 1145.916,
+          "tbt": 3184.5,
+          "cls": 0,
+          "speedIndex": 4939.681358783384,
+          "bytes": 1155283
+        },
+        "requests": 17,
+        "traceEntries": 19,
+        "errors": [],
+        "warnings": [],
+        "mainThread": [
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 3862.8559999999866
+          },
+          {
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout",
+            "duration": 2932.012
+          },
+          {
+            "group": "paintCompositeRender",
+            "groupLabel": "Rendering",
+            "duration": 392.7400000000041
+          },
+          {
+            "group": "scriptEvaluation",
+            "groupLabel": "Script Evaluation",
+            "duration": 158.68400000000014
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 115.76799999999999
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 19.66
+          }
+        ]
+      },
+      {
+        "label": "new",
+        "number": 3,
+        "url": "https://l.fluenti.com.br/caderninho/",
+        "fetchedAt": "2026-10-28T17:49:08.445Z",
+        "benchmarkIndex": 840,
+        "metrics": {
+          "performance": 68,
+          "lcp": 1088.1799999999998,
+          "fcp": 1088.1799999999998,
+          "tbt": 2611,
+          "cls": 0,
+          "speedIndex": 4488.9389877476015,
+          "bytes": 1155296
+        },
+        "requests": 17,
+        "traceEntries": 19,
+        "errors": [],
+        "warnings": [],
+        "mainThread": [
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 2970.4519999999875
+          },
+          {
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout",
+            "duration": 2809.708
+          },
+          {
+            "group": "paintCompositeRender",
+            "groupLabel": "Rendering",
+            "duration": 361.86800000000386
+          },
+          {
+            "group": "scriptEvaluation",
+            "groupLabel": "Script Evaluation",
+            "duration": 148.696
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 142.29600000000002
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 17.556000000000004
+          }
+        ]
+      },
+      {
+        "label": "old",
+        "number": 3,
+        "url": "https://caderninho-marcia.vercel.app/",
+        "fetchedAt": "2026-10-28T17:49:24.891Z",
+        "benchmarkIndex": 888.5,
+        "metrics": {
+          "performance": 69,
+          "lcp": 1059.7359999999999,
+          "fcp": 1059.7359999999999,
+          "tbt": 2160.5,
+          "cls": 0,
+          "speedIndex": 4393.825515441288,
+          "bytes": 1155303
+        },
+        "requests": 17,
+        "traceEntries": 19,
+        "errors": [],
+        "warnings": [],
+        "mainThread": [
+          {
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout",
+            "duration": 2846.915999999998
+          },
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 2668.7719999999904
+          },
+          {
+            "group": "paintCompositeRender",
+            "groupLabel": "Rendering",
+            "duration": 344.85600000000346
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 155.10400000000004
+          },
+          {
+            "group": "scriptEvaluation",
+            "groupLabel": "Script Evaluation",
+            "duration": 142.77599999999998
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 19.332
+          }
+        ]
+      }
+    ]
+  },
+  "resourceMedians": {
+    "new": [
+      {
+        "path": "/assets/images/capa.jpg",
+        "type": "Image",
+        "bytes": 363007
+      },
+      {
+        "path": "/assets/images/brasil-aquarela-1024.webp",
+        "type": "Image",
+        "bytes": 132019
+      },
+      {
+        "path": "/assets/images/capa-700.webp",
+        "type": "Image",
+        "bytes": 124554
+      },
+      {
+        "path": "/assets/images/folha-700.webp",
+        "type": "Image",
+        "bytes": 105370
+      },
+      {
+        "path": "/assets/images/mao-caderno-800.webp",
+        "type": "Image",
+        "bytes": 98997
+      },
+      {
+        "path": "/assets/fonts/caveat-latin.woff2",
+        "type": "Font",
+        "bytes": 75115
+      },
+      {
+        "path": "/assets/fonts/inter-tight-latin.woff2",
+        "type": "Font",
+        "bytes": 45079
+      },
+      {
+        "path": "/",
+        "type": "Document",
+        "bytes": 42916
+      },
+      {
+        "path": "/assets/images/selo-480.webp",
+        "type": "Image",
+        "bytes": 38839
+      },
+      {
+        "path": "/assets/fonts/jetbrains-mono-latin.woff2",
+        "type": "Font",
+        "bytes": 31524
+      },
+      {
+        "path": "/assets/fonts/manrope-latin.woff2",
+        "type": "Font",
+        "bytes": 24762
+      },
+      {
+        "path": "/assets/fonts/instrument-serif-italic-latin.woff2",
+        "type": "Font",
+        "bytes": 22296
+      },
+      {
+        "path": "/assets/images/miolo-760.webp",
+        "type": "Image",
+        "bytes": 16592
+      },
+      {
+        "path": "/assets/min/design_system.js",
+        "type": "Script",
+        "bytes": 14677
+      },
+      {
+        "path": "/assets/images/lapis-480.webp",
+        "type": "Image",
+        "bytes": 11594
+      },
+      {
+        "path": "/assets/min/pagina.js",
+        "type": "Script",
+        "bytes": 7247
+      },
+      {
+        "path": "/favicon.svg",
+        "type": "Other",
+        "bytes": 609
+      }
+    ],
+    "old": [
+      {
+        "path": "/assets/images/capa.jpg",
+        "type": "Image",
+        "bytes": 362968
+      },
+      {
+        "path": "/assets/images/brasil-aquarela-1024.webp",
+        "type": "Image",
+        "bytes": 132042
+      },
+      {
+        "path": "/assets/images/capa-700.webp",
+        "type": "Image",
+        "bytes": 124572
+      },
+      {
+        "path": "/assets/images/folha-700.webp",
+        "type": "Image",
+        "bytes": 105418
+      },
+      {
+        "path": "/assets/images/mao-caderno-800.webp",
+        "type": "Image",
+        "bytes": 99011
+      },
+      {
+        "path": "/assets/fonts/caveat-latin.woff2",
+        "type": "Font",
+        "bytes": 75120
+      },
+      {
+        "path": "/assets/fonts/inter-tight-latin.woff2",
+        "type": "Font",
+        "bytes": 45079
+      },
+      {
+        "path": "/",
+        "type": "Document",
+        "bytes": 42919
+      },
+      {
+        "path": "/assets/images/selo-480.webp",
+        "type": "Image",
+        "bytes": 38885
+      },
+      {
+        "path": "/assets/fonts/jetbrains-mono-latin.woff2",
+        "type": "Font",
+        "bytes": 31532
+      },
+      {
+        "path": "/assets/fonts/manrope-latin.woff2",
+        "type": "Font",
+        "bytes": 24794
+      },
+      {
+        "path": "/assets/fonts/instrument-serif-italic-latin.woff2",
+        "type": "Font",
+        "bytes": 22290
+      },
+      {
+        "path": "/assets/images/miolo-760.webp",
+        "type": "Image",
+        "bytes": 16595
+      },
+      {
+        "path": "/assets/min/design_system.js",
+        "type": "Script",
+        "bytes": 14677
+      },
+      {
+        "path": "/assets/images/lapis-480.webp",
+        "type": "Image",
+        "bytes": 11571
+      },
+      {
+        "path": "/assets/min/pagina.js",
+        "type": "Script",
+        "bytes": 7247
+      },
+      {
+        "path": "/favicon.svg",
+        "type": "Other",
+        "bytes": 609
+      }
+    ]
+  },
+  "network": [
+    {
+      "label": "new",
+      "cache": "cold",
+      "settings": {
+        "width": 412,
+        "height": 823,
+        "dpr": 1.75,
+        "cpu": 4,
+        "latencyMs": 150,
+        "downloadKbps": 1638.4,
+        "waitAfterLoadMs": 5000
+      },
+      "httpRequests": 16,
+      "bytes": 1143743,
+      "duplicates": [],
+      "failures": [],
+      "redirects": [],
+      "errors": [],
+      "broken": [],
+      "lcp": {
+        "start": 2448,
+        "size": 51714,
+        "url": "",
+        "element": "H1",
+        "id": "inicio-titulo",
+        "text": "Caderninhona mão!✳"
+      },
+      "navigation": {
+        "name": "https://l.fluenti.com.br/caderninho/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 6510,
+        "navigationId": 8784,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.800000011920929,
+        "domainLookupStart": 3.5999999940395355,
+        "domainLookupEnd": 6.9000000059604645,
+        "connectStart": 6.9000000059604645,
+        "secureConnectionStart": 20,
+        "connectEnd": 134.7000000178814,
+        "requestStart": 135.40000000596046,
+        "responseStart": 196.30000001192093,
+        "firstInterimResponseStart": 196.30000001192093,
+        "finalResponseHeadersStart": 217.59999999403954,
+        "responseEnd": 684.2000000178814,
+        "transferSize": 42870,
+        "encodedBodySize": 42570,
+        "decodedBodySize": 180379,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 1512.300000011921,
+        "domContentLoadedEventStart": 1556.0999999940395,
+        "domContentLoadedEventEnd": 1556.2000000178814,
+        "domComplete": 6507.700000017881,
+        "loadEventStart": 6508,
+        "loadEventEnd": 6510,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {}
+      },
+      "preloadResources": [
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/fonts/inter-tight-latin.woff2",
+          "initiator": "link",
+          "start": 321.7000000178814,
+          "end": 1649.800000011921,
+          "transfer": 45216,
+          "encoded": 44916,
+          "decoded": 44916
+        },
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/fonts/manrope-latin.woff2",
+          "initiator": "link",
+          "start": 322.30000001192093,
+          "end": 1120.7000000178814,
+          "transfer": 24876,
+          "encoded": 24576,
+          "decoded": 24576
+        },
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/images/brasil-aquarela-1024.webp",
+          "initiator": "link",
+          "start": 322.5,
+          "end": 4995.9000000059605,
+          "transfer": 132096,
+          "encoded": 131796,
+          "decoded": 131796
+        },
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/images/capa-700.webp",
+          "initiator": "link",
+          "start": 322.59999999403954,
+          "end": 5101.4000000059605,
+          "transfer": 124652,
+          "encoded": 124352,
+          "decoded": 124352
+        }
+      ],
+      "preloadRequests": [
+        {
+          "path": "/assets/fonts/inter-tight-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 319.7109999891836,
+          "bytes": 45079,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/fonts/manrope-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 320.4890000051819,
+          "bytes": 24794,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/brasil-aquarela-1024.webp",
+          "preload": true,
+          "priority": "High",
+          "startMs": 320.6990000035148,
+          "bytes": 132063,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/capa-700.webp",
+          "preload": true,
+          "priority": "Low",
+          "startMs": 320.87500000488944,
+          "bytes": 124554,
+          "protocol": "h2"
+        }
+      ],
+      "firstFoldPaths": [
+        "/",
+        "/assets/fonts/inter-tight-latin.woff2",
+        "/assets/fonts/manrope-latin.woff2",
+        "/assets/images/brasil-aquarela-1024.webp",
+        "/assets/images/capa-700.webp",
+        "/assets/min/design_system.js",
+        "/assets/min/pagina.js",
+        "/assets/images/folha-700.webp",
+        "/assets/images/capa.jpg",
+        "/assets/fonts/jetbrains-mono-latin.woff2",
+        "/assets/fonts/instrument-serif-italic-latin.woff2",
+        "/assets/fonts/caveat-latin.woff2",
+        "/assets/images/selo-480.webp",
+        "/assets/images/mao-caderno-800.webp",
+        "/assets/images/miolo-760.webp",
+        "/favicon.svg"
+      ]
+    },
+    {
+      "label": "new",
+      "cache": "warm",
+      "settings": {
+        "width": 412,
+        "height": 823,
+        "dpr": 1.75,
+        "cpu": 4,
+        "latencyMs": 150,
+        "downloadKbps": 1638.4,
+        "waitAfterLoadMs": 5000
+      },
+      "httpRequests": 15,
+      "bytes": 146,
+      "duplicates": [],
+      "failures": [],
+      "redirects": [],
+      "errors": [],
+      "broken": [],
+      "lcp": {
+        "start": 540,
+        "size": 52152,
+        "url": "",
+        "element": "H1",
+        "id": "inicio-titulo",
+        "text": "Caderninhona mão!✳"
+      },
+      "navigation": {
+        "name": "https://l.fluenti.com.br/caderninho/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 498,
+        "navigationId": 1544,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.9000000059604645,
+        "domainLookupStart": 1.9000000059604645,
+        "domainLookupEnd": 1.9000000059604645,
+        "connectStart": 1.9000000059604645,
+        "secureConnectionStart": 1.9000000059604645,
+        "connectEnd": 1.9000000059604645,
+        "requestStart": 32.80000001192093,
+        "responseStart": 128.09999999403954,
+        "firstInterimResponseStart": 128.09999999403954,
+        "finalResponseHeadersStart": 128.09999999403954,
+        "responseEnd": 292.59999999403954,
+        "transferSize": 300,
+        "encodedBodySize": 42570,
+        "decodedBodySize": 180379,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 216.80000001192093,
+        "unloadEventEnd": 216.80000001192093,
+        "domInteractive": 430,
+        "domContentLoadedEventStart": 467,
+        "domContentLoadedEventEnd": 467.09999999403954,
+        "domComplete": 497.30000001192093,
+        "loadEventStart": 497.7000000178814,
+        "loadEventEnd": 498,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {}
+      },
+      "preloadResources": [
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/fonts/inter-tight-latin.woff2",
+          "initiator": "link",
+          "start": 269,
+          "end": 269,
+          "transfer": 0,
+          "encoded": 44916,
+          "decoded": 44916
+        },
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/fonts/manrope-latin.woff2",
+          "initiator": "link",
+          "start": 269.30000001192093,
+          "end": 269.30000001192093,
+          "transfer": 0,
+          "encoded": 24576,
+          "decoded": 24576
+        },
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/images/brasil-aquarela-1024.webp",
+          "initiator": "link",
+          "start": 269.59999999403954,
+          "end": 269.59999999403954,
+          "transfer": 0,
+          "encoded": 131796,
+          "decoded": 131796
+        },
+        {
+          "url": "https://l.fluenti.com.br/caderninho/assets/images/capa-700.webp",
+          "initiator": "link",
+          "start": 269.7000000178814,
+          "end": 269.7000000178814,
+          "transfer": 0,
+          "encoded": 124352,
+          "decoded": 124352
+        }
+      ],
+      "preloadRequests": [
+        {
+          "path": "/assets/fonts/inter-tight-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 266.85600000200793,
+          "bytes": 0,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/fonts/manrope-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 267.16400001896545,
+          "bytes": 0,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/brasil-aquarela-1024.webp",
+          "preload": true,
+          "priority": "High",
+          "startMs": 267.4550000228919,
+          "bytes": 0,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/capa-700.webp",
+          "preload": true,
+          "priority": "Low",
+          "startMs": 267.67000000108965,
+          "bytes": 0,
+          "protocol": "h2"
+        }
+      ],
+      "firstFoldPaths": [
+        "/",
+        "/assets/fonts/inter-tight-latin.woff2",
+        "/assets/fonts/manrope-latin.woff2",
+        "/assets/images/brasil-aquarela-1024.webp",
+        "/assets/images/capa-700.webp",
+        "/assets/min/design_system.js",
+        "/assets/min/pagina.js",
+        "/assets/fonts/instrument-serif-italic-latin.woff2",
+        "/assets/fonts/jetbrains-mono-latin.woff2",
+        "/assets/fonts/caveat-latin.woff2",
+        "/assets/images/folha-700.webp",
+        "/assets/images/capa.jpg",
+        "/assets/images/selo-480.webp",
+        "/assets/images/mao-caderno-800.webp",
+        "/assets/images/miolo-760.webp"
+      ]
+    },
+    {
+      "label": "old",
+      "cache": "cold",
+      "settings": {
+        "width": 412,
+        "height": 823,
+        "dpr": 1.75,
+        "cpu": 4,
+        "latencyMs": 150,
+        "downloadKbps": 1638.4,
+        "waitAfterLoadMs": 5000
+      },
+      "httpRequests": 16,
+      "bytes": 1143757,
+      "duplicates": [],
+      "failures": [],
+      "redirects": [],
+      "errors": [],
+      "broken": [],
+      "lcp": {
+        "start": 2276,
+        "size": 51714,
+        "url": "",
+        "element": "H1",
+        "id": "inicio-titulo",
+        "text": "Caderninhona mão!✳"
+      },
+      "navigation": {
+        "name": "https://caderninho-marcia.vercel.app/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 8262.40000000596,
+        "navigationId": 9524,
+        "initiatorType": "navigation",
+        "deliveryType": "",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.5999999940395355,
+        "domainLookupStart": 5,
+        "domainLookupEnd": 5,
+        "connectStart": 5,
+        "secureConnectionStart": 18.099999994039536,
+        "connectEnd": 130.59999999403954,
+        "requestStart": 130.80000001192093,
+        "responseStart": 189.69999998807907,
+        "firstInterimResponseStart": 189.69999998807907,
+        "finalResponseHeadersStart": 212.90000000596046,
+        "responseEnd": 880.5,
+        "transferSize": 42870,
+        "encodedBodySize": 42570,
+        "decodedBodySize": 180379,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 0,
+        "unloadEventEnd": 0,
+        "domInteractive": 1335,
+        "domContentLoadedEventStart": 1590.699999988079,
+        "domContentLoadedEventEnd": 1590.800000011921,
+        "domComplete": 8261.59999999404,
+        "loadEventStart": 8261.90000000596,
+        "loadEventEnd": 8262.40000000596,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {}
+      },
+      "preloadResources": [
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/fonts/inter-tight-latin.woff2",
+          "initiator": "link",
+          "start": 364.19999998807907,
+          "end": 2009.4000000059605,
+          "transfer": 45216,
+          "encoded": 44916,
+          "decoded": 44916
+        },
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/fonts/manrope-latin.woff2",
+          "initiator": "link",
+          "start": 364.80000001192093,
+          "end": 1112.4000000059605,
+          "transfer": 24876,
+          "encoded": 24576,
+          "decoded": 24576
+        },
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/images/brasil-aquarela-1024.webp",
+          "initiator": "link",
+          "start": 365,
+          "end": 4916.0999999940395,
+          "transfer": 132096,
+          "encoded": 131796,
+          "decoded": 131796
+        },
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/images/capa-700.webp",
+          "initiator": "link",
+          "start": 365.09999999403954,
+          "end": 5052.0999999940395,
+          "transfer": 124652,
+          "encoded": 124352,
+          "decoded": 124352
+        }
+      ],
+      "preloadRequests": [
+        {
+          "path": "/assets/fonts/inter-tight-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 362.41199998767115,
+          "bytes": 45080,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/fonts/manrope-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 363.058999995701,
+          "bytes": 24789,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/brasil-aquarela-1024.webp",
+          "preload": true,
+          "priority": "High",
+          "startMs": 363.25500000384636,
+          "bytes": 132104,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/capa-700.webp",
+          "preload": true,
+          "priority": "Low",
+          "startMs": 363.4099999908358,
+          "bytes": 124554,
+          "protocol": "h2"
+        }
+      ],
+      "firstFoldPaths": [
+        "/",
+        "/assets/fonts/inter-tight-latin.woff2",
+        "/assets/fonts/manrope-latin.woff2",
+        "/assets/images/brasil-aquarela-1024.webp",
+        "/assets/images/capa-700.webp",
+        "/assets/min/design_system.js",
+        "/assets/min/pagina.js",
+        "/assets/images/folha-700.webp",
+        "/assets/images/capa.jpg",
+        "/assets/fonts/jetbrains-mono-latin.woff2",
+        "/assets/fonts/instrument-serif-italic-latin.woff2",
+        "/assets/fonts/caveat-latin.woff2",
+        "/assets/images/selo-480.webp",
+        "/assets/images/mao-caderno-800.webp",
+        "/assets/images/miolo-760.webp",
+        "/favicon.svg"
+      ]
+    },
+    {
+      "label": "old",
+      "cache": "warm",
+      "settings": {
+        "width": 412,
+        "height": 823,
+        "dpr": 1.75,
+        "cpu": 4,
+        "latencyMs": 150,
+        "downloadKbps": 1638.4,
+        "waitAfterLoadMs": 5000
+      },
+      "httpRequests": 15,
+      "bytes": 147,
+      "duplicates": [],
+      "failures": [],
+      "redirects": [],
+      "errors": [],
+      "broken": [],
+      "lcp": {
+        "start": 744,
+        "size": 52152,
+        "url": "",
+        "element": "H1",
+        "id": "inicio-titulo",
+        "text": "Caderninhona mão!✳"
+      },
+      "navigation": {
+        "name": "https://caderninho-marcia.vercel.app/",
+        "entryType": "navigation",
+        "startTime": 0,
+        "duration": 746.7000000178814,
+        "navigationId": 2851,
+        "initiatorType": "navigation",
+        "deliveryType": "cache",
+        "nextHopProtocol": "h2",
+        "renderBlockingStatus": "non-blocking",
+        "contentType": "text/html",
+        "contentEncoding": "br",
+        "workerStart": 0,
+        "workerRouterEvaluationStart": 0,
+        "workerCacheLookupStart": 0,
+        "workerMatchedSourceType": "",
+        "workerFinalSourceType": "",
+        "redirectStart": 0,
+        "redirectEnd": 0,
+        "fetchStart": 1.100000023841858,
+        "domainLookupStart": 1.100000023841858,
+        "domainLookupEnd": 1.100000023841858,
+        "connectStart": 1.100000023841858,
+        "secureConnectionStart": 1.100000023841858,
+        "connectEnd": 1.100000023841858,
+        "requestStart": 73.90000000596046,
+        "responseStart": 197.7000000178814,
+        "firstInterimResponseStart": 197.7000000178814,
+        "finalResponseHeadersStart": 197.80000001192093,
+        "responseEnd": 392.2000000178814,
+        "transferSize": 300,
+        "encodedBodySize": 42570,
+        "decodedBodySize": 180379,
+        "responseStatus": 200,
+        "serverTiming": [],
+        "unloadEventStart": 286.80000001192093,
+        "unloadEventEnd": 286.80000001192093,
+        "domInteractive": 634.9000000059605,
+        "domContentLoadedEventStart": 729.4000000059605,
+        "domContentLoadedEventEnd": 729.5,
+        "domComplete": 746.3000000119209,
+        "loadEventStart": 746.3000000119209,
+        "loadEventEnd": 746.7000000178814,
+        "type": "navigate",
+        "redirectCount": 0,
+        "activationStart": 0,
+        "criticalCHRestart": 0,
+        "notRestoredReasons": null,
+        "confidence": {}
+      },
+      "preloadResources": [
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/fonts/inter-tight-latin.woff2",
+          "initiator": "link",
+          "start": 340.5,
+          "end": 340.5,
+          "transfer": 0,
+          "encoded": 44916,
+          "decoded": 44916
+        },
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/fonts/manrope-latin.woff2",
+          "initiator": "link",
+          "start": 340.80000001192093,
+          "end": 340.80000001192093,
+          "transfer": 0,
+          "encoded": 24576,
+          "decoded": 24576
+        },
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/images/brasil-aquarela-1024.webp",
+          "initiator": "link",
+          "start": 340.90000000596046,
+          "end": 340.90000000596046,
+          "transfer": 0,
+          "encoded": 131796,
+          "decoded": 131796
+        },
+        {
+          "url": "https://caderninho-marcia.vercel.app/assets/images/capa-700.webp",
+          "initiator": "link",
+          "start": 341.10000002384186,
+          "end": 341.10000002384186,
+          "transfer": 0,
+          "encoded": 124352,
+          "decoded": 124352
+        }
+      ],
+      "preloadRequests": [
+        {
+          "path": "/assets/fonts/inter-tight-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 339.11100000841543,
+          "bytes": 0,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/fonts/manrope-latin.woff2",
+          "preload": true,
+          "priority": "High",
+          "startMs": 339.4069999922067,
+          "bytes": 0,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/brasil-aquarela-1024.webp",
+          "preload": true,
+          "priority": "High",
+          "startMs": 339.6260000008624,
+          "bytes": 0,
+          "protocol": "h2"
+        },
+        {
+          "path": "/assets/images/capa-700.webp",
+          "preload": true,
+          "priority": "Low",
+          "startMs": 339.82799999648705,
+          "bytes": 0,
+          "protocol": "h2"
+        }
+      ],
+      "firstFoldPaths": [
+        "/",
+        "/assets/fonts/inter-tight-latin.woff2",
+        "/assets/fonts/manrope-latin.woff2",
+        "/assets/images/brasil-aquarela-1024.webp",
+        "/assets/images/capa-700.webp",
+        "/assets/min/design_system.js",
+        "/assets/min/pagina.js",
+        "/assets/fonts/instrument-serif-italic-latin.woff2",
+        "/assets/fonts/jetbrains-mono-latin.woff2",
+        "/assets/fonts/caveat-latin.woff2",
+        "/assets/images/folha-700.webp",
+        "/assets/images/capa.jpg",
+        "/assets/images/selo-480.webp",
+        "/assets/images/mao-caderno-800.webp",
+        "/assets/images/miolo-760.webp"
+      ]
+    }
+  ],
+  "http": {
+    "resources": [
+      {
+        "label": "new",
+        "kind": "html",
+        "url": "https://l.fluenti.com.br/caderninho/",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-vercel-cache": "HIT",
+          "age": "1564",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "content-length": null,
+          "etag": "W/\"f8933410d0d781ec7fea0ed711dd5460\"",
+          "x-vercel-id": "gru1::zfhm5-1793209413550-087479dac2d1"
+        },
+        "decodedBytes": 180379,
+        "sha256": "f45b48d7a90f2463ccc55993ac86e91488e5ec4188b5c5aaecbe4ac304db8f0d"
+      },
+      {
+        "label": "new",
+        "kind": "hero",
+        "url": "https://l.fluenti.com.br/caderninho/assets/images/brasil-aquarela-1024.webp",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=2592000, stale-while-revalidate=86400",
+          "x-vercel-cache": "HIT",
+          "age": "1564",
+          "content-encoding": null,
+          "content-type": "image/webp",
+          "content-length": "131796",
+          "etag": "\"efaa9219c2c0fe824e4669686556aa6f\"",
+          "x-vercel-id": "gru1::x8vvb-1793209414012-5b8d5fe83157"
+        },
+        "decodedBytes": 131796,
+        "sha256": "1f75cfed1d1a9cced4ea75d2e87f36b12886bc9a63741d50ad76f6756726753b"
+      },
+      {
+        "label": "new",
+        "kind": "css",
+        "url": "https://l.fluenti.com.br/caderninho/assets/design_system.css",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-vercel-cache": "MISS",
+          "age": "0",
+          "content-encoding": "br",
+          "content-type": "text/css; charset=utf-8",
+          "content-length": null,
+          "etag": "W/\"ed654b2165bb8c515839fa2ba031c76b\"",
+          "x-vercel-id": "gru1::f9swj-1793209414500-fd0b195ea6f3"
+        },
+        "decodedBytes": 64759,
+        "sha256": "fa69566a6ab434a24d2a1bde65890b9e0b900535b67ddc865dec1adf9738a331"
+      },
+      {
+        "label": "new",
+        "kind": "js",
+        "url": "https://l.fluenti.com.br/caderninho/assets/min/design_system.js?v=7313f395fb",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "x-vercel-cache": "HIT",
+          "age": "1213",
+          "content-encoding": "br",
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": null,
+          "etag": "W/\"291b7f012076c7bce8ecdbc341834e07\"",
+          "x-vercel-id": "gru1::7s6gs-1793209415386-57146ba8ed14"
+        },
+        "decodedBytes": 38089,
+        "sha256": "7313f395fbb8eabcc8e5e964194f6d65a8aa96897c3276f3060106e67d685e9f"
+      },
+      {
+        "label": "new",
+        "kind": "font",
+        "url": "https://l.fluenti.com.br/caderninho/assets/fonts/inter-tight-latin.woff2",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "x-vercel-cache": "HIT",
+          "age": "1214",
+          "content-encoding": null,
+          "content-type": "font/woff2",
+          "content-length": "44916",
+          "etag": "\"239e3c121b9f93f650289374acbf6288\"",
+          "x-vercel-id": "gru1::9qg7f-1793209415800-bc8e8116a8f6"
+        },
+        "decodedBytes": 44916,
+        "sha256": "83d548cd73ef2e039167db3adb5ea9d7a7870466ffc8a162c9820bc348938aaf"
+      },
+      {
+        "label": "new",
+        "kind": "favicon",
+        "url": "https://l.fluenti.com.br/caderninho/favicon.svg",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-vercel-cache": "HIT",
+          "age": "1211",
+          "content-encoding": null,
+          "content-type": "image/svg+xml",
+          "content-length": "418",
+          "etag": "\"49c586a5b205acfef5eb5c913aa48b80\"",
+          "x-vercel-id": "gru1::lf6cg-1793209416240-2b569d32d2e1"
+        },
+        "decodedBytes": 418,
+        "sha256": "bf1d79619bdfcd5fd2be67cd00939a539d8a98e7aa941e71ca349c56e0db7bf5"
+      },
+      {
+        "label": "new",
+        "kind": "ogImage",
+        "url": "https://l.fluenti.com.br/caderninho/assets/images/og-image.jpg",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=2592000, stale-while-revalidate=86400",
+          "x-vercel-cache": "MISS",
+          "age": "0",
+          "content-encoding": null,
+          "content-type": "image/jpeg",
+          "content-length": "107692",
+          "etag": "\"98d3a04a609962b54baf072b0ed6d69f\"",
+          "x-vercel-id": "gru1::xsqbl-1793209416644-77879fac4d47"
+        },
+        "decodedBytes": 107692,
+        "sha256": "45665acb927912732f8f5c4d4109dc4433d554a9822a6b058f4ffc5888206ff5"
+      },
+      {
+        "label": "old",
+        "kind": "html",
+        "url": "https://caderninho-marcia.vercel.app/",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-vercel-cache": "HIT",
+          "age": "243",
+          "content-encoding": "br",
+          "content-type": "text/html; charset=utf-8",
+          "content-length": null,
+          "etag": "W/\"f8933410d0d781ec7fea0ed711dd5460\"",
+          "x-vercel-id": "gru1::qpgl7-1793209417608-8f94370f61dd"
+        },
+        "decodedBytes": 180379,
+        "sha256": "f45b48d7a90f2463ccc55993ac86e91488e5ec4188b5c5aaecbe4ac304db8f0d"
+      },
+      {
+        "label": "old",
+        "kind": "hero",
+        "url": "https://caderninho-marcia.vercel.app/assets/images/brasil-aquarela-1024.webp",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=2592000, stale-while-revalidate=86400",
+          "x-vercel-cache": "HIT",
+          "age": "1568",
+          "content-encoding": null,
+          "content-type": "image/webp",
+          "content-length": "131796",
+          "etag": "\"efaa9219c2c0fe824e4669686556aa6f\"",
+          "x-vercel-id": "gru1::w7hxj-1793209418141-8759a6b62816"
+        },
+        "decodedBytes": 131796,
+        "sha256": "1f75cfed1d1a9cced4ea75d2e87f36b12886bc9a63741d50ad76f6756726753b"
+      },
+      {
+        "label": "old",
+        "kind": "css",
+        "url": "https://caderninho-marcia.vercel.app/assets/design_system.css",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-vercel-cache": "HIT",
+          "age": "3",
+          "content-encoding": "br",
+          "content-type": "text/css; charset=utf-8",
+          "content-length": null,
+          "etag": "W/\"ed654b2165bb8c515839fa2ba031c76b\"",
+          "x-vercel-id": "gru1::xsqbl-1793209418612-414e3ba0033b"
+        },
+        "decodedBytes": 64759,
+        "sha256": "fa69566a6ab434a24d2a1bde65890b9e0b900535b67ddc865dec1adf9738a331"
+      },
+      {
+        "label": "old",
+        "kind": "js",
+        "url": "https://caderninho-marcia.vercel.app/assets/min/design_system.js?v=7313f395fb",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "x-vercel-cache": "HIT",
+          "age": "1217",
+          "content-encoding": "br",
+          "content-type": "application/javascript; charset=utf-8",
+          "content-length": null,
+          "etag": "W/\"291b7f012076c7bce8ecdbc341834e07\"",
+          "x-vercel-id": "gru1::pkk7r-1793209419132-4d5c6a6af654"
+        },
+        "decodedBytes": 38089,
+        "sha256": "7313f395fbb8eabcc8e5e964194f6d65a8aa96897c3276f3060106e67d685e9f"
+      },
+      {
+        "label": "old",
+        "kind": "font",
+        "url": "https://caderninho-marcia.vercel.app/assets/fonts/inter-tight-latin.woff2",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=31536000, immutable",
+          "x-vercel-cache": "HIT",
+          "age": "1218",
+          "content-encoding": null,
+          "content-type": "font/woff2",
+          "content-length": "44916",
+          "etag": "\"239e3c121b9f93f650289374acbf6288\"",
+          "x-vercel-id": "gru1::xnpp5-1793209419537-8a6ff0306b16"
+        },
+        "decodedBytes": 44916,
+        "sha256": "83d548cd73ef2e039167db3adb5ea9d7a7870466ffc8a162c9820bc348938aaf"
+      },
+      {
+        "label": "old",
+        "kind": "favicon",
+        "url": "https://caderninho-marcia.vercel.app/favicon.svg",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-vercel-cache": "HIT",
+          "age": "1215",
+          "content-encoding": null,
+          "content-type": "image/svg+xml",
+          "content-length": "418",
+          "etag": "\"49c586a5b205acfef5eb5c913aa48b80\"",
+          "x-vercel-id": "gru1::9qg7f-1793209419980-dd033137d228"
+        },
+        "decodedBytes": 418,
+        "sha256": "bf1d79619bdfcd5fd2be67cd00939a539d8a98e7aa941e71ca349c56e0db7bf5"
+      },
+      {
+        "label": "old",
+        "kind": "ogImage",
+        "url": "https://caderninho-marcia.vercel.app/assets/images/og-image.jpg",
+        "status": 200,
+        "headStatus": "HTTP/1.1 200 OK",
+        "headers": {
+          "cache-control": "public, max-age=2592000, stale-while-revalidate=86400",
+          "x-vercel-cache": "HIT",
+          "age": "3",
+          "content-encoding": null,
+          "content-type": "image/jpeg",
+          "content-length": "107692",
+          "etag": "\"98d3a04a609962b54baf072b0ed6d69f\"",
+          "x-vercel-id": "gru1::5s7cc-1793209420368-f3527e63c647"
+        },
+        "decodedBytes": 107692,
+        "sha256": "45665acb927912732f8f5c4d4109dc4433d554a9822a6b058f4ffc5888206ff5"
+      }
+    ],
+    "redirects": [
+      {
+        "url": "https://l.fluenti.com.br/caderninho",
+        "status": 308,
+        "location": "/caderninho/"
+      },
+      {
+        "url": "http://l.fluenti.com.br/caderninho/",
+        "status": 308,
+        "location": "https://l.fluenti.com.br/caderninho/"
+      },
+      {
+        "url": "http://caderninho-marcia.vercel.app/",
+        "status": 308,
+        "location": "https://caderninho-marcia.vercel.app/"
+      }
+    ]
+  }
+}
